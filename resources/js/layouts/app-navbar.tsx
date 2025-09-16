@@ -1,9 +1,9 @@
-import { usePage } from "@inertiajs/react"
-import { IconChevronLgDown, IconLogout } from "@intentui/icons"
-import { useEffect, useState } from "react"
-import { Avatar } from "@/components/ui/avatar"
-import { buttonStyles } from "@/components/ui/button"
-import { Menu } from "@/components/ui/menu"
+import { usePage } from "@inertiajs/react";
+import { IconChevronLgDown, IconLogout } from "@intentui/icons";
+import { useEffect, useState } from "react";
+import { Avatar } from "@/components/ui/avatar";
+import { buttonStyles } from "@/components/ui/button";
+import { Menu } from "@/components/ui/menu";
 import {
   Navbar,
   NavbarGap,
@@ -14,10 +14,10 @@ import {
   NavbarSpacer,
   NavbarStart,
   NavbarTrigger,
-} from "@/components/ui/navbar"
-import { Logo } from "@/components/logo"
-import type { SharedData } from "@/types/shared"
-import { Link } from "@/components/ui/link"
+} from "@/components/ui/navbar";
+import { Logo } from "@/components/logo";
+import type { SharedData } from "@/types/shared";
+import { Link } from "@/components/ui/link";
 
 const navigations = [
   {
@@ -25,13 +25,16 @@ const navigations = [
     textValue: "Home",
     href: "/",
   },
-]
+];
 
-export function AppNavbar({ children, ...props }: React.ComponentProps<typeof Navbar>) {
-  const page = usePage()
-  const { auth } = usePage<SharedData>().props
-  const [isOpen, setIsOpen] = useState(false)
-  useEffect(() => setIsOpen(false), [page.url])
+export function AppNavbar({
+  children,
+  ...props
+}: React.ComponentProps<typeof Navbar>) {
+  const page = usePage();
+  const { auth } = usePage<SharedData>().props;
+  const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => setIsOpen(false), [page.url]);
   return (
     <NavbarProvider isOpen={isOpen} onOpenChange={setIsOpen}>
       <Navbar {...props}>
@@ -44,16 +47,14 @@ export function AppNavbar({ children, ...props }: React.ComponentProps<typeof Na
 
         <NavbarSection>
           {navigations.map((item) => (
-            <NavbarItem isCurrent={item.href === page.url} key={item.href} href={item.href}>
+            <NavbarItem
+              isCurrent={item.href === page.url}
+              key={item.href}
+              href={item.href}
+            >
               {item.name}
             </NavbarItem>
           ))}
-          <NavbarItem target="_blank" href="https://intentui.com" className="justify-between">
-            Documentation
-          </NavbarItem>
-          <NavbarItem target="_blank" href="https://irsyad.co/blocks">
-            Blocks
-          </NavbarItem>
         </NavbarSection>
         <NavbarSpacer />
         <NavbarSection className="ml-auto hidden gap-x-2 lg:flex">
@@ -87,11 +88,11 @@ export function AppNavbar({ children, ...props }: React.ComponentProps<typeof Na
         </NavbarSection>
       </NavbarMobile>
     </NavbarProvider>
-  )
+  );
 }
 
 function UserMenu() {
-  const { auth } = usePage<SharedData>().props
+  const { auth } = usePage<SharedData>().props;
   return (
     <Menu>
       <Menu.Trigger
@@ -100,7 +101,7 @@ function UserMenu() {
       >
         <Avatar
           src={auth.user.gravatar}
-          shape="square"
+          // isSquare
           className="mr-2 size-7 *:size-7 sm:size-9 sm:*:size-9"
         />
         <div className="hidden flex-col pr-2 sm:flex">
@@ -121,6 +122,25 @@ function UserMenu() {
         <Menu.Item href="/dashboard">
           <Menu.Label>Dashboard</Menu.Label>
         </Menu.Item>
+        <Menu.Submenu className="justify-between">
+          <Menu.Item>
+            <Menu.Label>Manage User</Menu.Label>
+          </Menu.Item>
+          <Menu.Content>
+            <Menu.Item href="/manage-user/view">
+              <Menu.Label>Create User</Menu.Label>
+            </Menu.Item>
+            <Menu.Item href="/manage-role/view">
+              <Menu.Label>Create Role</Menu.Label>
+            </Menu.Item>
+            <Menu.Item href="/manage-role/assign-role">
+              <Menu.Label>Assign Role</Menu.Label>
+            </Menu.Item>
+            <Menu.Item href="/dashboard">
+              <Menu.Label>Assign Permission</Menu.Label>
+            </Menu.Item>
+          </Menu.Content>
+        </Menu.Submenu>
         <Menu.Item href="/settings/profile" className="justify-between">
           <Menu.Label>Update profile</Menu.Label>
         </Menu.Item>
@@ -137,5 +157,5 @@ function UserMenu() {
         </Menu.Item>
       </Menu.Content>
     </Menu>
-  )
+  );
 }
