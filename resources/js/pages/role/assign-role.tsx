@@ -11,18 +11,30 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import { RoleAssignRoleData, UserAssignRoleData } from "@/types";
+import { Dialog } from "@/components/ui/dialog";
+import { Autocomplete, Popover, useFilter } from "react-aria-components";
+import { SearchField } from "@/components/ui/search-field";
+import { ListBox } from "@/components/ui/list-box";
 
 const title = "Manage User";
 
-export default function AssignRole() {
+interface Props {
+  users: UserAssignRoleData[];
+  roles: RoleAssignRoleData[];
+}
+
+export default function AssignRole({ users, roles }: Props) {
+  const { contains } = useFilter({ sensitivity: "base" });
   const { data, setData, post, reset, errors, processing, recentlySuccessful } =
     useForm({
-      name: "",
+      user_id: "",
+      role_id: "",
     });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    post(route("manage-role.store"), {
+    post(route("manage-role.storeAssignRole"), {
       preserveScroll: true,
       onSuccess: () => {
         reset();
@@ -36,8 +48,8 @@ export default function AssignRole() {
       <h1 className="sr-only">{title}</h1>
       <Card>
         <Card.Header>
-          <Card.Title>Create Role</Card.Title>
-          <Card.Description>Create a new role</Card.Description>
+          <Card.Title>Assign Role</Card.Title>
+          <Card.Description>Assign a role to user</Card.Description>
         </Card.Header>
         <Card.Content>
           <Form
@@ -45,20 +57,57 @@ export default function AssignRole() {
             onSubmit={submit}
             className="max-w-lg space-y-6"
           >
-            {/* <Select
-              label="Design software"
-              placeholder="Select a software"
-              isRequired
+            <Select
+              label="Find a user"
+              placeholder="Select a user"
+              selectedKey={data.user_id}
+              onSelectionChange={(v) => setData("user_id", v as string)}
             >
               <SelectTrigger />
-              <SelectContent items={software}>
-                {(item) => (
-                  <SelectItem id={item.id} textValue={item.name}>
-                    {item.name}
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select> */}
+              <Popover className="entering:fade-in exiting:fade-out flex max-h-80 w-(--trigger-width) entering:animate-in exiting:animate-out flex-col overflow-hidden rounded-lg border bg-overlay">
+                <Dialog aria-label="Users">
+                  <Autocomplete filter={contains}>
+                    <div className="border-b bg-muted p-2">
+                      <SearchField className="rounded-lg bg-bg" autoFocus />
+                    </div>
+                    <ListBox
+                      className="max-h-[inherit] min-w-[inherit] border-0 shadow-none"
+                      items={users}
+                    >
+                      {(item) => (
+                        <SelectItem key={item.id}>{item.name}</SelectItem>
+                      )}
+                    </ListBox>
+                  </Autocomplete>
+                </Dialog>
+              </Popover>
+            </Select>
+
+            <Select
+              label="Find a role"
+              placeholder="Select a role"
+              selectedKey={data.role_id}
+              onSelectionChange={(v) => setData("role_id", v as string)}
+            >
+              <SelectTrigger />
+              <Popover className="entering:fade-in exiting:fade-out flex max-h-80 w-(--trigger-width) entering:animate-in exiting:animate-out flex-col overflow-hidden rounded-lg border bg-overlay">
+                <Dialog aria-label="Roles">
+                  <Autocomplete filter={contains}>
+                    <div className="border-b bg-muted p-2">
+                      <SearchField className="rounded-lg bg-bg" autoFocus />
+                    </div>
+                    <ListBox
+                      className="max-h-[inherit] min-w-[inherit] border-0 shadow-none"
+                      items={roles}
+                    >
+                      {(item) => (
+                        <SelectItem key={item.id}>{item.name}</SelectItem>
+                      )}
+                    </ListBox>
+                  </Autocomplete>
+                </Dialog>
+              </Popover>
+            </Select>
 
             <div className="flex items-center justify-end gap-4">
               <Button type="submit" isDisabled={processing}>

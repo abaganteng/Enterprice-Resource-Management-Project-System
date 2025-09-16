@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\UserAssignRoleData;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -32,13 +33,28 @@ class RoleController extends Controller
 
     public function assignRole()
     {
-
-
-        return inertia('role/assign-role');
+        $users = User::select(['id', 'name'])->get();
+        $roles = Role::select(['id', 'name'])->get();
+        return inertia('role/assign-role', [
+            'users' => fn () => UserAssignRoleData::collect($users),
+            'roles' => fn () => UserAssignRoleData::collect($roles),
+        ]);
     }
 
-    public function storeAssignRole()
+    public function storeAssignRole(Request $request)
     {
-        dd('hy');
+        $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'role_id' => 'required|integer|exists:roles,id',
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+        $role = Role::findOrFail($request->role_id);
+
+        $user->assignRole($role->name);
+
+        flash("Role {$role->name} has been successfully assigned to {$user->name}.");
+
+        return back();
     }
 }
