@@ -136,7 +136,7 @@ function UserMenu() {
             <Menu.Item href="/manage-role/assign-role">
               <Menu.Label>Assign Role</Menu.Label>
             </Menu.Item>
-            <Menu.Item href="/dashboard">
+            <Menu.Item href="/manage-permission/view">
               <Menu.Label>Assign Permission</Menu.Label>
             </Menu.Item>
           </Menu.Content>

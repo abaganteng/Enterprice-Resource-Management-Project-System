@@ -76,8 +76,8 @@ export default function SettingsLayout({
               Assign Role
             </NavLink>
             <NavLink
-              href="/settings/appearance"
-              isCurrent={route().current("settings.appearance")}
+              href="/manage-permission/view"
+              isCurrent={route().current("manage-permission.view")}
             >
               Assign Permission
             </NavLink>

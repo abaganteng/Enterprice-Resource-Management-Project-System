@@ -1,8 +1,4 @@
-export type UserAssignRoleData = {
-  id: number;
-  name: string;
-};
-export type RoleAssignRoleData = {
+export type ManageUserData = {
   id: number;
   name: string;
 };

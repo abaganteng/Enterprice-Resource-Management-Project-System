@@ -4,7 +4,7 @@ namespace App\Data;
 
 use Spatie\LaravelData\Data;
 
-class UserAssignRoleData extends Data
+class ManageUserData extends Data
 {
     public function __construct(
         public int $id,

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\UserAssignRoleData;
 use App\Models\User;
+use App\Data\ManageUserData;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
@@ -36,8 +36,8 @@ class RoleController extends Controller
         $users = User::select(['id', 'name'])->get();
         $roles = Role::select(['id', 'name'])->get();
         return inertia('role/assign-role', [
-            'users' => fn () => UserAssignRoleData::collect($users),
-            'roles' => fn () => UserAssignRoleData::collect($roles),
+            'users' => fn () => ManageUserData::collect($users),
+            'roles' => fn () => ManageUserData::collect($roles),
         ]);
     }
 
