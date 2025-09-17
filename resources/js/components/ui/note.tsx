@@ -1,21 +1,30 @@
-import { IconCircleCheckFill, IconCircleExclamationFill, IconCircleInfoFill } from "@intentui/icons"
-import { twJoin, twMerge } from "tailwind-merge"
+import {
+  IconCircleCheckFill,
+  IconCircleExclamationFill,
+  IconCircleInfoFill,
+} from "@intentui/icons";
+import { twJoin, twMerge } from "tailwind-merge";
 
 interface NoteProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  intent?: "default" | "info" | "warning" | "danger" | "success"
-  indicator?: boolean
+  intent?: "default" | "info" | "warning" | "danger" | "success";
+  indicator?: boolean;
 }
 
-const Note = ({ indicator = true, intent = "default", className, ...props }: NoteProps) => {
+const Note = ({
+  indicator = true,
+  intent = "default",
+  className,
+  ...props
+}: NoteProps) => {
   const iconMap: Record<string, React.ElementType | null> = {
     info: IconCircleInfoFill,
     warning: IconCircleExclamationFill,
     danger: IconCircleExclamationFill,
     success: IconCircleCheckFill,
     default: null,
-  }
+  };
 
-  const IconComponent = iconMap[intent] || null
+  const IconComponent = iconMap[intent] || null;
 
   return (
     <div
@@ -38,7 +47,7 @@ const Note = ({ indicator = true, intent = "default", className, ...props }: Not
             intent === "warning" && "border-warning-subtle-fg/40",
             intent === "success" && "border-success-subtle-fg/40",
             intent === "danger" && "border-danger-subtle-fg/40",
-            intent === "info" && "border-info-subtle-fg/40",
+            intent === "info" && "border-info-subtle-fg/40"
           )}
         >
           <div
@@ -47,7 +56,7 @@ const Note = ({ indicator = true, intent = "default", className, ...props }: Not
               intent === "warning" && "border-warning-subtle-fg/85",
               intent === "success" && "border-success-subtle-fg/85",
               intent === "danger" && "border-danger-subtle-fg/85",
-              intent === "info" && "border-info-subtle-fg/85",
+              intent === "info" && "border-info-subtle-fg/85"
             )}
           >
             <IconComponent className="size-5 shrink-0" />
@@ -58,8 +67,8 @@ const Note = ({ indicator = true, intent = "default", className, ...props }: Not
         {props.children}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export type { NoteProps }
-export { Note }
+export type { NoteProps };
+export { Note };

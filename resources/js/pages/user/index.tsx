@@ -75,13 +75,9 @@ export default function Index({ users, roles }: Props) {
                             <IconEye /> View
                           </MenuItem>
                           <MenuItem
-                            onAction={() => {
-                              router.get(
-                                route("manage-role.assign-role", {
-                                  user: user.id,
-                                })
-                              );
-                            }}
+                            href={route("manage-role.assign-role", {
+                              user: user.id,
+                            })}
                           >
                             <IconEye /> Assign Role
                           </MenuItem>

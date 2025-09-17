@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\ManageUserData;
 use App\Models\User;
 use App\Data\UserData;
+use App\Data\ManageUserData;
+use App\Data\UserDetailData;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -54,9 +55,9 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->load('roles');
+        $user->load('roles.permissions');
         return inertia('user/show', [
-            'user' => fn () => UserData::from($user),
+            'user' => fn () => UserDetailData::from($user),
         ]);
     }
 }
