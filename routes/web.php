@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::group(['middleware' => ['permission:read user']], function () { 
        Route::get('/manage-user/index', [Controllers\UserController::class, 'index'])->name('manage-user.index');
+       Route::get('/manage-user/show/{user}', [Controllers\UserController::class, 'show'])->name('manage-user.show');
     });    
 
     Route::group(['middleware' => ['permission:create user']], function () { 

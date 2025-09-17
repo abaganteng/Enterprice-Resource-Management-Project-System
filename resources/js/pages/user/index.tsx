@@ -71,7 +71,7 @@ export default function Index({ users, roles }: Props) {
                           <IconDotsVertical />
                         </MenuTrigger>
                         <MenuContent placement="left top">
-                          <MenuItem>
+                          <MenuItem href={route("manage-user.show", [user.id])}>
                             <IconEye /> View
                           </MenuItem>
                           <MenuItem

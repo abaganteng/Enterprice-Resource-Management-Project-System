@@ -51,4 +51,12 @@ class UserController extends Controller
             'roles' => fn () => ManageUserData::collect($roles)
         ]);
     }
+
+    public function show(User $user)
+    {
+        $user->load('roles');
+        return inertia('user/show', [
+            'user' => fn () => UserData::from($user),
+        ]);
+    }
 }
