@@ -31,15 +31,27 @@ class RoleController extends Controller
         
     }
 
-    public function assignRole()
-    {
-        $users = User::select(['id', 'name'])->get();
-        $roles = Role::select(['id', 'name'])->get();
+    public function assignRole(Request $request)
+{
+    $roles = Role::all(['id', 'name']);
+
+    if ($request->has('user')) {
+        $user = User::select('id', 'name')->findOrFail($request->user);
+
         return inertia('role/assign-role', [
-            'users' => fn () => ManageUserData::collect($users),
+            'user' => fn () => ManageUserData::from($user),
             'roles' => fn () => ManageUserData::collect($roles),
         ]);
     }
+
+    // Jika tidak ada user.id → tetap pakai mode lama
+    $users = User::all(['id', 'name']);
+
+    return inertia('role/assign-role', [
+        'users' => fn () => ManageUserData::collect($users),
+        'roles' => fn () => ManageUserData::collect($roles),
+    ]);
+}
 
     public function storeAssignRole(Request $request)
     {

@@ -1,10 +1,8 @@
 import AppLayout from "@/layouts/app-layout";
-import { Head, useForm, usePage } from "@inertiajs/react";
-import type { SharedData } from "@/types/shared";
+import { Head, useForm } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { TextField } from "@/components/ui/text-field";
-import { Link } from "@/components/ui/link";
 import { Button } from "@/components/ui/button";
 import SettingsLayout from "@/pages/settings/settings-layout";
 import { useRef } from "react";

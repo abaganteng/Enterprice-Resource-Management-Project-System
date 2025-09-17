@@ -22,8 +22,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/manage-permission/store', [Controllers\PermissionController::class, 'storeAssignPermission'])->name('manage-permission.storeAssignPermission');
     });   
 
-    Route::group(['middleware' => ['permission:create user']], function () { 
-       
+    Route::group(['middleware' => ['permission:read user']], function () { 
+       Route::get('/manage-user/index', [Controllers\UserController::class, 'index'])->name('manage-user.index');
     });    
 
     Route::group(['middleware' => ['permission:create user']], function () { 

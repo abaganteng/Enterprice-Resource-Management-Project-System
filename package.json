@@ -31,6 +31,7 @@
     "dependencies": {
         "@intentui/icons": "^1.11.0",
         "@types/node": "^22.15.34",
+        "momentum-paginator": "^1.0.7",
         "motion": "^12.19.2",
         "react": "^19.1.0",
         "react-aria-components": "^1.12.2",

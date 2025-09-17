@@ -58,6 +58,12 @@ export default function SettingsLayout({
             </Header>
             <Separator className="my-2" />
             <NavLink
+              href="/manage-user/index"
+              isCurrent={route().current("manage-user.index")}
+            >
+              All User
+            </NavLink>
+            <NavLink
               href="/manage-user/view"
               isCurrent={route().current("manage-user.view")}
             >

@@ -12,8 +12,8 @@ class PermissionController extends Controller
 {
     public function view()
     {
-        $roles = Role::select(['id', 'name'])->get();
-        $permissions = Permission::select(['id', 'name'])->get();
+        $roles = Role::all(['id', 'name']);
+        $permissions = Permission::all(['id', 'name']);
         return inertia('permission/view', [
             'roles' => fn () => ManageUserData::collect($roles),
             'permissions' => fn () => ManageUserData::collect($permissions),
