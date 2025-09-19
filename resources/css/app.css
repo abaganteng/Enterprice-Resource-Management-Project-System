@@ -64,6 +64,9 @@
     --color-danger-subtle: var(--danger-subtle);
     --color-danger-subtle-fg: var(--danger-subtle-fg);
 
+    --color-info-subtle: var(--info-subtle);
+    --color-info-subtle-fg: var(--info-subtle-fg);
+
     --color-success-subtle: var(--success-subtle);
     --color-success-subtle-fg: var(--success-subtle-fg);
 

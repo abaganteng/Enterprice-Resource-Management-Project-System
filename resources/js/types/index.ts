@@ -11,6 +11,11 @@ export type RoleData = {
   name: string;
   permissions: Array<PermissionData>;
 };
+export type RolesPermissionsData = {
+  id: number;
+  name: string;
+  permissions: Array<PermissionData>;
+};
 export type UserData = {
   id: number;
   name: string;

@@ -44,7 +44,7 @@ class UserController extends Controller
         $users = User::with(['roles' => function ($query) {
             $query->select('id', 'name');
         }])->paginate(10);
-
+        
         $roles = Role::select(['id', 'name'])->get();
         
         return inertia('user/index', [

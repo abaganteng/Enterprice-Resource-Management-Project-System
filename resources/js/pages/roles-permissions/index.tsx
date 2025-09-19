@@ -1,44 +1,32 @@
 import AppLayout from "@/layouts/app-layout";
-import { Head, router } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
 import SettingsLayout from "@/pages/settings/settings-layout";
 import { Table } from "@/components/ui/table";
-import {
-  Menu,
-  MenuContent,
-  MenuItem,
-  MenuSeparator,
-  MenuTrigger,
-} from "@/components/ui/menu";
-import {
-  IconDotsVertical,
-  IconEye,
-  IconHighlight,
-  IconTrash,
-} from "@intentui/icons";
-import { ManageUserData, UserData } from "@/types";
+import { Menu, MenuContent, MenuItem, MenuTrigger } from "@/components/ui/menu";
+import { IconDotsVertical, IconEye } from "@intentui/icons";
+import { RolesPermissionsData } from "@/types";
 import { usePaginator } from "momentum-paginator";
 import { Pagination } from "@/components/ui/pagination";
+import { Badge } from "@/components/ui/badge";
 
 const title = "Manage User";
 
 interface Props {
-  users: Paginator<UserData>;
-  roles: ManageUserData[];
+  rolesPermissions: Paginator<RolesPermissionsData>;
 }
 
-export default function Index({ users, roles }: Props) {
-  const { previous, next, pages } = usePaginator(users);
+export default function Index({ rolesPermissions }: Props) {
+  console.log(rolesPermissions);
+  const { previous, next, pages } = usePaginator(rolesPermissions);
   return (
     <>
       <Head title={title} />
       <h1 className="sr-only">{title}</h1>
       <Card>
         <Card.Header>
-          <Card.Title>Users</Card.Title>
-          <Card.Description>
-            Manage users, roles, and permissions.
-          </Card.Description>
+          <Card.Title>Roles and Permission</Card.Title>
+          <Card.Description>Manage roles, and permissions.</Card.Description>
         </Card.Header>
         <Card.Content>
           <Table
@@ -47,50 +35,52 @@ export default function Index({ users, roles }: Props) {
             aria-label="Users"
           >
             <Table.Header>
-              <Table.Column className="w-0">#</Table.Column>
-              <Table.Column isRowHeader>Email</Table.Column>
-              <Table.Column>Name</Table.Column>
-              <Table.Column>Role</Table.Column>
+              <Table.Column isRowHeader>Role</Table.Column>
+              <Table.Column>Permission</Table.Column>
               <Table.Column />
             </Table.Header>
             <Table.Body>
-              {users.data.length > 0 ? (
-                users.data.map((user: UserData, index: number) => (
-                  <Table.Row key={user.id}>
-                    <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>{user.email}</Table.Cell>
-                    <Table.Cell>{user.name}</Table.Cell>
-                    <Table.Cell>
-                      {user.roles?.length > 0
-                        ? user.roles?.map((role: any) => role.name).join(", ")
-                        : "-"}
-                    </Table.Cell>
-                    <Table.Cell className="text-end last:pr-2.5">
-                      <Menu>
-                        <MenuTrigger>
-                          <IconDotsVertical />
-                        </MenuTrigger>
-                        <MenuContent placement="left top">
-                          <MenuItem href={route("manage-user.show", [user.id])}>
-                            <IconEye /> View
-                          </MenuItem>
-                          <MenuItem>
-                            <IconHighlight /> Edit
-                          </MenuItem>
-                          <MenuSeparator />
-                          <MenuItem isDanger>
-                            <IconTrash /> Delete
-                          </MenuItem>
-                        </MenuContent>
-                      </Menu>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
+              {rolesPermissions.data.length > 0 ? (
+                rolesPermissions.data.map(
+                  (rolePermission: RolesPermissionsData) => (
+                    <Table.Row key={rolePermission.id}>
+                      <Table.Cell>{rolePermission.name}</Table.Cell>
+                      <Table.Cell className="capitalize">
+                        {rolePermission.permissions?.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {rolePermission.permissions.map(
+                              (permission: any) => (
+                                <Badge key={permission.id} intent="info">
+                                  {permission.name}
+                                </Badge>
+                              )
+                            )}
+                          </div>
+                        ) : (
+                          "-"
+                        )}
+                      </Table.Cell>
+                      <Table.Cell className="text-end last:pr-2.5">
+                        <Menu>
+                          <MenuTrigger>
+                            <IconDotsVertical />
+                          </MenuTrigger>
+                          <MenuContent placement="left top">
+                            <MenuItem
+                              href={route("manage-user.show", [
+                                rolePermission.id,
+                              ])}
+                            >
+                              <IconEye /> View
+                            </MenuItem>
+                          </MenuContent>
+                        </Menu>
+                      </Table.Cell>
+                    </Table.Row>
+                  )
+                )
               ) : (
                 <Table.Row>
-                  <Table.Cell className="text-center">
-                    No data available.
-                  </Table.Cell>
                   <Table.Cell className="text-center">
                     No data available.
                   </Table.Cell>

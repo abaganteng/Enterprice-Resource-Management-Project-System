@@ -37,7 +37,7 @@ export default function Index({ users, roles }: Props) {
         <Card.Header>
           <Card.Title>Users</Card.Title>
           <Card.Description>
-            Manage users, roles, and permissions.
+            Manage users with roles and permissions.
           </Card.Description>
         </Card.Header>
         <Card.Content>
