@@ -64,6 +64,14 @@ export default function SettingsLayout({
               All User
             </NavLink>
             <NavLink
+              href="/manage-roles-permissions/index"
+              isCurrent={route().current(
+                "manage-manage-roles-permissions.index"
+              )}
+            >
+              Manage Roles & Permissions
+            </NavLink>
+            <NavLink
               href="/manage-user/view"
               isCurrent={route().current("manage-user.view")}
             >

@@ -31,20 +31,26 @@ class RoleController extends Controller
         
     }
 
-    public function assignRole(Request $request)
+public function assignRole(Request $request)
 {
+    // Ambil semua role untuk pilihan
     $roles = Role::all(['id', 'name']);
 
+    // Kalau ada user
     if ($request->has('user')) {
-        $user = User::select('id', 'name')->findOrFail($request->user);
+        $user = User::with('roles:id,name')->select('id', 'name')->findOrFail($request->user);
+
+        // Ambil role terbaru milik user (ingat: 1 user hanya punya 1 role)
+        $currentRole = $user->roles->first();
 
         return inertia('role/assign-role', [
-            'user' => fn () => ManageUserData::from($user),
+            'user'  => fn () => ManageUserData::from($user),
+            'role'  => $currentRole ? fn () => ManageUserData::from($currentRole) : null,
             'roles' => fn () => ManageUserData::collect($roles),
         ]);
     }
 
-    // Jika tidak ada user.id → tetap pakai mode lama
+    // Kalau tidak ada user.id → fallback ke mode lama
     $users = User::all(['id', 'name']);
 
     return inertia('role/assign-role', [
@@ -63,10 +69,25 @@ class RoleController extends Controller
         $user = User::findOrFail($request->user_id);
         $role = Role::findOrFail($request->role_id);
 
-        $user->assignRole($role->name);
+        $user->syncRoles($role->name);
 
         flash("Role {$role->name} has been successfully assigned to {$user->name}.");
 
-        return back();
+        return to_route('manage-user.show', ['user' => $user->id]);
     }
+
+    public function revokeRole(User $user)
+{
+    $role = $user->roles->first();
+
+    if ($role) {
+        $user->removeRole($role->name);
+
+        flash("Role {$role->name} has been successfully revoked from {$user->name}.");
+    } else {
+        flash("User {$user->name} does not have any role assigned.");
+    }
+
+    return back();
+}
 }

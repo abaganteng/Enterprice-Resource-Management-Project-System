@@ -18,14 +18,15 @@ interface Props {
   users: ManageUserData[];
   roles: ManageUserData[];
   user?: ManageUserData;
+  role?: ManageUserData;
 }
 
-export default function AssignRole({ users, roles, user }: Props) {
+export default function AssignRole({ users, roles, user, role }: Props) {
   const { contains } = useFilter({ sensitivity: "base" });
   const { data, setData, post, reset, errors, processing, recentlySuccessful } =
     useForm({
       user_id: user?.id ?? "",
-      role_id: "",
+      role_id: role?.id ?? "",
     });
 
   const submit = (e: React.FormEvent) => {
@@ -83,8 +84,7 @@ export default function AssignRole({ users, roles, user }: Props) {
               </Select>
             )}
             <Select
-              label="Find a role"
-              placeholder="Select a role"
+              label="Choose a role"
               selectedKey={data.role_id}
               onSelectionChange={(v) => setData("role_id", v as string)}
             >
@@ -110,7 +110,7 @@ export default function AssignRole({ users, roles, user }: Props) {
 
             <div className="flex items-center justify-end gap-4">
               <Button type="submit" isDisabled={processing}>
-                Create
+                Save
               </Button>
               {recentlySuccessful && (
                 <p className="text-muted-fg text-sm">Saved.</p>

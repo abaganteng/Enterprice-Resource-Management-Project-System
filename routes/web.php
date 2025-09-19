@@ -17,6 +17,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/manage-role/assign-role', [Controllers\RoleController::class, 'assignRole'])->name('manage-role.assign-role');
         Route::post('/manage-role/assign-role', [Controllers\RoleController::class, 'storeAssignRole'])->name('manage-role.storeAssignRole');
+        
+        Route::delete('/manage-role/revoke-role/{user}', [Controllers\RoleController::class, 'revokeRole'])->name('manage-role.revokeRole');
 
         Route::get('/manage-permission/view', [Controllers\PermissionController::class, 'view'])->name('manage-permission.view');
         Route::post('/manage-permission/store', [Controllers\PermissionController::class, 'storeAssignPermission'])->name('manage-permission.storeAssignPermission');
@@ -25,6 +27,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['middleware' => ['permission:read user']], function () { 
        Route::get('/manage-user/index', [Controllers\UserController::class, 'index'])->name('manage-user.index');
        Route::get('/manage-user/show/{user}', [Controllers\UserController::class, 'show'])->name('manage-user.show');
+
+       Route::get('/manage-roles-permissions/index', [Controllers\RolesPermissionsController::class, 'index'])->name('manage-roles-permissions.index');
     });    
 
     Route::group(['middleware' => ['permission:create user']], function () { 
