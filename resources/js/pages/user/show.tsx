@@ -1,7 +1,7 @@
 import AppLayout from "@/layouts/app-layout";
 import { Head, useForm } from "@inertiajs/react";
 import SettingsLayout from "@/pages/settings/settings-layout";
-import { UserDetailData } from "@/types";
+import { ManageUserDetailData } from "@/types";
 import { Card } from "@/components/ui/card";
 import { DescriptionList } from "@/components/ui/description-list";
 import { Button } from "@/components/ui/button";
@@ -9,21 +9,13 @@ import { Note } from "@/components/ui/note";
 import { Badge } from "@/components/ui/badge";
 import { Menu, MenuContent, MenuItem } from "@/components/ui/menu";
 import { IconChevronLgDown } from "@intentui/icons";
-import {
-  Modal,
-  ModalClose,
-  ModalContent,
-  ModalDescription,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-} from "@/components/ui/modal";
+import { Modal } from "@/components/ui/modal";
 import { useState } from "react";
 
 const title = "Manage User";
 
 interface Props {
-  user: UserDetailData;
+  user: ManageUserDetailData;
 }
 
 export default function Show({ user }: Props) {
@@ -66,7 +58,9 @@ export default function Show({ user }: Props) {
                     Action <IconChevronLgDown />
                   </Button>
                   <MenuContent popover={{ placement: "bottom" }}>
-                    <MenuItem href="#">Edit user</MenuItem>
+                    <MenuItem href={route("manage-user.update", user.id)}>
+                      Edit user
+                    </MenuItem>
                     <MenuItem
                       href={route("manage-role.assign-role", {
                         user: user.id,

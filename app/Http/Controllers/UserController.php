@@ -3,19 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Data\UserData;
-use App\Data\ManageUserData;
-use App\Data\UserDetailData;
+use App\Data\ManageUserDetailData;
+use App\Data\ManageUserListData;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
-    public function view()
+    public function index()
     {
-        return inertia('user/view');
+        $users = User::with('roles')->paginate(10);
+        
+        return inertia('user/index', [
+            'users' => fn () => ManageUserListData::collect($users)
+        ]);
+    }
+
+    public function show(User $user)
+    {
+        $user->load('roles.permissions');
+        return inertia('user/show', [
+            'user' => fn () => ManageUserDetailData::from($user),
+        ]);
+    }
+
+    public function create()
+    {
+        return inertia('user/form', [
+            'user' => new User,
+            'page_settings' => [
+                'tittle' => 'Create user',
+                'description' => 'Create a new user',
+                'method' => 'post',
+                'url' => route('manage-user.store')
+            ]
+        ]);
     }
 
     public function store(Request $request)
@@ -39,25 +62,41 @@ class UserController extends Controller
         return back();
     }
 
-    public function index()
+    public function edit(User $user)
     {
-        $users = User::with(['roles' => function ($query) {
-            $query->select('id', 'name');
-        }])->paginate(10);
-        
-        $roles = Role::select(['id', 'name'])->get();
-        
-        return inertia('user/index', [
-            'users' => fn () => UserData::collect($users),
-            'roles' => fn () => ManageUserData::collect($roles)
+        return inertia('user/form', [
+            'user' => $user,
+            'page_settings' => [
+                'tittle' => 'Update user',
+                'description' => 'Update a user',
+                'method' => 'put',
+                'url' => route('manage-user.update', $user)
+            ]
         ]);
     }
 
-    public function show(User $user)
+    public function update(Request $request, User $user)
     {
-        $user->load('roles.permissions');
-        return inertia('user/show', [
-            'user' => fn () => UserDetailData::from($user),
+        $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        'password' => ['nullable', 'min:8', 'confirmed'], // boleh kosong
         ]);
+
+        $user->name = $validated['name']; 
+
+        $user->email = $validated['email']; 
+
+        if (!empty($validated['password'])) { 
+            $user->password = Hash::make($validated['password']); 
+        } 
+
+        $user->save();
+
+        flash('Account has been successfully updated.');
+
+        return to_route('manage-user.show', ['user' => $user->id]);
     }
+
+    
 }

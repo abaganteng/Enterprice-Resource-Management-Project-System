@@ -1,5 +1,5 @@
 import AppLayout from "@/layouts/app-layout";
-import { Head, router } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
 import SettingsLayout from "@/pages/settings/settings-layout";
 import { Table } from "@/components/ui/table";
@@ -16,7 +16,7 @@ import {
   IconHighlight,
   IconTrash,
 } from "@intentui/icons";
-import { ManageUserData, UserData } from "@/types";
+import { ManageUserListData, UserData } from "@/types";
 import { usePaginator } from "momentum-paginator";
 import { Pagination } from "@/components/ui/pagination";
 import { Link } from "@/components/ui/link";
@@ -25,11 +25,10 @@ import { buttonStyles } from "@/components/ui/button";
 const title = "Manage User";
 
 interface Props {
-  users: Paginator<UserData>;
-  roles: ManageUserData[];
+  users: Paginator<ManageUserListData>;
 }
 
-export default function Index({ users, roles }: Props) {
+export default function Index({ users }: Props) {
   const { previous, next, pages } = usePaginator(users);
   return (
     <>
@@ -42,7 +41,7 @@ export default function Index({ users, roles }: Props) {
             <Card.Description>
               Manage users with roles and permissions.
             </Card.Description>
-            <Link className={buttonStyles()} href="/manage-user/view">
+            <Link className={buttonStyles()} href="/manage-user/create">
               Create User
             </Link>
           </div>
@@ -62,7 +61,7 @@ export default function Index({ users, roles }: Props) {
             </Table.Header>
             <Table.Body>
               {users.data.length > 0 ? (
-                users.data.map((user: UserData, index: number) => (
+                users.data.map((user: ManageUserListData, index: number) => (
                   <Table.Row key={user.id}>
                     <Table.Cell>{index + 1}</Table.Cell>
                     <Table.Cell>{user.email}</Table.Cell>

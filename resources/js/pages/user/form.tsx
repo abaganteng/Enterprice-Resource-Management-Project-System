@@ -1,7 +1,7 @@
 import AppLayout from "@/layouts/app-layout";
 import { Head, useForm } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
+import { Form as Formulir } from "@/components/ui/form";
 import { TextField } from "@/components/ui/text-field";
 import { Button } from "@/components/ui/button";
 import SettingsLayout from "@/pages/settings/settings-layout";
@@ -9,19 +9,26 @@ import { useRef } from "react";
 
 const title = "Manage User";
 
-export default function View() {
+export default function Form({
+  user,
+  page_settings,
+}: {
+  user: any;
+  page_settings: any;
+}) {
   const passwordInput = useRef<HTMLInputElement>(null);
   const { data, setData, post, reset, errors, processing, recentlySuccessful } =
     useForm({
-      name: "",
-      email: "",
+      name: user?.name ?? "",
+      email: user?.email ?? "",
       password: "",
       password_confirmation: "",
+      _method: page_settings.method,
     });
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    post(route("manage-user.store"), {
+    post(page_settings.url, {
       preserveScroll: true,
       onSuccess: () => {
         reset();
@@ -41,11 +48,11 @@ export default function View() {
       <h1 className="sr-only">{title}</h1>
       <Card>
         <Card.Header>
-          <Card.Title>Create User</Card.Title>
-          <Card.Description>Create a new user</Card.Description>
+          <Card.Title>{page_settings.tittle}</Card.Title>
+          <Card.Description>{page_settings.description}</Card.Description>
         </Card.Header>
         <Card.Content>
-          <Form
+          <Formulir
             validationErrors={errors}
             onSubmit={submit}
             className="max-w-lg space-y-6"
@@ -55,7 +62,7 @@ export default function View() {
               label="Name"
               type="text"
               value={data.name}
-              onChange={(v) => setData("name", v)}
+              onChange={(v: string) => setData("name", v)}
               isRequired
               errorMessage={errors.name}
               autoFocus
@@ -77,7 +84,7 @@ export default function View() {
               label="Password"
               value={data.password}
               onChange={(v) => setData("password", v)}
-              isRequired
+              isRequired={page_settings.method === "post"}
               isRevealable
               errorMessage={errors.password}
               autoComplete="password"
@@ -91,7 +98,7 @@ export default function View() {
               onChange={(v) => setData("password_confirmation", v)}
               errorMessage={errors.password_confirmation}
               isRevealable
-              isRequired
+              isRequired={page_settings.method === "post"}
             />
 
             <div className="flex items-center justify-end gap-4">
@@ -102,14 +109,14 @@ export default function View() {
                 <p className="text-muted-fg text-sm">Saved.</p>
               )}
             </div>
-          </Form>
+          </Formulir>
         </Card.Content>
       </Card>
     </>
   );
 }
 
-View.layout = (page: any) => (
+Form.layout = (page: any) => (
   <AppLayout>
     <SettingsLayout children={page} />
   </AppLayout>

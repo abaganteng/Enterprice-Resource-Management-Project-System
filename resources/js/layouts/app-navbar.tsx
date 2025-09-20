@@ -123,21 +123,15 @@ function UserMenu() {
           <Menu.Label>Dashboard</Menu.Label>
         </Menu.Item>
         <Menu.Submenu className="justify-between">
-          <Menu.Item>
-            <Menu.Label>Manage User</Menu.Label>
+          <Menu.Item href="/manage-user/index">
+            <Menu.Label>Management Access</Menu.Label>
           </Menu.Item>
           <Menu.Content>
-            <Menu.Item href="/manage-user/view">
-              <Menu.Label>Create User</Menu.Label>
+            <Menu.Item href="/manage-user/index">
+              <Menu.Label>Manage user</Menu.Label>
             </Menu.Item>
-            <Menu.Item href="/manage-role/view">
-              <Menu.Label>Create Role</Menu.Label>
-            </Menu.Item>
-            <Menu.Item href="/manage-role/assign-role">
-              <Menu.Label>Assign Role</Menu.Label>
-            </Menu.Item>
-            <Menu.Item href="/manage-permission/view">
-              <Menu.Label>Assign Permission</Menu.Label>
+            <Menu.Item href="/manage-roles-permissions/index">
+              <Menu.Label>Manage Role & Permission</Menu.Label>
             </Menu.Item>
           </Menu.Content>
         </Menu.Submenu>

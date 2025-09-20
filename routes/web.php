@@ -9,8 +9,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', Controllers\DashboardController::class)->name('dashboard');
 
     Route::group(['middleware' => ['permission:create user']], function () { 
-        Route::get('/manage-user/view', [Controllers\UserController::class, 'view'])->name('manage-user.view');
+        Route::get('/manage-user/create', [Controllers\UserController::class, 'create'])->name('manage-user.create');
         Route::post('/manage-user/store', [Controllers\UserController::class, 'store'])->name('manage-user.store');
+
+        Route::get('/manage-user/update/{user}', [Controllers\UserController::class, 'edit'])->name('manage-user.edit');
+        Route::put('/manage-user/update/{user}', [Controllers\UserController::class, 'update'])->name('manage-user.update');
 
         Route::get('/manage-role/view', [Controllers\RoleController::class, 'view'])->name('manage-role.view');
         Route::post('/manage-role/store', [Controllers\RoleController::class, 'store'])->name('manage-role.store');
