@@ -19,6 +19,8 @@ import {
 import { ManageUserData, UserData } from "@/types";
 import { usePaginator } from "momentum-paginator";
 import { Pagination } from "@/components/ui/pagination";
+import { Link } from "@/components/ui/link";
+import { buttonStyles } from "@/components/ui/button";
 
 const title = "Manage User";
 
@@ -36,9 +38,14 @@ export default function Index({ users, roles }: Props) {
       <Card>
         <Card.Header>
           <Card.Title>Users</Card.Title>
-          <Card.Description>
-            Manage users with roles and permissions.
-          </Card.Description>
+          <div className="flex items-center justify-between">
+            <Card.Description>
+              Manage users with roles and permissions.
+            </Card.Description>
+            <Link className={buttonStyles()} href="/manage-user/view">
+              Create User
+            </Link>
+          </div>
         </Card.Header>
         <Card.Content>
           <Table

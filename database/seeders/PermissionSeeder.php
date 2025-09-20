@@ -59,7 +59,6 @@ class PermissionSeeder extends Seeder
 
     // buat role admin dengan semua permissions
     $adminRole = Role::findOrCreate('admin', 'web');
-    $adminRole->syncPermissions(Permission::all());
 
     // assign role ke user id=1 (kalau ada)
     if ($user = User::find(1)) {

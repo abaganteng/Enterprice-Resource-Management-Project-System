@@ -18,7 +18,7 @@ interface Props {
   roles: ManageUserData[];
 }
 
-export default function View({ permissions, roles }: Props) {
+export function View({ permissions, roles }: Props) {
   const { contains } = useFilter({ sensitivity: "base" });
   const { data, setData, post, reset, errors, processing, recentlySuccessful } =
     useForm({

@@ -8,7 +8,7 @@ import SettingsLayout from "@/pages/settings/settings-layout";
 
 const title = "Manage User";
 
-export default function View() {
+export function View() {
   const { data, setData, post, reset, errors, processing, recentlySuccessful } =
     useForm({
       name: "",

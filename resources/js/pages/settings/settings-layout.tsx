@@ -61,7 +61,7 @@ export default function SettingsLayout({
               href="/manage-user/index"
               isCurrent={route().current("manage-user.index")}
             >
-              All User
+              Manage User
             </NavLink>
             <NavLink
               href="/manage-roles-permissions/index"
@@ -72,28 +72,10 @@ export default function SettingsLayout({
               Manage Roles & Permissions
             </NavLink>
             <NavLink
-              href="/manage-user/view"
-              isCurrent={route().current("manage-user.view")}
-            >
-              Create User
-            </NavLink>
-            <NavLink
-              href="/manage-role/view"
-              isCurrent={route().current("manage-role.view")}
-            >
-              Create Role
-            </NavLink>
-            <NavLink
               href="/manage-role/assign-role"
               isCurrent={route().current("manage-role.assign-role")}
             >
               Assign Role
-            </NavLink>
-            <NavLink
-              href="/manage-permission/view"
-              isCurrent={route().current("manage-permission.view")}
-            >
-              Assign Permission
             </NavLink>
             <Separator className="my-4" />
             <NavLink
