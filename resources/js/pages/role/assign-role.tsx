@@ -5,7 +5,7 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import SettingsLayout from "@/pages/settings/settings-layout";
 import { Select, SelectItem, SelectTrigger } from "@/components/ui/select";
-import { ManageUserData } from "@/types/index";
+import { ManageUserData, RoleData } from "@/types/index";
 import { Dialog } from "@/components/ui/dialog";
 import { Autocomplete, Popover, useFilter } from "react-aria-components";
 import { SearchField } from "@/components/ui/search-field";
@@ -16,9 +16,9 @@ const title = "Manage User";
 
 interface Props {
   users: ManageUserData[];
-  roles: ManageUserData[];
+  roles: RoleData[];
   user?: ManageUserData;
-  role?: ManageUserData;
+  role?: RoleData;
 }
 
 export default function AssignRole({ users, roles, user, role }: Props) {

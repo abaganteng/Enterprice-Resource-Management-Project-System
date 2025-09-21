@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Data\ManageUserData;
+use App\Data\PermissionData;
 use Illuminate\Http\Request;
 use App\Data\RoleAssignRoleData;
+use App\Data\RoleData;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -15,8 +17,8 @@ class PermissionController extends Controller
         $roles = Role::all(['id', 'name']);
         $permissions = Permission::all(['id', 'name']);
         return inertia('permission/view', [
-            'roles' => fn () => ManageUserData::collect($roles),
-            'permissions' => fn () => ManageUserData::collect($permissions),
+            'roles' => fn () => RoleData::collect($roles),
+            'permissions' => fn () => PermissionData::collect($permissions),
         ]);
     }
 

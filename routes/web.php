@@ -18,6 +18,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/manage-role/view', [Controllers\RoleController::class, 'view'])->name('manage-role.view');
         Route::post('/manage-role/store', [Controllers\RoleController::class, 'store'])->name('manage-role.store');
 
+        Route::put('/manage-role/update', [Controllers\RoleController::class, 'update'])->name('manage-role.update');
+
+        Route::delete('/manage-role/delete/{role}', [Controllers\RoleController::class, 'delete'])->name('manage-role.delete');
+
+        Route::post('/manage-role/revoke/{role}', [Controllers\RoleController::class, 'revokePermission'])->name('manage-role.revoke');
+
         Route::get('/manage-role/assign-role', [Controllers\RoleController::class, 'assignRole'])->name('manage-role.assign-role');
         Route::post('/manage-role/assign-role', [Controllers\RoleController::class, 'storeAssignRole'])->name('manage-role.storeAssignRole');
         

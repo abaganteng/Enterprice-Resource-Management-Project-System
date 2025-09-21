@@ -54,7 +54,7 @@ export default function SettingsLayout({
             </NavLink>
             <Separator className="my-4" />
             <Header content="" className="text-xs text-gray-500">
-              Manage User
+              Management Access
             </Header>
             <Separator className="my-2" />
             <NavLink

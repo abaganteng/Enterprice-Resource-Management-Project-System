@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Data\PermissionData;
-use App\Data\RolesPermissionsData;
+use App\Data\RoleDetailData;
 use Spatie\Permission\Models\Role;
-use Spatie\LaravelData\DataCollection;
 use Spatie\Permission\Models\Permission;
-use Spatie\LaravelData\PaginatedDataCollection;
 
 class RolesPermissionsController extends Controller
 {
@@ -19,7 +17,7 @@ class RolesPermissionsController extends Controller
         $permissions = Permission::select(['id', 'name'])->get();
 
     return inertia('roles-permissions/index', [
-        'rolesPermissions' => RolesPermissionsData::collect($rolesPermissions, DataCollection::class),
+        'rolesPermissions' => RoleDetailData::collect($rolesPermissions),
         'permissions' => PermissionData::collect($permissions),
     ]);
     }

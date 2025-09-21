@@ -3,33 +3,39 @@ import { Head, usePage } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
 import SettingsLayout from "@/pages/settings/settings-layout";
 import { Table } from "@/components/ui/table";
-import { Menu, MenuContent, MenuItem, MenuTrigger } from "@/components/ui/menu";
-import { IconDotsVertical, IconEye } from "@intentui/icons";
-import { PermissionData, RolesPermissionsData } from "@/types";
-import { Pagination } from "@/components/ui/pagination";
+import { PermissionData, RoleDetailData, RolesPermissionsData } from "@/types";
 import { Badge } from "@/components/ui/badge";
-import { useListData } from "react-stately";
-import { useDragAndDrop } from "react-aria-components";
 import { View as AssignPermission } from "../permission/view";
 import { View as CreateRole } from "../role/view";
+import {
+  Menu,
+  MenuContent,
+  MenuItem,
+  MenuSeparator,
+  MenuTrigger,
+} from "@/components/ui/menu";
+import { IconDotsVertical } from "@intentui/icons";
+import { UpdateRoleModal } from "./update-role-modal";
+import { useState } from "react";
+import { DeleteRoleModal } from "./delete-role-modal";
+import { RevokePermissionModal } from "./revoke-permission-modal";
 
 const title = "Manage User";
 
-interface Props {
-  // rolesPermissions: RolesPermissionsData[];
-  permissions: PermissionData[];
-}
-
 interface PageProps {
-  rolesPermissions: RolesPermissionsData[];
+  rolesPermissions: RoleDetailData[];
   permissions: PermissionData[];
   [key: string]: unknown;
 }
 
 export default function Index() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<any>(null);
+  const [action, setAction] = useState<"update" | "delete" | "revoke" | null>(
+    null
+  );
   const { props } = usePage<PageProps>();
   const { rolesPermissions, permissions } = props;
-  console.log(rolesPermissions);
 
   return (
     <>
@@ -50,6 +56,7 @@ export default function Index() {
               <Table.Header>
                 <Table.Column isRowHeader>Role</Table.Column>
                 <Table.Column>Permission</Table.Column>
+                <Table.Column />
               </Table.Header>
               <Table.Body>
                 {rolesPermissions.map((item: RolesPermissionsData) => (
@@ -65,6 +72,50 @@ export default function Index() {
                       ) : (
                         <Badge intent="danger">Tidak ada permission</Badge>
                       )}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Menu>
+                        <MenuTrigger>
+                          <IconDotsVertical />
+                        </MenuTrigger>
+                        <MenuContent placement="left top">
+                          <MenuItem
+                            key={`update-${item.id}`}
+                            onAction={() => {
+                              setSelectedRole(item);
+                              setAction("update");
+                              setIsOpen(true);
+                            }}
+                          >
+                            Update Role
+                          </MenuItem>
+                          <MenuSeparator />
+                          <MenuItem
+                            key={`revoke-${item.id}`}
+                            onAction={() => {
+                              setSelectedRole(item);
+                              setAction("revoke");
+                              setIsOpen(true);
+                            }}
+                            isDanger
+                          >
+                            Revoke Permission
+                          </MenuItem>
+                          <MenuSeparator />
+                          <MenuItem
+                            key={`delete-${item.id}`}
+                            onAction={() => {
+                              setSelectedRole(item);
+                              setAction("delete");
+                              setIsOpen(true);
+                            }}
+                            isDanger
+                          >
+                            Delete Role
+                          </MenuItem>
+                          <MenuSeparator />
+                        </MenuContent>
+                      </Menu>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -102,6 +153,28 @@ export default function Index() {
         <CreateRole />
         <AssignPermission permissions={permissions} roles={rolesPermissions} />
       </div>
+
+      {selectedRole && action === "update" && (
+        <UpdateRoleModal
+          open={isOpen}
+          onOpenChange={() => setIsOpen(false)}
+          role={selectedRole}
+        />
+      )}
+      {selectedRole && action === "delete" && (
+        <DeleteRoleModal
+          open={isOpen}
+          onOpenChange={() => setIsOpen(false)}
+          role={selectedRole}
+        />
+      )}
+      {selectedRole && action === "revoke" && (
+        <RevokePermissionModal
+          open={isOpen}
+          onOpenChange={() => setIsOpen(false)}
+          role={selectedRole}
+        />
+      )}
     </>
   );
 }
