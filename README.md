@@ -1,21 +1,31 @@
-### TL;DR
+### Management Access System
 
-```bash
-laravel new app --using=intentui/laravel
-```
+Sebuah sistem management access berbasis Laravel, React, dan Inertia dengan dukungan role & permission menggunakan Spatie.
 
-Make sure to update your `APP_URL` in the `.env` file before using the route function. Then, run `bun run dev` to generate and watch routes properly during development.
+### Fitur Utama
+
+1. Create User dan Role
+2. Edit User dan Role
+3. Delete Role
+4. Assign Role (ke user) dan Permission (ke role)
+5. Revoke Role (dari user) dan Permission (dari role)
+
+### Tech Stack
+
+1. Backend : L A R A V E L 12
+2. Frontend : R E A C T J S + I N E R T I A J S
+3. Database : M Y S Q L
+4. Package utama : laravel-permission [https://spatie.be/docs/laravel-permission/v6/] dan Laravel-data [https://spatie.be/docs/laravel-data/v4/introduction]
+
+### Cara Penggunaan
+
+1. Clone Repo di terminal
+2. Masuk ke direktori, `composer install`, `npm install`, edit file .env.example menjadi .env, `php artisan key:generate`, `php artisan migrate --seed`, `npm run dev`.
+3. Agar dapat melihat tampilan login sebagai Super-admin dengan user id 1. Lebih mudah login gunakan url `http://belajar-spatie-package.test/dev/login/1`. Management access terletak di user menu.
+
 
 ### Laravel Inertia React with TypeScript
 
-By default, packages like Laravel Breeze use regular JavaScript for React. However, this project is tailored for those who want an Inertia.js boilerplate with TypeScript.
-
-#### Features
-
-- Authentication
-- User Profile
-- User Password
-- User Deletion
 
 ### Quick Login
 
@@ -27,10 +37,3 @@ Example:
 http://localhost:8000/dev/login/1
 ```
 
-This feature is only available in development mode (`APP_ENV=local` in `.env`). Ensure that a user with the specified ID exists in your database.
-
-### Default Branch Renaming
-
-The **9.x** branch is now named **laravel-9.x**.
-
-If you have a local clone, you can update it accordingly.
