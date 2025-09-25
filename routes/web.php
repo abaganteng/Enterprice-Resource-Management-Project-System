@@ -43,6 +43,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['middleware' => ['permission:read project']], function () { 
         Route::get('/projects/index', [Controllers\ProjectController::class, 'index'])->name('projects.index');
     });
+
+    Route::group(['middleware' => ['permission:create project']], function () { 
+        Route::post('/projects/store', [Controllers\ProjectController::class, 'store'])->name('projects.store');
+    });
    
 });
 

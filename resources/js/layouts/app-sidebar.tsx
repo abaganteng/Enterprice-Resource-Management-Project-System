@@ -265,6 +265,19 @@ export default function AppSidebar(
               <IconDashboardFill />
               Dashboard
             </MenuItem>
+            <Menu.Submenu className="justify-between">
+              <Menu.Item>
+                <Menu.Label>Management Access</Menu.Label>
+              </Menu.Item>
+              <Menu.Content>
+                <Menu.Item href="/manage-user/index">
+                  <Menu.Label>Manage user</Menu.Label>
+                </Menu.Item>
+                <Menu.Item href="/manage-roles-permissions/index">
+                  <Menu.Label>Manage Role & Permission</Menu.Label>
+                </Menu.Item>
+              </Menu.Content>
+            </Menu.Submenu>
             <MenuItem href="#settings">
               <IconSettingsFill />
               Settings

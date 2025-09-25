@@ -142,8 +142,4 @@ export default function Show({ user }: Props) {
   );
 }
 
-Show.layout = (page: any) => (
-  <AppLayout>
-    <SettingsLayout children={page} />
-  </AppLayout>
-);
+Show.layout = (page: any) => <AppLayout children={page} />;

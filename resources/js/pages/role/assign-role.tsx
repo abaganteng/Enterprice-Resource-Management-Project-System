@@ -123,8 +123,4 @@ export default function AssignRole({ users, roles, user, role }: Props) {
   );
 }
 
-AssignRole.layout = (page: any) => (
-  <AppLayout>
-    <SettingsLayout children={page} />
-  </AppLayout>
-);
+AssignRole.layout = (page: any) => <AppLayout children={page} />;

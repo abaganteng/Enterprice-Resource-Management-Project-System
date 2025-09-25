@@ -17,17 +17,74 @@ import {
   MenuTrigger,
 } from "@/components/ui/menu";
 import { SidebarNav, SidebarTrigger } from "@/components/ui/sidebar";
+import { usePage } from "@inertiajs/react";
 
 export default function AppSidebarNav() {
+  const { url } = usePage();
+
+  const menus = [
+    {
+      label: "Dashboard",
+      href: "/dashboard",
+      children: [],
+    },
+    {
+      label: "Management Access",
+      href: "/#", // induk, tidak bisa diklik
+      children: [
+        {
+          label: "Manage User",
+          href: "/manage-user/index",
+          children: [],
+        },
+        {
+          label: "Manage Role & Permission",
+          href: "/manage-roles-permissions/index",
+          children: [],
+        },
+      ],
+    },
+  ];
+
+  let breadcrumbTrail: { label: string; href?: string | undefined }[] = [];
+
+  if (
+    url.startsWith("/manage-user") ||
+    url.startsWith("/manage-roles-permissions")
+  ) {
+    const parent = menus.find((m) => m.label === "Management Access");
+    if (parent) {
+      breadcrumbTrail.push(parent);
+
+      const activeChild = parent.children.find((child) =>
+        url.startsWith(child.href)
+      );
+      if (activeChild) {
+        breadcrumbTrail.push(activeChild);
+      }
+    }
+  } else {
+    breadcrumbTrail.push(menus[0]); // default: Dashboard
+  }
+
   return (
     <SidebarNav>
       <span className="flex items-center gap-x-4">
         <SidebarTrigger className="-ml-2" />
         <Breadcrumbs className="hidden md:flex">
-          <Breadcrumbs.Item href="/blocks/sidebar/sidebar-01">
-            Dashboard
-          </Breadcrumbs.Item>
-          <Breadcrumbs.Item>Newsletter</Breadcrumbs.Item>
+          {breadcrumbTrail.map((item, idx) => {
+            const isParent = idx === 0;
+            const isLast = idx === breadcrumbTrail.length - 1;
+
+            return (
+              <Breadcrumbs.Item
+                key={item.href ?? item.label}
+                {...(!isParent && !isLast && { href: item.href })}
+              >
+                {item.label}
+              </Breadcrumbs.Item>
+            );
+          })}
         </Breadcrumbs>
       </span>
       <UserMenu />

@@ -1,11 +1,8 @@
 import AppLayout from "@/layouts/app-layout";
-import SettingsLayout from "../settings/settings-layout";
 import { ProjectData } from "@/types";
 import { usePaginator } from "momentum-paginator";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
-import { Link } from "@/components/ui/link";
-import { buttonStyles } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
 import {
   Menu,
@@ -21,28 +18,31 @@ import {
   IconTrash,
 } from "@intentui/icons";
 import { Pagination } from "@/components/ui/pagination";
+import { CreateProjectModal } from "./create-project-modal";
 
 const title = "Project";
 
-interface Props {
-  projects: Paginator<ProjectData>;
+interface ProjectStatusOption {
+  id: string;
+  name: string;
 }
 
-export default function Index({ projects }: Props) {
+interface Props {
+  projects: Paginator<ProjectData>;
+  statuses: ProjectStatusOption[];
+}
+
+export default function Index({ projects, statuses }: Props) {
   const { previous, next, pages } = usePaginator(projects);
   return (
     <>
       <Head title={title} />
       <Card>
         <Card.Header>
-          <Card.Title>Users</Card.Title>
+          <Card.Title>Projects</Card.Title>
           <div className="flex items-center justify-between">
-            <Card.Description>
-              Manage users with roles and permissions.
-            </Card.Description>
-            <Link className={buttonStyles()} href="/manage-user/create">
-              Create Project
-            </Link>
+            <Card.Description>Projects data management.</Card.Description>
+            <CreateProjectModal statuses={statuses} />
           </div>
         </Card.Header>
         <Card.Content>
@@ -70,7 +70,7 @@ export default function Index({ projects }: Props) {
                     <Table.Cell>{user.client.name}</Table.Cell>
                     <Table.Cell>{user.manager.name}</Table.Cell>
                     <Table.Cell>{user.name}</Table.Cell>
-                    <Table.Cell>{user.budget}</Table.Cell>
+                    <Table.Cell>Rp {user.budget}</Table.Cell>
                     <Table.Cell>{user.status}</Table.Cell>
                     <Table.Cell>{user.start_date}</Table.Cell>
                     <Table.Cell>{user.end_date}</Table.Cell>

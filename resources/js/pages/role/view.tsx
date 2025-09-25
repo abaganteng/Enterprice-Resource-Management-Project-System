@@ -66,8 +66,4 @@ export function View() {
   );
 }
 
-View.layout = (page: any) => (
-  <AppLayout>
-    <SettingsLayout children={page} />
-  </AppLayout>
-);
+View.layout = (page: any) => <AppLayout children={page} />;

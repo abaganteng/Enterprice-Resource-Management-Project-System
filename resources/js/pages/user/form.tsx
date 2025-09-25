@@ -116,8 +116,4 @@ export default function Form({
   );
 }
 
-Form.layout = (page: any) => (
-  <AppLayout>
-    <SettingsLayout children={page} />
-  </AppLayout>
-);
+Form.layout = (page: any) => <AppLayout children={page} />;

@@ -3,7 +3,7 @@ import { Head, usePage } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
 import SettingsLayout from "@/pages/settings/settings-layout";
 import { Table } from "@/components/ui/table";
-import { PermissionData, RoleDetailData, RolesPermissionsData } from "@/types";
+import { PermissionData, RoleDetailData } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { View as AssignPermission } from "../permission/view";
 import { View as CreateRole } from "../role/view";
@@ -59,7 +59,7 @@ export default function Index() {
                 <Table.Column />
               </Table.Header>
               <Table.Body>
-                {rolesPermissions.map((item: RolesPermissionsData) => (
+                {rolesPermissions.map((item: RoleDetailData) => (
                   <Table.Row key={item.id}>
                     <Table.Cell>{item.name}</Table.Cell>
                     <Table.Cell>
@@ -179,8 +179,4 @@ export default function Index() {
   );
 }
 
-Index.layout = (page: any) => (
-  <AppLayout>
-    <SettingsLayout children={page} />
-  </AppLayout>
-);
+Index.layout = (page: any) => <AppLayout children={page} />;

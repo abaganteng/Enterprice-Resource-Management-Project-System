@@ -145,8 +145,4 @@ export default function Index({ users }: Props) {
   );
 }
 
-Index.layout = (page: any) => (
-  <AppLayout>
-    <SettingsLayout children={page} />
-  </AppLayout>
-);
+Index.layout = (page: any) => <AppLayout children={page} />;
