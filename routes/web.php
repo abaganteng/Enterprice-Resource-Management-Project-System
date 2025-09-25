@@ -40,8 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
        Route::get('/manage-roles-permissions/index', [Controllers\RolesPermissionsController::class, 'index'])->name('manage-roles-permissions.index');
     });    
 
-    Route::group(['middleware' => ['permission:create user']], function () { 
-        
+    Route::group(['middleware' => ['permission:read project']], function () { 
+        Route::get('/projects/index', [Controllers\ProjectController::class, 'index'])->name('projects.index');
     });
    
 });

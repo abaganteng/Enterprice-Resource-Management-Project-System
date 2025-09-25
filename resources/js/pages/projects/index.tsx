@@ -1,7 +1,11 @@
 import AppLayout from "@/layouts/app-layout";
+import SettingsLayout from "../settings/settings-layout";
+import { ProjectData } from "@/types";
+import { usePaginator } from "momentum-paginator";
 import { Head } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
-import SettingsLayout from "@/pages/settings/settings-layout";
+import { Link } from "@/components/ui/link";
+import { buttonStyles } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
 import {
   Menu,
@@ -16,24 +20,19 @@ import {
   IconHighlight,
   IconTrash,
 } from "@intentui/icons";
-import { ManageUserListData } from "@/types";
-import { usePaginator } from "momentum-paginator";
 import { Pagination } from "@/components/ui/pagination";
-import { Link } from "@/components/ui/link";
-import { buttonStyles } from "@/components/ui/button";
 
-const title = "Manage User";
+const title = "Project";
 
 interface Props {
-  users: Paginator<ManageUserListData>;
+  projects: Paginator<ProjectData>;
 }
 
-export default function Index({ users }: Props) {
-  const { previous, next, pages } = usePaginator(users);
+export default function Index({ projects }: Props) {
+  const { previous, next, pages } = usePaginator(projects);
   return (
     <>
       <Head title={title} />
-      <h1 className="sr-only">{title}</h1>
       <Card>
         <Card.Header>
           <Card.Title>Users</Card.Title>
@@ -42,7 +41,7 @@ export default function Index({ users }: Props) {
               Manage users with roles and permissions.
             </Card.Description>
             <Link className={buttonStyles()} href="/manage-user/create">
-              Create User
+              Create Project
             </Link>
           </div>
         </Card.Header>
@@ -54,23 +53,27 @@ export default function Index({ users }: Props) {
           >
             <Table.Header>
               <Table.Column className="w-0">#</Table.Column>
-              <Table.Column isRowHeader>Email</Table.Column>
-              <Table.Column>Name</Table.Column>
-              <Table.Column>Role</Table.Column>
+              <Table.Column isRowHeader>Client</Table.Column>
+              <Table.Column>Manager</Table.Column>
+              <Table.Column>Project Name</Table.Column>
+              <Table.Column>Budget</Table.Column>
+              <Table.Column>Status</Table.Column>
+              <Table.Column>Start Date</Table.Column>
+              <Table.Column>End Date</Table.Column>
               <Table.Column />
             </Table.Header>
             <Table.Body>
-              {users.data.length > 0 ? (
-                users.data.map((user: ManageUserListData, index: number) => (
+              {projects.data.length > 0 ? (
+                projects.data.map((user: ProjectData, index: number) => (
                   <Table.Row key={user.id}>
                     <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>{user.email}</Table.Cell>
+                    <Table.Cell>{user.client.name}</Table.Cell>
+                    <Table.Cell>{user.manager.name}</Table.Cell>
                     <Table.Cell>{user.name}</Table.Cell>
-                    <Table.Cell>
-                      {user.roles?.length > 0
-                        ? user.roles?.map((role: any) => role.name).join(", ")
-                        : "-"}
-                    </Table.Cell>
+                    <Table.Cell>{user.budget}</Table.Cell>
+                    <Table.Cell>{user.status}</Table.Cell>
+                    <Table.Cell>{user.start_date}</Table.Cell>
+                    <Table.Cell>{user.end_date}</Table.Cell>
                     <Table.Cell className="text-end last:pr-2.5">
                       <Menu>
                         <MenuTrigger>
@@ -94,6 +97,21 @@ export default function Index({ users }: Props) {
                 ))
               ) : (
                 <Table.Row>
+                  <Table.Cell className="text-center">
+                    No data available.
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    No data available.
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    No data available.
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    No data available.
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    No data available.
+                  </Table.Cell>
                   <Table.Cell className="text-center">
                     No data available.
                   </Table.Cell>
@@ -145,8 +163,4 @@ export default function Index({ users }: Props) {
   );
 }
 
-Index.layout = (page: any) => (
-  <AppLayout>
-    <SettingsLayout children={page} />
-  </AppLayout>
-);
+Index.layout = (page: any) => <AppLayout children={page} />;
