@@ -57,6 +57,20 @@ class PermissionSeeder extends Seeder
     collect($this->generatePermissions())
         ->each(fn ($permission) => Permission::findOrCreate($permission, 'web'));
 
+        $rolesPermissions = collect([
+            'Manager' => [
+                'read project', 'create project', 'update project', 'delete project',
+            ],
+            'Client' => [
+                'read project'
+                ],
+        ]);
+
+        $rolesPermissions->each(function ($permissions, $role) {
+            $roleInstance = Role::create(['name' => $role]);
+            $roleInstance->givePermissionTo($permissions);
+        });
+
     // buat role admin dengan semua permissions
     $adminRole = Role::findOrCreate('super-admin', 'web');
 
@@ -64,5 +78,14 @@ class PermissionSeeder extends Seeder
     if ($user = User::find(1)) {
         $user->assignRole($adminRole);
     }
+
+    User::find(2)->assignRole('Manager');
+    User::find(3)->assignRole('Manager');
+    User::find(4)->assignRole('Manager');
+    User::find(5)->assignRole('Manager');
+    User::find(6)->assignRole('Client');
+    User::find(7)->assignRole('Client');
+    User::find(8)->assignRole('Client');
+    User::find(9)->assignRole('Client');
 }
 }

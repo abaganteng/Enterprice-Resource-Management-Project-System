@@ -47,6 +47,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['middleware' => ['permission:create project']], function () { 
         Route::post('/projects/store', [Controllers\ProjectController::class, 'store'])->name('projects.store');
     });
+
+    Route::group(['middleware' => ['permission:update project']], function () { 
+        Route::put('/projects/update', [Controllers\ProjectController::class, 'update'])->name('projects.update');
+    });
    
 });
 

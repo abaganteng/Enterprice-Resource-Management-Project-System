@@ -11,6 +11,8 @@ class ProjectData extends Data
         public ManageUserData $manager,
         public ManageUserData $client,
         public string $name,
+        public string $description,
+        public string $project_type,
         public ?string $start_date,
         public ?string $end_date,
         public ?float $budget,

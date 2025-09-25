@@ -23,6 +23,8 @@ export type ProjectData = {
   manager: ManageUserData;
   client: ManageUserData;
   name: string;
+  description: string;
+  project_type: string;
   start_date: string | null;
   end_date: string | null;
   budget: number | null;

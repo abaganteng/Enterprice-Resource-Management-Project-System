@@ -1,5 +1,5 @@
 import AppLayout from "@/layouts/app-layout";
-import { ProjectData } from "@/types";
+import { ManageUserData, ProjectData } from "@/types";
 import { usePaginator } from "momentum-paginator";
 import { Head, usePage } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
@@ -14,11 +14,15 @@ import {
 import {
   IconDotsVertical,
   IconEye,
+  IconGear,
   IconHighlight,
   IconTrash,
 } from "@intentui/icons";
 import { Pagination } from "@/components/ui/pagination";
-import { CreateProjectModal } from "./create-project-modal";
+import { FormProjectModal } from "./form-project-modal";
+import { useState } from "react";
+import { Link } from "@/components/ui/link";
+import { buttonStyles } from "@/components/ui/button";
 
 const title = "Project";
 
@@ -27,12 +31,34 @@ interface ProjectStatusOption {
   name: string;
 }
 
+interface PageSettings {
+  title: string;
+  description: string;
+  buttonText: string;
+  method: "post" | "put";
+  url: string;
+}
+
 interface Props {
   projects: Paginator<ProjectData>;
   statuses: ProjectStatusOption[];
+  types: ProjectStatusOption[];
+  clients: ManageUserData[];
+  create?: PageSettings;
+  update?: PageSettings;
 }
 
-export default function Index({ projects, statuses }: Props) {
+export default function Index({
+  projects,
+  statuses,
+  types,
+  clients,
+  create,
+  update,
+}: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [action, setAction] = useState<"update" | "create" | null>(null);
   const { previous, next, pages } = usePaginator(projects);
   return (
     <>
@@ -42,7 +68,21 @@ export default function Index({ projects, statuses }: Props) {
           <Card.Title>Projects</Card.Title>
           <div className="flex items-center justify-between">
             <Card.Description>Projects data management.</Card.Description>
-            <CreateProjectModal statuses={statuses} />
+            <Link
+              onClick={() => (
+                setIsOpen(true), setAction("create"), setSelectedProject(null)
+              )}
+              className={buttonStyles()}
+            >
+              Create Project
+            </Link>
+            {/* <FormProjectModal
+              open={isOpen}
+              onOpenChange={() => setIsOpen(false)}
+              statuses={statuses}
+              types={types}
+              clients={clients}
+            /> */}
           </div>
         </Card.Header>
         <Card.Content>
@@ -56,6 +96,7 @@ export default function Index({ projects, statuses }: Props) {
               <Table.Column isRowHeader>Client</Table.Column>
               <Table.Column>Manager</Table.Column>
               <Table.Column>Project Name</Table.Column>
+              <Table.Column>Project Type</Table.Column>
               <Table.Column>Budget</Table.Column>
               <Table.Column>Status</Table.Column>
               <Table.Column>Start Date</Table.Column>
@@ -64,27 +105,37 @@ export default function Index({ projects, statuses }: Props) {
             </Table.Header>
             <Table.Body>
               {projects.data.length > 0 ? (
-                projects.data.map((user: ProjectData, index: number) => (
-                  <Table.Row key={user.id}>
+                projects.data.map((project: ProjectData, index: number) => (
+                  <Table.Row key={project.id}>
                     <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>{user.client.name}</Table.Cell>
-                    <Table.Cell>{user.manager.name}</Table.Cell>
-                    <Table.Cell>{user.name}</Table.Cell>
-                    <Table.Cell>Rp {user.budget}</Table.Cell>
-                    <Table.Cell>{user.status}</Table.Cell>
-                    <Table.Cell>{user.start_date}</Table.Cell>
-                    <Table.Cell>{user.end_date}</Table.Cell>
+                    <Table.Cell>{project.client.name}</Table.Cell>
+                    <Table.Cell>{project.manager.name}</Table.Cell>
+                    <Table.Cell>{project.name}</Table.Cell>
+                    <Table.Cell>{project.project_type}</Table.Cell>
+                    <Table.Cell>Rp {project.budget}</Table.Cell>
+                    <Table.Cell>{project.status}</Table.Cell>
+                    <Table.Cell>{project.start_date}</Table.Cell>
+                    <Table.Cell>{project.end_date}</Table.Cell>
                     <Table.Cell className="text-end last:pr-2.5">
                       <Menu>
                         <MenuTrigger>
                           <IconDotsVertical />
                         </MenuTrigger>
                         <MenuContent placement="left top">
-                          <MenuItem href={route("manage-user.show", [user.id])}>
+                          <MenuItem
+                            href={route("manage-user.show", [project.id])}
+                          >
                             <IconEye /> View
                           </MenuItem>
-                          <MenuItem>
-                            <IconHighlight /> Edit
+                          <MenuItem
+                            onAction={() => {
+                              setSelectedProject(project);
+                              setAction("update");
+                              setIsOpen(true);
+                            }}
+                          >
+                            <IconGear />
+                            Update Project
                           </MenuItem>
                           <MenuSeparator />
                           <MenuItem isDanger>
@@ -159,6 +210,28 @@ export default function Index({ projects, statuses }: Props) {
           </Pagination>
         </Card.Footer>
       </Card>
+
+      {selectedProject && action === "update" && (
+        <FormProjectModal
+          open={isOpen}
+          onOpenChange={() => setIsOpen(false)}
+          project={selectedProject}
+          statuses={statuses}
+          types={types}
+          clients={clients}
+          pageSettings={update}
+        />
+      )}
+      {action === "create" && (
+        <FormProjectModal
+          open={isOpen}
+          onOpenChange={() => setIsOpen(false)}
+          statuses={statuses}
+          types={types}
+          clients={clients}
+          pageSettings={create}
+        />
+      )}
     </>
   );
 }

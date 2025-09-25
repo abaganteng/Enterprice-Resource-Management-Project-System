@@ -209,7 +209,7 @@ export default function AppSidebar(
               </SidebarDisclosureTrigger>
               <SidebarDisclosurePanel>
                 <SidebarItem
-                  href="projects/index"
+                  href="/projects/index"
                   isCurrent={route().current("projects.index")}
                   tooltip="Warehouse"
                 >
