@@ -14,6 +14,15 @@ export type ManageUserListData = {
   email: string;
   roles: Array<RoleData>;
 };
+export type MilestoneData = {
+  id: number | null;
+  name: string | null;
+  description: string | null;
+  due_date: string | null;
+  status: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+};
 export type PermissionData = {
   id: number;
   name: string;
@@ -43,6 +52,18 @@ export type ProjectDetailData = {
   status: string | null;
   created_at: string;
   updated_at: string;
+  phases: Array<ProjectPhaseData> | null;
+};
+export type ProjectPhaseData = {
+  id: number;
+  name: string;
+  description: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  status: string;
+  created_at: string | null;
+  updated_at: string | null;
+  milestones: Array<MilestoneData> | null;
 };
 export type RoleData = {
   id: number;

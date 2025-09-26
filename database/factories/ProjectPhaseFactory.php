@@ -21,7 +21,7 @@ class ProjectPhaseFactory extends Factory
         $endDate = $this->faker->dateTimeBetween($startDate, '+6 months');
 
         return [
-            'project_id' => Project::factory(),
+            'project_id' => 1,
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph(3),
             'start_date' => $startDate->format('Y-m-d'),

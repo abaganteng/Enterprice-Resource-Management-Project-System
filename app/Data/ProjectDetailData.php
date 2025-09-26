@@ -3,9 +3,14 @@
 namespace App\Data;
 
 use Spatie\LaravelData\Data;
+use Illuminate\Support\Collection;
+
 
 class ProjectDetailData extends Data
 {
+        /**
+     * @param DataCollection<int, ProjectPhaseData> $project_phases
+     */
     public function __construct(
         public ?int $id,
         public UserData $manager,
@@ -19,5 +24,7 @@ class ProjectDetailData extends Data
         public ?string $status,
         public string $created_at,
         public string $updated_at,
+        /** @var Collection<int, ProjectPhaseData> */
+        public ?Collection $phases
     ) {}
 }

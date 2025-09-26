@@ -20,9 +20,9 @@ class MilestoneFactory extends Factory
     public function definition(): array
     {
          return [
-            'project_id' => Project::factory(),
-            'phase_id' => ProjectPhase::factory(),
-            'approved_by' => User::factory(),
+            'project_id' => 1,
+            'phase_id' => 1,
+            'approved_by' => 2,
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph(2),
             'due_date' => $this->faker->dateTimeBetween('now', '+3 months')->format('Y-m-d'),

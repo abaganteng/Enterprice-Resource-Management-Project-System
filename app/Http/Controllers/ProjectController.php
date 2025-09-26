@@ -143,7 +143,7 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        $project = Project::with(['manager', 'client'])->first();
+        $project = Project::with(['manager', 'client', 'phases.milestones'])->first();
 
         return inertia('projects/show', [
             'project' => ProjectDetailData::from($project),
