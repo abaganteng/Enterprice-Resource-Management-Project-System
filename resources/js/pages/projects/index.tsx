@@ -56,6 +56,7 @@ export default function Index({
   create,
   update,
 }: Props) {
+  console.log(projects);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [action, setAction] = useState<"update" | "create" | null>(null);
@@ -108,8 +109,8 @@ export default function Index({
                 projects.data.map((project: ProjectData, index: number) => (
                   <Table.Row key={project.id}>
                     <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>{project.client.name}</Table.Cell>
-                    <Table.Cell>{project.manager.name}</Table.Cell>
+                    <Table.Cell>{project.client?.name}</Table.Cell>
+                    <Table.Cell>{project.manager?.name}</Table.Cell>
                     <Table.Cell>{project.name}</Table.Cell>
                     <Table.Cell>{project.project_type}</Table.Cell>
                     <Table.Cell>Rp {project.budget}</Table.Cell>
@@ -122,9 +123,7 @@ export default function Index({
                           <IconDotsVertical />
                         </MenuTrigger>
                         <MenuContent placement="left top">
-                          <MenuItem
-                            href={route("manage-user.show", [project.id])}
-                          >
+                          <MenuItem href={route("projects.show", [project.id])}>
                             <IconEye /> View
                           </MenuItem>
                           <MenuItem
@@ -148,6 +147,9 @@ export default function Index({
                 ))
               ) : (
                 <Table.Row>
+                  <Table.Cell className="text-center">
+                    No data available.
+                  </Table.Cell>
                   <Table.Cell className="text-center">
                     No data available.
                   </Table.Cell>

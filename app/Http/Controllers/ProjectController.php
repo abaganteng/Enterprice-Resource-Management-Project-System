@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Data\ProjectData;
 use App\Data\ManageUserData;
 use Illuminate\Http\Request;
+use App\Data\ProjectDetailData;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,7 +68,6 @@ class ProjectController extends Controller
         'name'         => 'required|string|max:255',
         'description'  => 'nullable|string',
         'budget'       => 'nullable|numeric|min:0',
-        'status_id'    => ['required', Rule::enum(ProjectStatus::class)],
         'start_date'   => 'required|date',
         'end_date'     => 'required|date|after_or_equal:start_date',
         'project_type' => ['required', Rule::enum(ProjectType::class)],
@@ -76,13 +76,12 @@ class ProjectController extends Controller
             'exists:users,id'
         ],
     ]);
-    
 
     $project = Project::create([
         'name'        => $validated['name'],
         'description' => $validated['description'] ?? null,
         'budget'      => $validated['budget'] ?? 0,
-        'status'      => $validated['status_id'],
+        'status'      => 'draft',
         'start_date'  => $validated['start_date'],
         'end_date'    => $validated['end_date'],
         'project_type'=> $validated['project_type'],
@@ -96,8 +95,58 @@ class ProjectController extends Controller
 
     }
 
-    public function update()
+    public function update(Request $request, Project $project)
     {
-        dd('update project');
+         // 1. Base rules (boleh diupdate kapan saja)
+        $rules = [
+            'description' => ['nullable', 'string'],
+            'budget'      => ['nullable', 'numeric', 'min:0'],
+            'status_id'   => ['required', Rule::enum(ProjectStatus::class)],
+            'end_date'    => ['required', 'date', 'after_or_equal:start_date'],
+        ];
+
+        // 2. Kalau masih draft → semua field editable
+        if ($project->status_id === ProjectStatus::Draft->value) {
+            $rules['name']        = ['required', 'string', 'max:255'];
+            $rules['start_date']  = ['required', 'date'];
+            $rules['project_type'] = ['required', Rule::enum(ProjectType::class)];
+
+            if ($request->input('project_type') === ProjectType::External->value) {
+                $rules['client_id'] = ['required', 'exists:users,id'];
+            }
+        }
+        // 3. Validasi request
+        $validated = $request->validate($rules);
+
+        // 4. Update field sesuai rules
+        $project->description = $validated['description'] ?? $project->description;
+        $project->budget      = $validated['budget'] ?? $project->budget;
+        $project->status_id   = $validated['status_id'];
+        $project->end_date    = $validated['end_date'];
+
+        // 5. Jika draft → bisa update tambahan field
+        if ($project->status_id === ProjectStatus::Draft->value) {
+            $project->name        = $validated['name'];
+            $project->start_date  = $validated['start_date'];
+            $project->project_type = $validated['project_type'];
+
+            if ($validated['project_type'] === ProjectType::External->value) {
+                $project->client_id = $validated['client_id'];
+            } else {
+                $project->client_id = null;
+            }
+        }
+
+        // 6. Simpan perubahan
+        $project->save();
+    }
+
+    public function show(Project $project)
+    {
+        $project = Project::with(['manager', 'client'])->first();
+
+        return inertia('projects/show', [
+            'project' => ProjectDetailData::from($project),
+        ]);
     }
 }

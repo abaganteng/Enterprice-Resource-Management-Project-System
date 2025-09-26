@@ -19,9 +19,21 @@ export type PermissionData = {
   name: string;
 };
 export type ProjectData = {
+  id: number;
+  manager: ManageUserData | null;
+  client: ManageUserData | null;
+  name: string;
+  description: string | null;
+  project_type: string | null;
+  budget: number | null;
+  status: string | null;
+  start_date: string | null;
+  end_date: string | null;
+};
+export type ProjectDetailData = {
   id: number | null;
-  manager: ManageUserData;
-  client: ManageUserData;
+  manager: UserData;
+  client: UserData;
   name: string;
   description: string;
   project_type: string;
@@ -29,6 +41,8 @@ export type ProjectData = {
   end_date: string | null;
   budget: number | null;
   status: string | null;
+  created_at: string;
+  updated_at: string;
 };
 export type RoleData = {
   id: number;
@@ -38,4 +52,9 @@ export type RoleDetailData = {
   id: number;
   name: string;
   permissions: Array<PermissionData>;
+};
+export type UserData = {
+  id: number;
+  name: string;
+  email: string;
 };

@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
     $permissionsList = [];
 
     // default CRUD permissions
-    $defaultPermissions = ['create', 'read', 'update', 'delete'];
+    $defaultPermissions = ['create', 'read', 'update', 'delete', 'approve', 'assign'];
 
     // tambahan custom permission per model (optional)
     $customPermissions = [];
@@ -59,11 +59,21 @@ class PermissionSeeder extends Seeder
 
         $rolesPermissions = collect([
             'Manager' => [
-                'read project', 'create project', 'update project', 'delete project',
+                'read project', 'create project', 'update project',
+                'read project phase', 'create project phase', 'update project phase',
+                'read milestone', 'create milestone', 'update milestone',
+                'read task', 'create task', 'update task',
             ],
             'Client' => [
-                'read project'
+                'read project', 'approve milestone'
                 ],
+            'Team Lead' => [
+                'read milestone', 'create milestone', 'update milestone',
+                'read task', 'create task', 'update task', 'assign task',
+            ],
+            'Employee' => [
+                'read task', 'update task',
+            ],
         ]);
 
         $rolesPermissions->each(function ($permissions, $role) {
@@ -79,13 +89,22 @@ class PermissionSeeder extends Seeder
         $user->assignRole($adminRole);
     }
 
-    User::find(2)->assignRole('Manager');
-    User::find(3)->assignRole('Manager');
-    User::find(4)->assignRole('Manager');
-    User::find(5)->assignRole('Manager');
-    User::find(6)->assignRole('Client');
-    User::find(7)->assignRole('Client');
-    User::find(8)->assignRole('Client');
-    User::find(9)->assignRole('Client');
+    $managers = [2, 3, 4, 5];
+    $clients  = [6, 7, 8, 9];
+    $teamLeads = [10, 11, 12, 13];
+    $employees = [14, 15, 16, 17, 18];
+
+
+    // Assign role Manager
+    User::whereIn('id', $managers)->get()->each->assignRole('Manager');
+
+    // Assign role Client
+    User::whereIn('id', $clients)->get()->each->assignRole('Client');
+
+    // Assign role Team Lead
+    User::whereIn('id', $teamLeads)->get()->each->assignRole('Team Lead');
+
+    // Assign role Employee
+    User::whereIn('id', $employees)->get()->each->assignRole('Employee');
 }
 }

@@ -27,7 +27,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Autocomplete, useFilter, Popover } from "react-aria-components";
 import { SearchField } from "@/components/ui/search-field";
 import { ListBox } from "@/components/ui/list-box";
-import { IconCircleInfo } from "@intentui/icons";
+import { DatePicker } from "@/components/ui/date-picker";
 
 interface ProjectStatusOption {
   id: string;
@@ -66,23 +66,30 @@ export function FormProjectModal({
     name: project?.name ?? "",
     project_type: project?.project_type ?? "",
     client_id: project?.client?.id ?? "",
-    budget: project?.budget ?? "",
+    budget: project?.budget ?? "0",
     description: project?.description ?? "",
-    status_id: project?.status ?? "",
     start_date: project?.start_date ?? "",
     end_date: project?.end_date ?? "",
     _method: pageSettings?.method,
   });
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const submit = async (): Promise<boolean> => {
     if (dateRange?.start && dateRange?.end) {
       setData("start_date", dateRange.start.toString());
       setData("end_date", dateRange.end.toString());
     }
 
-    post(pageSettings?.url || "", {});
+    return new Promise((resolve) => {
+      post(pageSettings?.url || "", {
+        onSuccess: () => {
+          reset();
+          resolve(true); // sukses → true
+        },
+        onError: () => {
+          resolve(false); // gagal (validasi error) → false
+        },
+      });
+    });
   };
 
   useEffect(() => {
@@ -116,7 +123,9 @@ export function FormProjectModal({
                   placeholder="Enter project name"
                   value={data.name}
                   onChange={(v) => setData("name", v)}
+                  isRequired
                   errorMessage={errors.name}
+                  isReadOnly={project && project.status !== "draft"}
                 />
                 <TextField
                   aria-label="Budget"
@@ -139,110 +148,40 @@ export function FormProjectModal({
 
               {/* Separator Horizontal */}
               <Separator orientation="horizontal" className="my-4" />
-
-              {/* Section 2: Timeline */}
-              <DateRangePicker
-                isRequired
-                label="Date Range Project"
-                value={dateRange}
-                onChange={(range) => {
-                  // kalau project sudah punya start_date (immutable), jangan update start
-                  if (project?.start_date) {
-                    const fixedStart = parseDate(project.start_date);
-                    setDateRange({
-                      start: fixedStart,
-                      end: range?.end ?? fixedStart,
-                    });
-                    setData("start_date", project.start_date); // tetap pakai dari backend
-                    setData(
-                      "end_date",
-                      range?.end?.toString() ?? project.end_date
-                    );
-                  } else {
-                    // create mode → bebas isi start & end
-                    setDateRange(range);
-                    setData("start_date", range?.start?.toString() ?? "");
-                    setData("end_date", range?.end?.toString() ?? "");
+              {project?.project_type ? (
+                <TextField
+                  isReadOnly
+                  label="Project Type"
+                  value={project.project_type}
+                  className="w-full"
+                />
+              ) : (
+                <Select
+                  aria-label="Select Project Type"
+                  placeholder="Select Type Project"
+                  label="Project Type"
+                  selectedKey={data.project_type}
+                  onSelectionChange={(v) =>
+                    setData("project_type", v as string)
                   }
-                }}
-              />
-
-              {/* Separator Horizontal */}
-              <Separator orientation="horizontal" className="my-4" />
-
-              <div className="flex flex-col md:flex-row md:items-center md:gap-4">
-                {/* Select kiri */}
-                <div className="w-full md:flex-1">
-                  <Select
-                    aria-label="Select Project Status"
-                    placeholder="Select Status"
-                    label="Project Status"
-                    selectedKey={data.status_id}
-                    onSelectionChange={(v) => setData("status_id", v as string)}
-                    className="w-full"
-                  >
-                    <SelectTrigger />
-                    <SelectContent items={statuses}>
-                      {(item) => (
-                        <SelectItem
-                          key={item.id}
-                          id={item.id}
-                          textValue={item.name}
-                        >
-                          {item.name}
-                        </SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Separator (hanya tampil di md ke atas) */}
-                <div className="hidden md:flex md:items-center md:px-2">
-                  <Separator
-                    orientation="vertical"
-                    className="h-8"
-                    aria-hidden="true"
-                  />
-                </div>
-
-                {/* Select kanan */}
-                <div className="w-full md:flex-1">
-                  {project?.project_type ? (
-                    <TextField
-                      isReadOnly
-                      label="Project Type"
-                      value={project.project_type}
-                      className="w-full"
-                    />
-                  ) : (
-                    <Select
-                      aria-label="Select Project Type"
-                      placeholder="Select Type"
-                      label="Project Type"
-                      selectedKey={data.project_type}
-                      onSelectionChange={(v) =>
-                        setData("project_type", v as string)
-                      }
-                      className="w-full"
-                    >
-                      <SelectTrigger />
-                      <SelectContent items={types}>
-                        {(item) => (
-                          <SelectItem
-                            key={item.id}
-                            id={item.id}
-                            textValue={item.name}
-                          >
-                            {item.name}
-                          </SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                  )}
-                </div>
-              </div>
-
-              {/* Section 4: Client (conditional) */}
+                  className="w-full"
+                  isRequired
+                  errorMessage={errors.project_type}
+                >
+                  <SelectTrigger />
+                  <SelectContent items={types}>
+                    {(item) => (
+                      <SelectItem
+                        key={item.id}
+                        id={item.id}
+                        textValue={item.name}
+                      >
+                        {item.name}
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
               {data.project_type === "external" && (
                 <>
                   <Separator orientation="horizontal" className="my-4" />
@@ -252,6 +191,8 @@ export function FormProjectModal({
                     placeholder="Select Client"
                     selectedKey={data.client_id}
                     onSelectionChange={(v) => setData("client_id", v as string)}
+                    isRequired
+                    errorMessage={errors.client_id}
                   >
                     <SelectTrigger />
                     <Popover className="entering:fade-in exiting:fade-out flex max-h-80 w-(--trigger-width) entering:animate-in exiting:animate-out flex-col overflow-hidden rounded-lg border bg-overlay">
@@ -277,11 +218,57 @@ export function FormProjectModal({
                   </Select>
                 </>
               )}
+
+              <Separator orientation="horizontal" className="my-4" />
+
+              {/* Section 2: Timeline */}
+              {project && project.status !== "draft" ? (
+                <DatePicker
+                  aria-label="End Date"
+                  label="End Date"
+                  value={data.end_date ? parseDate(data.end_date) : null}
+                  onChange={(date) =>
+                    setData("end_date", date?.toString() ?? "")
+                  }
+                  errorMessage={
+                    errors.start_date
+                      ? errors.start_date
+                      : errors.end_date
+                      ? errors.end_date
+                      : undefined
+                  }
+                />
+              ) : (
+                <DateRangePicker
+                  isRequired
+                  label="Date Range Project"
+                  value={dateRange}
+                  onChange={(range) => {
+                    setDateRange(range);
+                    setData("start_date", range?.start?.toString() ?? "");
+                    setData("end_date", range?.end?.toString() ?? "");
+                  }}
+                  errorMessage={errors.start_date || errors.end_date}
+                />
+              )}
+
+              {/* Separator Horizontal */}
+              <Separator orientation="horizontal" className="my-4" />
             </ModalBody>
 
             <ModalFooter>
               <ModalClose>Cancel</ModalClose>
-              <Button onPress={close} onClick={submit} intent="primary">
+              <Button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const success = await submit(); // submit return true/false
+
+                  if (success) {
+                    close(); // tutup modal hanya kalau sukses
+                  }
+                }}
+                intent="primary"
+              >
                 {pageSettings?.buttonText}
               </Button>
             </ModalFooter>

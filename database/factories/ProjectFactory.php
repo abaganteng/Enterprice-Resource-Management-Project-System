@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\ProjectType;
 use App\ProjectStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,6 +26,7 @@ class ProjectFactory extends Factory
             'client_id' => User::factory(),
             'manager_id' => User::factory(),
             'name' => $this->faker->sentence(3),
+            'project_type' => $this->faker->randomElement(ProjectType::cases())->value,
             'description' => $this->faker->paragraph(4),
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
