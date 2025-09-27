@@ -139,14 +139,31 @@ class ProjectController extends Controller
 
         // 6. Simpan perubahan
         $project->save();
+
+        flash('Project updated successfully!');
+        return to_route('projects.index');
     }
 
     public function show(Project $project)
     {
-        $project = Project::with(['manager', 'client', 'phases.milestones'])->first();
+        $project->load(['manager', 'client', 'phases.milestones', 'milestones']);
 
         return inertia('projects/show', [
             'project' => ProjectDetailData::from($project),
+            'create' => [
+                'title' => 'Create New Phase',
+                'description' => 'Create a new phase here.',
+                'buttonText' => 'Create Phase',
+                'method' => 'post',
+                'url' => route('phases.store'),
+            ],
+            'update' => [
+                'title' => 'Update Phase',
+                'description' => 'Update the phase details here.',
+                'buttonText' => 'Update Phase',
+                'method' => 'put',
+                'url' => route('phases.update'),
+            ]
         ]);
     }
 }

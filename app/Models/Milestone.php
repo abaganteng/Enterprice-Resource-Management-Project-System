@@ -15,6 +15,9 @@ class Milestone extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'project_id',
+        'phase_id',
+        'approved_by',
         'name',
         'description',
         'due_Date',

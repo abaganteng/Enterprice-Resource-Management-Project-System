@@ -10,6 +10,7 @@ class ProjectDetailData extends Data
 {
         /**
      * @param DataCollection<int, ProjectPhaseData> $project_phases
+     * @param DataCollection<int, MilestoneData> $milestones
      */
     public function __construct(
         public ?int $id,
@@ -25,6 +26,8 @@ class ProjectDetailData extends Data
         public string $created_at,
         public string $updated_at,
         /** @var Collection<int, ProjectPhaseData> */
-        public ?Collection $phases
+        public ?Collection $phases,
+        /** @var Collection<int, MilestoneData> */
+        public ?Collection $milestones
     ) {}
 }

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('milestone_id')->constrained('milestones');
             $table->foreignId('phase_id')->constrained('project_phases');
             $table->string('title');
-            $table->text('description');
-            $table->string('priority');
+            $table->text('description')->nullable();
+            $table->string('priority')->nullable();
             $table->string('status');
-            $table->foreignId('assign_to')->constrained('users');
+            $table->foreignId('assign_to')->nullable()->constrained('users');
             $table->datetime('due_date');
             $table->foreignId('created_by')->constrained('users');
             $table->timestamps();

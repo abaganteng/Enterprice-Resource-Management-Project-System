@@ -53,6 +53,7 @@ export type ProjectDetailData = {
   created_at: string;
   updated_at: string;
   phases: Array<ProjectPhaseData> | null;
+  milestones: Array<MilestoneData> | null;
 };
 export type ProjectPhaseData = {
   id: number;

@@ -4,7 +4,7 @@ import { ProjectData, ProjectDetailData } from "@/types";
 import { Card } from "@/components/ui/card";
 import { Button, buttonStyles } from "@/components/ui/button";
 import { Menu, MenuContent, MenuItem } from "@/components/ui/menu";
-import { IconChevronLgDown, IconFolderOpen } from "@intentui/icons";
+import { IconChevronLgDown, IconFile, IconFolderOpen } from "@intentui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { DescriptionList } from "@/components/ui/description-list";
@@ -16,15 +16,29 @@ import {
   DisclosurePanel,
   DisclosureTrigger,
 } from "@/components/ui/disclosure";
+import { FormPhaseModal } from "../phases/form-phase-modal";
+import { useState } from "react";
 
 const title = "Show Project";
 
-interface Props {
-  project: ProjectDetailData;
+interface PageSettings {
+  title: string;
+  description: string;
+  buttonText: string;
+  method: "post" | "put";
+  url: string;
 }
 
-export default function Show({ project }: Props) {
-  console.log(project);
+interface Props {
+  project: ProjectDetailData;
+  create?: PageSettings;
+  update?: PageSettings;
+}
+
+export default function Show({ project, create, update }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedPhase, setSelectedPhase] = useState<any>(null);
+  const [action, setAction] = useState<"update" | "create" | null>(null);
   return (
     <>
       <Head title={title} />
@@ -124,74 +138,160 @@ export default function Show({ project }: Props) {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-lg font-semibold">Phases & Milestones</h2>
               <div className="flex gap-x-2">
-                <Button size="sm">+ Phase</Button>
-                <Button size="sm" intent="secondary">
-                  + Milestone
-                </Button>
+                <Link
+                  onClick={() => (
+                    setIsOpen(true), setAction("create"), setSelectedPhase(null)
+                  )}
+                  className={buttonStyles()}
+                >
+                  + Phase
+                </Link>
               </div>
             </div>
 
             <Card>
               <Card.Content>
-                <DisclosureGroup
-                  allowsMultipleExpanded
-                  defaultExpandedKeys={[1]}
-                >
-                  {project.phases?.map((phase, index) => (
+                <DisclosureGroup allowsMultipleExpanded>
+                  {project.phases?.map((phase) => (
                     <Disclosure key={phase.id} id={phase.id}>
                       {/* Phase Title */}
                       <DisclosureTrigger className="flex justify-between items-center w-full">
                         <span className="font-medium">
                           <IconFolderOpen className="fill-orange-400" />{" "}
-                          {phase.name} ({phase.start_date} - {phase.end_date})
+                          {phase.name}({phase.start_date} - {phase.end_date})
                         </span>
                         <span className="text-sm text-gray-500">
                           {phase.status}
                         </span>
                       </DisclosureTrigger>
 
-                      {/* Milestones */}
-                      <DisclosurePanel className="pl-6 mt-2 space-y-2">
-                        {(phase.milestones?.length ?? 0) > 0 ? (
-                          (phase.milestones ?? []).map((ms) => (
-                            <div
-                              key={ms.id}
-                              className="flex justify-between text-sm border-b pb-1"
-                            >
-                              <span>⏺ {ms.name}</span>
-                              <span className="text-gray-500">
-                                {ms.due_date || "No date"}
-                              </span>
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-sm text-gray-400 italic">
-                            Belum ada milestone.
-                          </p>
-                        )}
+                      {/* Phase Content */}
+                      <DisclosurePanel className="pl-6 mt-3 space-y-3">
+                        {/* Aksi Phase */}
+                        <div className="flex gap-3 text-sm">
+                          <Link
+                            href={route("phases.show", phase.id)}
+                            className="text-blue-500 hover:underline"
+                          >
+                            View Detail
+                          </Link>
+                          <Link
+                            onClick={() => (
+                              setIsOpen(true),
+                              setAction("update"),
+                              setSelectedPhase(phase)
+                            )}
+                            className={buttonStyles()}
+                          >
+                            Edit
+                          </Link>
+                          <button className="text-red-500 hover:underline">
+                            Delete
+                          </button>
+                        </div>
+
+                        {/* Milestones */}
+                        <div className="space-y-2">
+                          {(phase.milestones?.length ?? 0) > 0 ? (
+                            phase.milestones?.map((ms: any) => (
+                              <Disclosure key={ms.id} id={ms.id}>
+                                <DisclosureTrigger className="flex justify-between w-full text-sm">
+                                  <span className="text-gray-700">
+                                    ⏺ {ms.name}
+                                  </span>
+                                  <span className="text-gray-500">
+                                    {ms.due_date || "No date"}
+                                  </span>
+                                </DisclosureTrigger>
+                                <DisclosurePanel className="pl-4 mt-1 space-y-2">
+                                  <Link
+                                    href={route("milestones.show", ms.id)}
+                                    className="text-blue-500 hover:underline text-sm"
+                                  >
+                                    View Detail Milestone
+                                  </Link>
+
+                                  {/* Tasks */}
+                                  {(ms.tasks?.length ?? 0) > 0 ? (
+                                    ms.tasks.map((task: any) => (
+                                      <div
+                                        key={task.id}
+                                        className="flex justify-between text-xs border-b pb-1"
+                                      >
+                                        <span>• {task.title}</span>
+                                        <span className="text-gray-500">
+                                          {task.status}
+                                        </span>
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <p className="text-xs text-gray-400 italic">
+                                      Belum ada task.
+                                    </p>
+                                  )}
+                                </DisclosurePanel>
+                              </Disclosure>
+                            ))
+                          ) : (
+                            <p className="text-sm text-gray-400 italic">
+                              Belum ada milestone.
+                            </p>
+                          )}
+                        </div>
                       </DisclosurePanel>
                     </Disclosure>
                   ))}
+                </DisclosureGroup>
+              </Card.Content>
+            </Card>
+          </div>
 
-                  {/* Independent Milestones
-                  {project.independentMilestones.length > 0 && (
-                    <Disclosure id="independent">
-                      <DisclosureTrigger>
-                        📍 Milestone Independen
-                      </DisclosureTrigger>
-                      <DisclosurePanel className="pl-6 mt-2 space-y-2">
-                        {project.independentMilestones.map((ms) => (
-                          <div
-                            key={ms.id}
-                            className="flex justify-between text-sm border-b pb-1"
-                          >
-                            <span>⏺ {ms.name}</span>
-                            <span className="text-gray-500">{ms.due_date}</span>
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-semibold">Milestones</h2>
+              <div className="flex gap-x-2">
+                <Link
+                  onClick={() => (
+                    setIsOpen(true), setAction("create"), setSelectedPhase(null)
+                  )}
+                  className={buttonStyles()}
+                >
+                  + Milestone
+                </Link>
+              </div>
+            </div>
+
+            <Card>
+              <Card.Content>
+                <DisclosureGroup allowsMultipleExpanded>
+                  {Array.isArray(project.milestones) &&
+                  project.milestones.length > 0 ? (
+                    project.milestones.map((ms: any) => (
+                      <Disclosure key={ms.id} id={ms.id}>
+                        {/* Milestone Title */}
+                        <DisclosureTrigger className="flex justify-between items-center w-full">
+                          <span className="font-medium">
+                            <IconFile className="text-blue-500 fill-blue-400" />{" "}
+                            {ms.name}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {ms.due_date || "No date"}
+                          </span>
+                        </DisclosureTrigger>
+
+                        {/* Milestone Detail */}
+                        <DisclosurePanel className="pl-6 mt-2 space-y-2">
+                          <div className="text-sm text-gray-600">
+                            {ms.description || "Tidak ada deskripsi."}
                           </div>
-                        ))}
-                      </DisclosurePanel>
-                    </Disclosure>
-                  )} */}
+                        </DisclosurePanel>
+                      </Disclosure>
+                    ))
+                  ) : (
+                    <div className="pl-6 mt-2 text-sm text-gray-500 italic">
+                      🚫 Belum ada milestone untuk proyek ini
+                    </div>
+                  )}
                 </DisclosureGroup>
               </Card.Content>
             </Card>
@@ -206,6 +306,27 @@ export default function Show({ project }: Props) {
 
         <Card.Footer />
       </Card>
+
+      {selectedPhase && action === "update" && (
+        <FormPhaseModal
+          open={isOpen}
+          onOpenChange={() => setIsOpen(false)}
+          project_phase={selectedPhase}
+          pageSettings={update}
+          start_date={project.start_date}
+          end_date={project.end_date}
+        />
+      )}
+      {action === "create" && (
+        <FormPhaseModal
+          open={isOpen}
+          onOpenChange={() => setIsOpen(false)}
+          pageSettings={create}
+          start_date={project.start_date}
+          end_date={project.end_date}
+          project={project.id}
+        />
+      )}
     </>
   );
 }

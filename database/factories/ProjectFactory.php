@@ -23,8 +23,8 @@ class ProjectFactory extends Factory
         $endDate = $this->faker->dateTimeBetween($startDate, '+1 year');
 
         return [
-            'client_id' => User::factory(),
-            'manager_id' => User::factory(),
+            'client_id' => 6,
+            'manager_id' => 2,
             'name' => $this->faker->sentence(3),
             'project_type' => $this->faker->randomElement(ProjectType::cases())->value,
             'description' => $this->faker->paragraph(4),

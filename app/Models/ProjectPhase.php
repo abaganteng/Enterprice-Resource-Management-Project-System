@@ -14,6 +14,7 @@ class ProjectPhase extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'project_id',
         'name',
         'description',
         'start_date',
