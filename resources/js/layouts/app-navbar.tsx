@@ -25,6 +25,11 @@ const navigations = [
     textValue: "Home",
     href: "/",
   },
+  {
+    name: "Project",
+    textValue: "Project",
+    href: "/projects/index",
+  },
 ];
 
 export function AppNavbar({

@@ -41,11 +41,11 @@ export type ProjectData = {
 };
 export type ProjectDetailData = {
   id: number | null;
-  manager: UserData;
-  client: UserData;
-  name: string;
-  description: string;
-  project_type: string;
+  manager: UserData | null;
+  client: UserData | null;
+  name: string | null;
+  description: string | null;
+  project_type: string | null;
   start_date: string | null;
   end_date: string | null;
   budget: number | null;
@@ -56,6 +56,17 @@ export type ProjectDetailData = {
   milestones: Array<MilestoneData> | null;
 };
 export type ProjectPhaseData = {
+  id: number;
+  name: string;
+  description: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  status: string;
+  created_at: string | null;
+  updated_at: string | null;
+  milestones: Array<MilestoneData> | null;
+};
+export type ProjectPhaseDetailData = {
   id: number;
   name: string;
   description: string | null;

@@ -18,6 +18,10 @@ import {
 } from "@/components/ui/disclosure";
 import { FormPhaseModal } from "../phases/form-phase-modal";
 import { useState } from "react";
+import ProjectSidebar from "./project-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import ProjectSidebarNav from "./project-sidebar-nav";
+import ProjectLayout from "./project-layout";
 
 const title = "Show Project";
 
@@ -43,223 +47,99 @@ export default function Show({ project, create, update }: Props) {
     <>
       <Head title={title} />
       <h1 className="sr-only">{title}</h1>
-
-      <Card>
-        {/* Header */}
-        <Card.Header>
-          <Card.Title>Project Name ({project.name})</Card.Title>
-          <Card.Description>
-            <div className="flex items-center justify-between">
-              <div>Project Type: {project.project_type}</div>
-              <div className="capitalize">
-                <Badge>{project.status}</Badge>
+      <ProjectLayout project={project}>
+        <Card>
+          {/* Header */}
+          <Card.Header>
+            <Card.Title>Project Name ({project.name})</Card.Title>
+            <Card.Description>
+              <div className="flex items-center justify-between">
+                <div>Project Type: {project.project_type}</div>
+                <div className="capitalize">
+                  <Badge>{project.status}</Badge>
+                </div>
               </div>
-            </div>
-          </Card.Description>
-        </Card.Header>
+            </Card.Description>
+          </Card.Header>
 
-        <Card.Content className="flex flex-col gap-y-6">
-          {/* Manager & Client */}
-          <div className="flex justify-center items-start gap-x-5">
-            {/* Manager */}
-            <Card className="w-1/2">
-              <div className="ml-5 font-medium">Manager</div>
-              <Card.Header>
-                <div className="flex items-center gap-x-3">
-                  <Avatar
-                    isSquare
-                    alt="manager"
-                    src="https://intentui.com/images/avatar/cobain.jpg"
-                  />
-                  <div>
-                    <Card.Title>{project.manager.name}</Card.Title>
-                    <Card.Description>{project.manager.email}</Card.Description>
+          <Card.Content className="flex flex-col gap-y-6">
+            {/* Manager & Client */}
+            <div className="flex justify-center items-start gap-x-5">
+              {/* Manager */}
+              <Card className="w-1/2">
+                <div className="ml-5 font-medium">Manager</div>
+                <Card.Header>
+                  <div className="flex items-center gap-x-3">
+                    <Avatar
+                      isSquare
+                      alt="manager"
+                      src="https://intentui.com/images/avatar/cobain.jpg"
+                    />
+                    <div>
+                      <Card.Title>{project.manager.name}</Card.Title>
+                      <Card.Description>
+                        {project.manager.email}
+                      </Card.Description>
+                    </div>
                   </div>
-                </div>
-              </Card.Header>
-            </Card>
+                </Card.Header>
+              </Card>
 
-            {/* Client */}
-            <Card className="w-1/2">
-              <div className="ml-5 font-medium">Client</div>
-              <Card.Header>
-                <div className="flex items-center gap-x-3">
-                  <Avatar
-                    isSquare
-                    alt="client"
-                    src="https://intentui.com/images/avatar/cobain.jpg"
-                  />
-                  <div>
-                    <Card.Title>{project.client.name}</Card.Title>
-                    <Card.Description>{project.client.email}</Card.Description>
+              {/* Client */}
+              <Card className="w-1/2">
+                <div className="ml-5 font-medium">Client</div>
+                <Card.Header>
+                  <div className="flex items-center gap-x-3">
+                    <Avatar
+                      isSquare
+                      alt="client"
+                      src="https://intentui.com/images/avatar/cobain.jpg"
+                    />
+                    <div>
+                      <Card.Title>{project.client.name}</Card.Title>
+                      <Card.Description>
+                        {project.client.email}
+                      </Card.Description>
+                    </div>
                   </div>
-                </div>
-              </Card.Header>
-            </Card>
-          </div>
-
-          {/* Budget, Dates & Description */}
-          <Card>
-            <Card.Content className="space-y-4">
-              {/* Grid 3 kolom */}
-              <div className="grid grid-cols-3 gap-4 text-sm">
-                <div>
-                  <span className="block font-medium text-gray-600">
-                    Budget
-                  </span>
-                  <span>{project.budget || "-"}</span>
-                </div>
-                <div>
-                  <span className="block font-medium text-gray-600">
-                    Start Date
-                  </span>
-                  <span>{project.start_date}</span>
-                </div>
-                <div>
-                  <span className="block font-medium text-gray-600">
-                    End Date
-                  </span>
-                  <span>{project.end_date || "Not Set"}</span>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <span className="block font-medium text-gray-600">
-                  Description
-                </span>
-                <p className="text-justify">{project.description}</p>
-              </div>
-            </Card.Content>
-          </Card>
-
-          {/* Phase & Milestone */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">Phases & Milestones</h2>
-              <div className="flex gap-x-2">
-                <Link
-                  onClick={() => (
-                    setIsOpen(true), setAction("create"), setSelectedPhase(null)
-                  )}
-                  className={buttonStyles()}
-                >
-                  + Phase
-                </Link>
-              </div>
+                </Card.Header>
+              </Card>
             </div>
 
+            {/* Budget, Dates & Description */}
             <Card>
-              <Card.Content>
-                <DisclosureGroup allowsMultipleExpanded>
-                  {project.phases?.map((phase) => (
-                    <Disclosure key={phase.id} id={phase.id}>
-                      {/* Phase Title */}
-                      <DisclosureTrigger className="flex justify-between items-center w-full">
-                        <span className="font-medium">
-                          <IconFolderOpen className="fill-orange-400" />{" "}
-                          {phase.name}({phase.start_date} - {phase.end_date})
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {phase.status}
-                        </span>
-                      </DisclosureTrigger>
+              <Card.Content className="space-y-4">
+                {/* Grid 3 kolom */}
+                <div className="grid grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="block font-medium text-gray-600">
+                      Budget
+                    </span>
+                    <span>{project.budget || "-"}</span>
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-600">
+                      Start Date
+                    </span>
+                    <span>{project.start_date}</span>
+                  </div>
+                  <div>
+                    <span className="block font-medium text-gray-600">
+                      End Date
+                    </span>
+                    <span>{project.end_date || "Not Set"}</span>
+                  </div>
+                </div>
 
-                      {/* Phase Content */}
-                      <DisclosurePanel className="pl-6 mt-3 space-y-3">
-                        {/* Aksi Phase */}
-                        <div className="flex gap-3 text-sm">
-                          <Link
-                            href={route("phases.show", phase.id)}
-                            className="text-blue-500 hover:underline"
-                          >
-                            View Detail
-                          </Link>
-                          <Link
-                            onClick={() => (
-                              setIsOpen(true),
-                              setAction("update"),
-                              setSelectedPhase(phase)
-                            )}
-                            className={buttonStyles()}
-                          >
-                            Edit
-                          </Link>
-                          <button className="text-red-500 hover:underline">
-                            Delete
-                          </button>
-                        </div>
-
-                        {/* Milestones */}
-                        <div className="space-y-2">
-                          {(phase.milestones?.length ?? 0) > 0 ? (
-                            phase.milestones?.map((ms: any) => (
-                              <Disclosure key={ms.id} id={ms.id}>
-                                <DisclosureTrigger className="flex justify-between w-full text-sm">
-                                  <span className="text-gray-700">
-                                    ⏺ {ms.name}
-                                  </span>
-                                  <span className="text-gray-500">
-                                    {ms.due_date || "No date"}
-                                  </span>
-                                </DisclosureTrigger>
-                                <DisclosurePanel className="pl-4 mt-1 space-y-2">
-                                  <Link
-                                    href={route("milestones.show", ms.id)}
-                                    className="text-blue-500 hover:underline text-sm"
-                                  >
-                                    View Detail Milestone
-                                  </Link>
-
-                                  {/* Tasks */}
-                                  {(ms.tasks?.length ?? 0) > 0 ? (
-                                    ms.tasks.map((task: any) => (
-                                      <div
-                                        key={task.id}
-                                        className="flex justify-between text-xs border-b pb-1"
-                                      >
-                                        <span>• {task.title}</span>
-                                        <span className="text-gray-500">
-                                          {task.status}
-                                        </span>
-                                      </div>
-                                    ))
-                                  ) : (
-                                    <p className="text-xs text-gray-400 italic">
-                                      Belum ada task.
-                                    </p>
-                                  )}
-                                </DisclosurePanel>
-                              </Disclosure>
-                            ))
-                          ) : (
-                            <p className="text-sm text-gray-400 italic">
-                              Belum ada milestone.
-                            </p>
-                          )}
-                        </div>
-                      </DisclosurePanel>
-                    </Disclosure>
-                  ))}
-                </DisclosureGroup>
+                {/* Description */}
+                <div>
+                  <span className="block font-medium text-gray-600">
+                    Description
+                  </span>
+                  <p className="text-justify">{project.description}</p>
+                </div>
               </Card.Content>
             </Card>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">Milestones</h2>
-              <div className="flex gap-x-2">
-                <Link
-                  onClick={() => (
-                    setIsOpen(true), setAction("create"), setSelectedPhase(null)
-                  )}
-                  className={buttonStyles()}
-                >
-                  + Milestone
-                </Link>
-              </div>
-            </div>
 
             <Card>
               <Card.Content>
@@ -295,17 +175,17 @@ export default function Show({ project, create, update }: Props) {
                 </DisclosureGroup>
               </Card.Content>
             </Card>
-          </div>
 
-          {/* Audit Info */}
-          <div className="text-xs text-gray-500 space-y-1">
-            <div>Created At: {project.created_at}</div>
-            <div>Updated At: {project.updated_at || "Not Updated"}</div>
-          </div>
-        </Card.Content>
+            {/* Audit Info */}
+            <div className="text-xs text-gray-500 space-y-1">
+              <div>Created At: {project.created_at}</div>
+              <div>Updated At: {project.updated_at || "Not Updated"}</div>
+            </div>
+          </Card.Content>
 
-        <Card.Footer />
-      </Card>
+          <Card.Footer />
+        </Card>
+      </ProjectLayout>
 
       {selectedPhase && action === "update" && (
         <FormPhaseModal
@@ -315,6 +195,7 @@ export default function Show({ project, create, update }: Props) {
           pageSettings={update}
           start_date={project.start_date}
           end_date={project.end_date}
+          project={project.id}
         />
       )}
       {action === "create" && (

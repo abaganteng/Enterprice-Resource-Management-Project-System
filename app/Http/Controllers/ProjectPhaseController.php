@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjectPhase;
 use Illuminate\Http\Request;
+use App\Data\ProjectDetailData;
+use App\Data\ProjectPhaseDetailData;
 
 class ProjectPhaseController extends Controller
 {
@@ -32,65 +34,46 @@ class ProjectPhaseController extends Controller
         return to_route('projects.show', $phase->project_id);
     }
 
-    public function update(Request $request, ProjectPhase $phase)
-    {
-        $user = $request->user();
-
-    // 🔐 Cek role & akses
-    if ($user->hasRole('manager') && $phase->project->manager_id !== $user->id) {
-        abort(403, 'Anda tidak memiliki akses untuk mengupdate phase ini.');
-    }
-    // Super Admin → bisa override, tidak perlu cek
-
-    // 📌 Aturan validasi
+public function update(Request $request, ProjectPhase $phase)
+{
+    // Base rules
     $rules = [
-        'name'        => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'end_date'    => 'nullable|date|after_or_equal:' . $phase->start_date,
-        // 'status'      => 'required|string|in:draft,in_progress,completed',
+        'name'        => ['required', 'string', 'max:255'],
+        'project_id' => ['required', 'exists:projects,id'],
+        'description' => ['nullable', 'string'],
+        'start_date'  => ['required', 'date'],
+        'end_date'    => ['required', 'date', 'after_or_equal:start_date'],
+        'status'      => ['required'],
     ];
-
-    // Jika status bukan draft, start_date tidak boleh diubah
-    if ($phase->status === 'draft') {
-        $rules['start_date'] = 'required|date|before_or_equal:end_date';
-    }
 
     $validated = $request->validate($rules);
 
-    // 🚫 Status tidak boleh mundur ke draft
-    if ($phase->status !== 'draft' && $validated['status'] === 'draft') {
-        return back()->withErrors([
-            'status' => 'Status tidak bisa dikembalikan ke draft.'
-        ]);
-    }
 
-    // 🔄 Update field yang diizinkan
-    $phase->fill([
-        'name'        => $validated['name'],
-        'description' => $validated['description'] ?? $phase->description,
-        'end_date'    => $validated['end_date'] ?? $phase->end_date,
-        'status'      => 'draft',
-        'start_date'  => $validated['start_date'] ?? $phase->start_date,
-    ]);
-
-    // Jika phase bukan draft, pastikan start_date tidak diubah
-    if ($phase->status !== 'draft') {
-        unset($phase->start_date);
-    }
-
+    // 🔄 Update langsung semua field tervalidasi
+    $phase->fill($validated);
     $phase->save();
 
     flash('Project phase updated successfully!');
+
     return to_route('projects.show', $phase->project_id);
-    }
+}
+
 
     public function show(ProjectPhase $phase)
     {
-        dd('hello world');
-        $phase->load(['milestones.tasks']);
+        $phase->load(['project.phases', 'milestones.tasks']);
+
 
         return inertia('phases/show', [
-            'phase' => $phase
+            'project' => ProjectDetailData::from($phase->project), // sidebar
+            'phase'   => ProjectPhaseDetailData::from($phase),
+            'update' => [
+                'title' => 'Update Phase',
+                'description' => 'Update the phase details here.',
+                'buttonText' => 'Update Phase',
+                'method' => 'put',
+                'url' => route('phases.update', $phase->id),
+            ]
         ]);
-    }
+        }
 }

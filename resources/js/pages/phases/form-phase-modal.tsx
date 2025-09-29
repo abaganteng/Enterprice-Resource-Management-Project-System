@@ -49,7 +49,7 @@ export function FormPhaseModal({
   end_date,
   project,
 }: CreateProjectModalProps) {
-  console.log(start_date, end_date);
+  console.log(project_phase);
   const [dateRange, setDateRange] = useState<RangeValue<DateValue>>(null);
   const { data, setData, reset, post, errors } = useForm({
     name: project_phase?.name ?? "",

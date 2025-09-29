@@ -57,6 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/phases/update', [Controllers\ProjectPhaseController::class, 'update'])->name('phases.update');
 
     Route::get('/phases/show/{phase}', [Controllers\ProjectPhaseController::class, 'show'])->name('phases.show');
+    Route::get('/milestone/show/{milestone}', [Controllers\MilestoneController::class, 'show'])->name('milestones.show');
    
 });
 

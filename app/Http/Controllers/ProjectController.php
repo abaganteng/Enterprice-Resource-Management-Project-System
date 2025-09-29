@@ -96,53 +96,31 @@ class ProjectController extends Controller
     }
 
     public function update(Request $request, Project $project)
-    {
-         // 1. Base rules (boleh diupdate kapan saja)
-        $rules = [
-            'description' => ['nullable', 'string'],
-            'budget'      => ['nullable', 'numeric', 'min:0'],
-            'status_id'   => ['required', Rule::enum(ProjectStatus::class)],
-            'end_date'    => ['required', 'date', 'after_or_equal:start_date'],
-        ];
+{
+    // Semua rules divalidasi di sini
+    $rules = [
+        'name'         => ['required', 'string', 'max:255'],
+        'description'  => ['nullable', 'string'],
+        'budget'       => ['nullable', 'numeric', 'min:0'],
+        'start_date'   => ['required', 'date'],
+        'end_date'     => ['required', 'date', 'after_or_equal:start_date'],
+        'project_type' => ['required', Rule::enum(ProjectType::class)],
+        'client_id'    => ['nullable', 'exists:users,id'],
+        // ⚠ status_id sengaja dihapus → update status pakai endpoint lain
+    ];
 
-        // 2. Kalau masih draft → semua field editable
-        if ($project->status_id === ProjectStatus::Draft->value) {
-            $rules['name']        = ['required', 'string', 'max:255'];
-            $rules['start_date']  = ['required', 'date'];
-            $rules['project_type'] = ['required', Rule::enum(ProjectType::class)];
+    $validated = $request->validate($rules);
 
-            if ($request->input('project_type') === ProjectType::External->value) {
-                $rules['client_id'] = ['required', 'exists:users,id'];
-            }
-        }
-        // 3. Validasi request
-        $validated = $request->validate($rules);
+    // Update semua field tervalidasi
+    $project->fill($validated);
 
-        // 4. Update field sesuai rules
-        $project->description = $validated['description'] ?? $project->description;
-        $project->budget      = $validated['budget'] ?? $project->budget;
-        $project->status_id   = $validated['status_id'];
-        $project->end_date    = $validated['end_date'];
 
-        // 5. Jika draft → bisa update tambahan field
-        if ($project->status_id === ProjectStatus::Draft->value) {
-            $project->name        = $validated['name'];
-            $project->start_date  = $validated['start_date'];
-            $project->project_type = $validated['project_type'];
+    $project->save();
 
-            if ($validated['project_type'] === ProjectType::External->value) {
-                $project->client_id = $validated['client_id'];
-            } else {
-                $project->client_id = null;
-            }
-        }
+    flash('Project updated successfully!');
 
-        // 6. Simpan perubahan
-        $project->save();
-
-        flash('Project updated successfully!');
-        return to_route('projects.index');
-    }
+    return to_route('projects.index');
+}
 
     public function show(Project $project)
     {
@@ -157,13 +135,7 @@ class ProjectController extends Controller
                 'method' => 'post',
                 'url' => route('phases.store'),
             ],
-            'update' => [
-                'title' => 'Update Phase',
-                'description' => 'Update the phase details here.',
-                'buttonText' => 'Update Phase',
-                'method' => 'put',
-                'url' => route('phases.update'),
-            ]
+            
         ]);
     }
 }
