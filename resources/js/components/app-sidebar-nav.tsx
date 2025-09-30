@@ -1,7 +1,12 @@
 import {
+  IconBarsThree2,
   IconCommandRegular,
   IconDashboard,
+  IconDotsHorizontal,
   IconLogout,
+  IconMessageDots,
+  IconPeople,
+  IconPlus,
   IconSettings,
 } from "@intentui/icons";
 import { Avatar } from "@/components/ui/avatar";
@@ -14,80 +19,83 @@ import {
   MenuLabel,
   MenuSection,
   MenuSeparator,
+  MenuSubmenu,
   MenuTrigger,
 } from "@/components/ui/menu";
 import { SidebarNav, SidebarTrigger } from "@/components/ui/sidebar";
-import { usePage } from "@inertiajs/react";
+import { ProjectDetailData } from "@/types";
 
-export default function AppSidebarNav() {
-  const { url } = usePage();
-
-  const menus = [
-    {
-      label: "Dashboard",
-      href: "/dashboard",
-      children: [],
-    },
-    {
-      label: "Management Access",
-      href: "/#", // induk, tidak bisa diklik
-      children: [
-        {
-          label: "Manage User",
-          href: "/manage-user/index",
-          children: [],
-        },
-        {
-          label: "Manage Role & Permission",
-          href: "/manage-roles-permissions/index",
-          children: [],
-        },
-      ],
-    },
-  ];
-
-  let breadcrumbTrail: { label: string; href?: string | undefined }[] = [];
-
-  if (
-    url.startsWith("/manage-user") ||
-    url.startsWith("/manage-roles-permissions")
-  ) {
-    const parent = menus.find((m) => m.label === "Management Access");
-    if (parent) {
-      breadcrumbTrail.push(parent);
-
-      const activeChild = parent.children.find((child) =>
-        url.startsWith(child.href)
-      );
-      if (activeChild) {
-        breadcrumbTrail.push(activeChild);
-      }
-    }
-  } else {
-    breadcrumbTrail.push(menus[0]); // default: Dashboard
-  }
-
+export default function AppSidebarNav({
+  project,
+}: {
+  project: ProjectDetailData;
+}) {
   return (
-    <SidebarNav>
-      <span className="flex items-center gap-x-4">
+    <SidebarNav className="flex items-center justify-between">
+      {/* LEFT */}
+      <div className="flex items-center gap-3">
         <SidebarTrigger className="-ml-2" />
-        <Breadcrumbs className="hidden md:flex">
-          {breadcrumbTrail.map((item, idx) => {
-            const isParent = idx === 0;
-            const isLast = idx === breadcrumbTrail.length - 1;
 
-            return (
-              <Breadcrumbs.Item
-                key={item.href ?? item.label}
-                {...(!isParent && !isLast && { href: item.href })}
-              >
-                {item.label}
-              </Breadcrumbs.Item>
-            );
-          })}
+        <Breadcrumbs className="hidden md:flex items-center gap-2">
+          <Breadcrumbs.Item href="/blocks/sidebar/sidebar-01">
+            <span className="font-medium">{project?.name}</span>
+          </Breadcrumbs.Item>
         </Breadcrumbs>
-      </span>
-      <UserMenu />
+
+        {/* Icon kiri */}
+        <Menu>
+          <MenuTrigger aria-label="Open Menu">
+            <IconDotsHorizontal className="w-4 h-4 cursor-pointer hover:text-gray-600" />
+          </MenuTrigger>
+          <MenuContent popover={{ placement: "bottom" }}>
+            <MenuItem href="#">
+              <IconPlus className="cursor-pointer hover:text-gray-600" />
+              <MenuLabel>Rename</MenuLabel>
+            </MenuItem>
+            <MenuSeparator />
+            <MenuSubmenu>
+              <MenuItem>
+                <MenuLabel>Create new</MenuLabel>
+              </MenuItem>
+              <MenuContent>
+                <MenuItem>
+                  <MenuLabel>List</MenuLabel>
+                </MenuItem>
+                <MenuSeparator />
+                <MenuSubmenu>
+                  <MenuItem>
+                    <MenuLabel>Import</MenuLabel>
+                  </MenuItem>
+                  <MenuContent>
+                    <MenuItem>
+                      <MenuLabel>Exels file</MenuLabel>
+                    </MenuItem>
+                    <MenuItem>
+                      <MenuLabel>Pdf file</MenuLabel>
+                    </MenuItem>
+                  </MenuContent>
+                </MenuSubmenu>
+              </MenuContent>
+            </MenuSubmenu>
+            <MenuSeparator />
+            <MenuItem>
+              <MenuLabel>Duplicate</MenuLabel>
+            </MenuItem>
+            <MenuItem>
+              <MenuLabel>Delete</MenuLabel>
+            </MenuItem>
+          </MenuContent>
+        </Menu>
+
+        <IconBarsThree2 className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+      </div>
+
+      {/* RIGHT */}
+      <div className="flex items-center gap-3 ml-auto">
+        <IconMessageDots className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+        <IconPeople className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+        {/* Tambah icon lain di sini */}
+      </div>
     </SidebarNav>
   );
 }

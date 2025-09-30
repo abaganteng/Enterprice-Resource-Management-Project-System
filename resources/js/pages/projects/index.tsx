@@ -20,7 +20,6 @@ import {
   IconTrash,
 } from "@intentui/icons";
 import { Pagination } from "@/components/ui/pagination";
-import { FormProjectModal } from "./form-project-modal";
 import { useState } from "react";
 import { Link } from "@/components/ui/link";
 import { buttonStyles } from "@/components/ui/button";
@@ -144,18 +143,18 @@ export default function Index({
           </div>
         </div>
 
-        {selectedProject && action === "update" && (
-          <FormProjectModal
-            open={isOpen}
-            onOpenChange={() => setIsOpen(false)}
-            project={selectedProject}
-            statuses={statuses}
-            types={types}
-            clients={clients}
-            pageSettings={update}
-          />
-        )}
-        {action === "create" && (
+        {/* {selectedProject && action === "update" && (
+          // <FormProjectModal
+          //   open={isOpen}
+          //   onOpenChange={() => setIsOpen(false)}
+          //   project={selectedProject}
+          //   statuses={statuses}
+          //   types={types}
+          //   clients={clients}
+          //   pageSettings={update}
+          // />
+        )} */}
+        {/* {action === "create" && (
           <FormProjectModal
             open={isOpen}
             onOpenChange={() => setIsOpen(false)}
@@ -164,7 +163,7 @@ export default function Index({
             clients={clients}
             pageSettings={create}
           />
-        )}
+        )} */}
       </Container>
     </>
   );

@@ -1,15 +1,52 @@
+import AppSidebar from "@/components/app-sidebar";
+import AppSidebarNav from "@/components/app-sidebar-nav";
+import AppSidebarSubNav from "@/components/app-sidebar-sub-nav";
 import { Flash } from "@/components/flash";
 import { Footer } from "@/components/footer";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppNavbar } from "@/layouts/app-navbar";
-import type { PropsWithChildren } from "react";
+import { CreateProjectModal } from "@/pages/projects/create-project-modal";
+import { usePage } from "@inertiajs/react";
+import { useState, type PropsWithChildren } from "react";
 
 export default function AppLayout({ children }: PropsWithChildren) {
+  const { projects } = usePage<{ projects: any[] }>().props;
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
   return (
-    <div>
+    <div className="flex flex-col h-screen">
+      {/* Flash messages */}
       <Flash />
+
+      {/* Navbar fix di atas */}
       <AppNavbar />
-      {children}
-      <Footer />
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar fix di kiri */}
+        <SidebarProvider>
+          <AppSidebar
+            projects={projects}
+            onCreateProject={() => setIsCreateModalOpen(true)}
+            collapsible="dock"
+          />
+
+          {/* Main section (dinamis → children halaman) */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <SidebarInset>{children}</SidebarInset>
+
+            {/* Footer selalu di bawah */}
+            <Footer />
+          </div>
+        </SidebarProvider>
+      </div>
+
+      {/* Modal create project */}
+      {isCreateModalOpen && (
+        <CreateProjectModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

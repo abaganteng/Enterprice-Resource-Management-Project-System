@@ -3,47 +3,32 @@ import {
   IconArrowDownFill,
   IconArrowUpFill,
   IconBrandIntentui,
-  IconBuildingFill,
-  IconChevronsY,
   IconCircleCheckFill,
-  IconCircleQuestionmarkFill,
   IconClockFill,
   IconCreditCardFill,
   IconCube,
   IconDashboardFill,
   IconDotsHorizontal,
+  IconEyeDropper,
   IconHashtagFill,
-  IconHeadphonesFill,
   IconListBulletsFill,
-  IconLogout,
-  IconMessageFill,
-  IconNotesFill,
-  IconPackageFill,
   IconPlus,
-  IconSettingsFill,
-  IconShieldFill,
+  IconSearch,
   IconShoppingBagFill,
-  IconTicketFill,
+  IconTrash,
 } from "@intentui/icons";
-import { Avatar } from "@/components/ui/avatar";
 import { Link } from "@/components/ui/link";
 import {
   Menu,
   MenuContent,
-  MenuHeader,
   MenuItem,
+  MenuLabel,
   MenuSection,
-  MenuSeparator,
   MenuTrigger,
 } from "@/components/ui/menu";
 import {
   Sidebar,
   SidebarContent,
-  SidebarDisclosure,
-  SidebarDisclosureGroup,
-  SidebarDisclosurePanel,
-  SidebarDisclosureTrigger,
-  SidebarFooter,
   SidebarHeader,
   SidebarItem,
   SidebarLabel,
@@ -53,9 +38,16 @@ import {
   SidebarSectionGroup,
 } from "@/components/ui/sidebar";
 
-export default function AppSidebar(
-  props: React.ComponentProps<typeof Sidebar>
-) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  projects: { id: number; name: string }[];
+  onCreateProject: () => void;
+}
+
+export default function AppSidebar({
+  projects,
+  onCreateProject,
+  ...props
+}: AppSidebarProps) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -176,59 +168,83 @@ export default function AppSidebar(
               <SidebarLabel>Payments</SidebarLabel>
             </SidebarItem>
           </SidebarSection>
+          <SidebarSection>
+            <div className="col-span-full flex w-full items-center justify-between px-2 ">
+              <span className="text-xs font-semibold uppercase text-gray-500">
+                Projects
+              </span>
+              <div className="flex items-center gap-2">
+                <Menu>
+                  <MenuTrigger aria-label="Open Menu">
+                    <IconDotsHorizontal className="w-4 h-4 cursor-pointer hover:text-gray-600" />
+                  </MenuTrigger>
+                  <MenuContent
+                    popover={{ placement: "bottom" }}
+                    className="min-w-64"
+                  >
+                    <MenuSection>
+                      <MenuItem onClick={onCreateProject}>
+                        <IconPlus className="cursor-pointer hover:text-gray-600" />
+                        <MenuLabel>Create Project</MenuLabel>
+                      </MenuItem>
+                      <MenuItem href="#">
+                        <IconPlus className="cursor-pointer hover:text-gray-600" />
+                        <MenuLabel>Manage Project</MenuLabel>
+                      </MenuItem>
+                    </MenuSection>
+                  </MenuContent>
+                </Menu>
+                <IconSearch className="w-4 h-4 cursor-pointer hover:text-gray-600" />
+                <Link onClick={onCreateProject}>
+                  <IconPlus className="w-4 h-4 cursor-pointer hover:text-gray-600" />
+                </Link>
+              </div>
+            </div>
+            <SidebarItem tooltip="Overview" href="#">
+              <IconDashboardFill />
+              <SidebarLabel>Everythings</SidebarLabel>
+            </SidebarItem>
 
-          <SidebarDisclosureGroup defaultExpandedKeys={[1]}>
-            <SidebarDisclosure id={1}>
-              <SidebarDisclosureTrigger>
-                <IconDotsHorizontal />
-                <SidebarLabel>Support</SidebarLabel>
-              </SidebarDisclosureTrigger>
-              <SidebarDisclosurePanel>
-                <SidebarItem href="#" tooltip="Tickets">
-                  <IconTicketFill />
-                  <SidebarLabel>Tickets</SidebarLabel>
-                </SidebarItem>
-                <SidebarItem href="#" tooltip="Chat Support">
-                  <IconMessageFill />
-                  <SidebarLabel>Chat Support</SidebarLabel>
-                </SidebarItem>
-                <SidebarItem href="#" tooltip="FAQ">
-                  <IconCircleQuestionmarkFill />
-                  <SidebarLabel>FAQ</SidebarLabel>
-                </SidebarItem>
-                <SidebarItem href="#" tooltip="Documentation">
-                  <IconNotesFill />
-                  <SidebarLabel>Documentation</SidebarLabel>
-                </SidebarItem>
-              </SidebarDisclosurePanel>
-            </SidebarDisclosure>
-            <SidebarDisclosure id={2}>
-              <SidebarDisclosureTrigger>
-                <IconPackageFill />
-                <SidebarLabel>Project</SidebarLabel>
-              </SidebarDisclosureTrigger>
-              <SidebarDisclosurePanel>
-                <SidebarItem
-                  href="/projects/index"
-                  isCurrent={route().current("projects.index")}
-                  tooltip="Warehouse"
-                >
-                  <IconBuildingFill />
-                  <SidebarLabel>All Project</SidebarLabel>
-                </SidebarItem>
-                <SidebarItem href="#" tooltip="Stock Levels">
-                  <SidebarLabel>Stock Levels</SidebarLabel>
-                </SidebarItem>
-                <SidebarItem href="#" tooltip="Shipping">
-                  <SidebarLabel>Shipping</SidebarLabel>
-                </SidebarItem>
-              </SidebarDisclosurePanel>
-            </SidebarDisclosure>
-          </SidebarDisclosureGroup>
+            {projects.map((project) => (
+              <SidebarItem key={project.id} tooltip={project.name}>
+                {({ isCollapsed, isFocused }) => (
+                  <>
+                    <SidebarLink
+                      href={route("projects.overview", { project: project.id })}
+                    >
+                      <IconShoppingBagFill />
+                      <SidebarLabel>{project.name}</SidebarLabel>
+                    </SidebarLink>
+
+                    {(!isCollapsed || isFocused) && (
+                      <Menu>
+                        <MenuTrigger
+                          data-slot="menu-action-trigger"
+                          aria-label="Manage"
+                        >
+                          <IconDotsHorizontal /> <IconPlus />
+                        </MenuTrigger>
+                        <MenuContent
+                          popover={{ offset: 0, placement: "right top" }}
+                        >
+                          <MenuItem href="#new-order">
+                            <IconEyeDropper /> Rename
+                          </MenuItem>
+                          <MenuItem href="#view-all">
+                            <IconTrash /> Delete
+                          </MenuItem>
+                        </MenuContent>
+                      </Menu>
+                    )}
+                  </>
+                )}
+              </SidebarItem>
+            ))}
+          </SidebarSection>
         </SidebarSectionGroup>
       </SidebarContent>
 
-      <SidebarFooter className="flex flex-row justify-between gap-4 group-data-[state=collapsed]:flex-col">
+      {/* <SidebarFooter className="flex flex-row justify-between gap-4 group-data-[state=collapsed]:flex-col">
         <Menu>
           <MenuTrigger
             className="flex w-full items-center justify-between"
@@ -299,7 +315,7 @@ export default function AppSidebar(
             </MenuItem>
           </MenuContent>
         </Menu>
-      </SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   );

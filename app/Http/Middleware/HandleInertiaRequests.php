@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Project;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 use Illuminate\Http\Request;
@@ -47,6 +48,12 @@ class HandleInertiaRequests extends Middleware
                 'type' => $request->session()->get('type') ?? 'success',
                 'data' => $request->session()->get('data'),
             ],
+            'projects' => fn () => $request->user()
+            ? $request->user()->projects()->select('id', 'name')->get()
+            : [],
+            // 'currentProject' => fn () => $request->route('project')
+            // ? Project::find($request->route('project'))
+            // : null,
         ];
     }
 }

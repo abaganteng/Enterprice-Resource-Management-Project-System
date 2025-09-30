@@ -14,15 +14,6 @@ export type ManageUserListData = {
   email: string;
   roles: Array<RoleData>;
 };
-export type MilestoneData = {
-  id: number | null;
-  name: string | null;
-  description: string | null;
-  due_date: string | null;
-  status: string | null;
-  created_at: string | null;
-  updated_at: string | null;
-};
 export type PermissionData = {
   id: number;
   name: string;
@@ -41,41 +32,13 @@ export type ProjectData = {
 };
 export type ProjectDetailData = {
   id: number | null;
-  manager: UserData | null;
-  client: UserData | null;
   name: string | null;
-  description: string | null;
-  project_type: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  budget: number | null;
-  status: string | null;
-  created_at: string;
-  updated_at: string;
-  phases: Array<ProjectPhaseData> | null;
-  milestones: Array<MilestoneData> | null;
+  projectGroups: Array<ProjectGroupData> | null;
 };
-export type ProjectPhaseData = {
-  id: number;
-  name: string;
-  description: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  status: string;
-  created_at: string | null;
-  updated_at: string | null;
-  milestones: Array<MilestoneData> | null;
-};
-export type ProjectPhaseDetailData = {
-  id: number;
-  name: string;
-  description: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  status: string;
-  created_at: string | null;
-  updated_at: string | null;
-  milestones: Array<MilestoneData> | null;
+export type ProjectGroupData = {
+  id: number | null;
+  name: string | null;
+  statuses: Array<StatusData> | null;
 };
 export type RoleData = {
   id: number;
@@ -85,6 +48,17 @@ export type RoleDetailData = {
   id: number;
   name: string;
   permissions: Array<PermissionData>;
+};
+export type StatusData = {
+  id: number | null;
+  name: string | null;
+  parent_id: number | null;
+  tasks: Array<TaskData> | null;
+};
+export type TaskData = {
+  id: number | null;
+  name: string | null;
+  parent_id: number | null;
 };
 export type UserData = {
   id: number;

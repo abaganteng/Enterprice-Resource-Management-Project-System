@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/react";
-import { IconChevronLgDown, IconLogout } from "@intentui/icons";
+import { IconCalendar, IconChevronLgDown, IconLogout } from "@intentui/icons";
 import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { buttonStyles } from "@/components/ui/button";
@@ -18,28 +18,15 @@ import {
 import { Logo } from "@/components/logo";
 import type { SharedData } from "@/types/shared";
 import { Link } from "@/components/ui/link";
+import { SearchField } from "@/components/ui/search-field";
 
-const navigations = [
-  {
-    name: "Home",
-    textValue: "Home",
-    href: "/",
-  },
-  {
-    name: "Project",
-    textValue: "Project",
-    href: "/projects/index",
-  },
-];
-
-export function AppNavbar({
-  children,
-  ...props
-}: React.ComponentProps<typeof Navbar>) {
+export function AppNavbar({ ...props }: React.ComponentProps<typeof Navbar>) {
   const page = usePage();
   const { auth } = usePage<SharedData>().props;
   const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => setIsOpen(false), [page.url]);
+
   return (
     <NavbarProvider isOpen={isOpen} onOpenChange={setIsOpen}>
       <Navbar {...props}>
@@ -48,20 +35,18 @@ export function AppNavbar({
             <Logo />
           </Link>
         </NavbarStart>
-        <NavbarGap />
 
-        <NavbarSection>
-          {navigations.map((item) => (
-            <NavbarItem
-              isCurrent={item.href === page.url}
-              key={item.href}
-              href={item.href}
-            >
-              {item.name}
-            </NavbarItem>
-          ))}
-        </NavbarSection>
-        <NavbarSpacer />
+        <div className="flex flex-1 justify-center">
+          <div className="flex items-center gap-3">
+            <IconCalendar className="w-5 h-5 text-gray-600" />
+            <SearchField
+              aria-label="Search"
+              placeholder="Search"
+              className="w-64"
+            />
+          </div>
+        </div>
+
         <NavbarSection className="ml-auto hidden gap-x-2 lg:flex">
           {auth.user ? (
             <UserMenu />
@@ -73,6 +58,7 @@ export function AppNavbar({
           )}
         </NavbarSection>
       </Navbar>
+
       <NavbarMobile>
         <NavbarTrigger />
         <NavbarSpacer />

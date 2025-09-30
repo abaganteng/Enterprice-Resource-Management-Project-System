@@ -57,29 +57,29 @@ class PermissionSeeder extends Seeder
     collect($this->generatePermissions())
         ->each(fn ($permission) => Permission::findOrCreate($permission, 'web'));
 
-        $rolesPermissions = collect([
-            'Manager' => [
-                'read project', 'create project', 'update project',
-                'read project phase', 'create project phase', 'update project phase',
-                'read milestone', 'create milestone', 'update milestone',
-                'read task', 'create task', 'update task',
-            ],
-            'Client' => [
-                'read project', 'approve milestone'
-                ],
-            'Team Lead' => [
-                'read milestone', 'create milestone', 'update milestone',
-                'read task', 'create task', 'update task', 'assign task',
-            ],
-            'Employee' => [
-                'read task', 'update task',
-            ],
-        ]);
+        // $rolesPermissions = collect([
+        //     'Manager' => [
+        //         'read project', 'create project', 'update project',
+        //         'read project phase', 'create project phase', 'update project phase',
+        //         'read milestone', 'create milestone', 'update milestone',
+        //         'read task', 'create task', 'update task',
+        //     ],
+        //     'Client' => [
+        //         'read project', 'approve milestone'
+        //         ],
+        //     'Team Lead' => [
+        //         'read milestone', 'create milestone', 'update milestone',
+        //         'read task', 'create task', 'update task', 'assign task',
+        //     ],
+        //     'Employee' => [
+        //         'read task', 'update task',
+        //     ],
+        // ]);
 
-        $rolesPermissions->each(function ($permissions, $role) {
-            $roleInstance = Role::create(['name' => $role]);
-            $roleInstance->givePermissionTo($permissions);
-        });
+        // $rolesPermissions->each(function ($permissions, $role) {
+        //     $roleInstance = Role::create(['name' => $role]);
+        //     $roleInstance->givePermissionTo($permissions);
+        // });
 
     // buat role admin dengan semua permissions
     $adminRole = Role::findOrCreate('super-admin', 'web');
@@ -89,22 +89,22 @@ class PermissionSeeder extends Seeder
         $user->assignRole($adminRole);
     }
 
-    $managers = [2, 3, 4, 5];
-    $clients  = [6, 7, 8, 9];
-    $teamLeads = [10, 11, 12, 13];
-    $employees = [14, 15, 16, 17, 18];
+    // $managers = [2, 3, 4, 5];
+    // $clients  = [6, 7, 8, 9];
+    // $teamLeads = [10, 11, 12, 13];
+    // $employees = [14, 15, 16, 17, 18];
 
 
-    // Assign role Manager
-    User::whereIn('id', $managers)->get()->each->assignRole('Manager');
+    // // Assign role Manager
+    // User::whereIn('id', $managers)->get()->each->assignRole('Manager');
 
-    // Assign role Client
-    User::whereIn('id', $clients)->get()->each->assignRole('Client');
+    // // Assign role Client
+    // User::whereIn('id', $clients)->get()->each->assignRole('Client');
 
-    // Assign role Team Lead
-    User::whereIn('id', $teamLeads)->get()->each->assignRole('Team Lead');
+    // // Assign role Team Lead
+    // User::whereIn('id', $teamLeads)->get()->each->assignRole('Team Lead');
 
-    // Assign role Employee
-    User::whereIn('id', $employees)->get()->each->assignRole('Employee');
+    // // Assign role Employee
+    // User::whereIn('id', $employees)->get()->each->assignRole('Employee');
 }
 }

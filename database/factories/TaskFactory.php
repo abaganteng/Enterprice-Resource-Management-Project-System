@@ -21,16 +21,11 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'project_id' => Project::factory(),
-            'milestone_id' => Milestone::factory(),
-            'phase_id' => ProjectPhase::factory(),
-            'title' => $this->faker->sentence(4),
-            'description' => $this->faker->paragraph(3),
-            'priority' => $this->faker->randomElement(['low', 'medium', 'high']),
-            'status' => $this->faker->randomElement(['todo', 'in-progress', 'done']),
-            'assign_to' => User::factory(),
-            'due_date' => $this->faker->dateTimeBetween('now', '+6 months'),
-            'created_by' => User::factory(),
+            'project_id' => 1,
+            'project_group_id' => 1,
+            'status_id' => 1,
+            'parent_id' => 6,
+            'name' => $this->faker->sentence(3),
         ];
     }
 }

@@ -5,8 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Milestone;
-use App\Models\ProjectPhase;
+use App\Models\ProjectGroup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,14 +17,7 @@ class Project extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'project_type',
-        'client_id',
-        'manager_id',
-        'description',
-        'start_date',
-        'end_date',
-        'budget',
-        'status'
+        'created_by',
     ];
 
     public function getStartDate(): Attribute
@@ -63,29 +55,17 @@ class Project extends Model
                 : null
         );
     }
-
-     public function manager(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'manager_id');
-    }
-
-    public function client(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'client_id');
-    }
-
-    public function phases(): HasMany
-    {
-        return $this->hasMany(ProjectPhase::class);
-    }
-
-    public function milestones(): HasMany
-    {
-        return $this->hasMany(Milestone::class);
-    }
-
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
     }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function projectGroups(): HasMany {
+    return $this->hasMany(ProjectGroup::class);
+}
 }

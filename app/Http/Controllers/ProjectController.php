@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    public function dashboard()
+    {
+        return inertia('projects/dashbaord');
+    }
+
    public function index()
     {   
         $statuses = collect(ProjectStatus::cases())->map(function ($status) {
@@ -66,32 +71,16 @@ class ProjectController extends Controller
         
         $validated = $request->validate([
         'name'         => 'required|string|max:255',
-        'description'  => 'nullable|string',
-        'budget'       => 'nullable|numeric|min:0',
-        'start_date'   => 'required|date',
-        'end_date'     => 'required|date|after_or_equal:start_date',
-        'project_type' => ['required', Rule::enum(ProjectType::class)],
-        'client_id'    => [
-            'nullable',
-            'exists:users,id'
-        ],
     ]);
 
     $project = Project::create([
         'name'        => $validated['name'],
-        'description' => $validated['description'] ?? null,
-        'budget'      => $validated['budget'] ?? 0,
-        'status'      => 'draft',
-        'start_date'  => $validated['start_date'],
-        'end_date'    => $validated['end_date'],
-        'project_type'=> $validated['project_type'],
-        'client_id'   => $validated['client_id'] ?? null,
-        'manager_id'  => Auth::id(),
+        'created_by'  => Auth::id(),
     ]);
 
     flash('Project created successfully!');
 
-    return to_route('projects.index');
+    return to_route('home');
 
     }
 
@@ -119,23 +108,19 @@ class ProjectController extends Controller
 
     flash('Project updated successfully!');
 
-    return to_route('projects.index');
+    return to_route('tasks/overview');
 }
 
     public function show(Project $project)
     {
-        $project->load(['manager', 'client', 'phases.milestones', 'milestones']);
+        $lists = $project->projectGroups()
+        ->with([
+            'statuses.tasks.subtasks', // status -> tasks -> subtasks
+        ])
+        ->get();
 
         return inertia('projects/show', [
-            'project' => ProjectDetailData::from($project),
-            'create' => [
-                'title' => 'Create New Phase',
-                'description' => 'Create a new phase here.',
-                'buttonText' => 'Create Phase',
-                'method' => 'post',
-                'url' => route('phases.store'),
-            ],
-            
+            'project' => ProjectDetailData::from($lists),
         ]);
     }
 }

@@ -2,15 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
-use App\ProjectType;
-use App\ProjectStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProjectGroup>
  */
-class ProjectFactory extends Factory
+class ProjectGroupFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,9 +16,8 @@ class ProjectFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
-            'created_by' => 1,
+            'project_id' => 1,
             'name' => $this->faker->sentence(3),
         ];
     }

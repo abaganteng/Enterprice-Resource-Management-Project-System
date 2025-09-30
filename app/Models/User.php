@@ -59,28 +59,12 @@ class User extends Authenticatable
         return 'https://www.gravatar.com/avatar/'.md5(strtolower(trim($this->email))).'?s='.$size.'&d=mp';
     }
 
-    public function managedProjects(): HasMany
+    public function projects(): HasMany
     {
-        return $this->hasMany(Project::class, 'manager_id');
+        return $this->hasMany(Project::class, 'created_by');
     }
-
-    public function clientProjects(): HasMany
-    {
-        return $this->hasMany(Project::class, 'client_id');
-    }
-
-    public function approvedMilestones(): HasMany
-    {
-        return $this->hasMany(Milestone::class, 'approved_by');
-    }
-
-    public function assignedTasks(): HasMany
-    {
-        return $this->hasMany(Task::class, 'assign_to');
-    }
-
-    public function createdTasks(): HasMany
-    {
-        return $this->hasMany(Task::class, 'created_by');
-    }
+    // public function createdTasks(): HasMany
+    // {
+    //     return $this->hasMany(Task::class, 'created_by');
+    // }
 }

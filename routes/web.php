@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::group(['middleware' => ['permission:read project']], function () { 
         Route::get('/projects/index', [Controllers\ProjectController::class, 'index'])->name('projects.index');
-        Route::get('/projects/show/{project}', [Controllers\ProjectController::class, 'show'])->name('projects.show');
+        
     });
 
     Route::group(['middleware' => ['permission:create project']], function () { 
@@ -53,11 +53,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/projects/update', [Controllers\ProjectController::class, 'update'])->name('projects.update');
     });
 
-    Route::post('/phases/store', [Controllers\ProjectPhaseController::class, 'store'])->name('phases.store');
-    Route::put('/phases/update', [Controllers\ProjectPhaseController::class, 'update'])->name('phases.update');
+    Route::get('/projects/dashboard', [Controllers\ProjectController::class, 'dashboard'])->name('projects.dashboard');
 
-    Route::get('/phases/show/{phase}', [Controllers\ProjectPhaseController::class, 'show'])->name('phases.show');
-    Route::get('/milestone/show/{milestone}', [Controllers\MilestoneController::class, 'show'])->name('milestones.show');
+   Route::prefix('projects/{project}')->group(function () {
+    // Default redirect ke overview
+    Route::get('/', function ($project) {
+        return redirect()->route('projects.dashboard', $project);
+    })->name('projects.dashboard');
+
+    // Overview project
+    Route::get('/overview', [Controllers\TaskController::class, 'overview'])
+        ->name('projects.overview');
+
+    // List task dalam project
+    Route::get('/list', [Controllers\TaskController::class, 'list'])
+        ->name('projects.tasks.list');
+});
    
 });
 
