@@ -2,12 +2,10 @@ import AppSidebarNav from "@/components/app-sidebar-nav";
 import AppSidebarSubNav from "@/components/app-sidebar-sub-nav";
 import AppLayout from "./app-layout";
 import { PropsWithChildren } from "react";
+import { ProjectDetailData } from "@/types";
 
 interface ProjectLayoutProps extends PropsWithChildren {
-  project: {
-    id: number;
-    name: string;
-  };
+  project: ProjectDetailData;
 }
 
 export default function ProjectLayoutNav({

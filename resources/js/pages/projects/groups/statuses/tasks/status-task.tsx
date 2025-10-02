@@ -13,7 +13,7 @@ interface ListTaskProps {
   tasks: Task[];
 }
 
-export function ListTask({ tasks }: ListTaskProps) {
+export function StatusTask({ tasks }: ListTaskProps) {
   // Ambil root tasks (tanpa parent)
   const rootTasks = tasks.filter((t) => !t.parent_id);
 
@@ -32,12 +32,6 @@ interface TaskItemProps {
 }
 
 function TaskItem({ task, tasks }: TaskItemProps) {
-  console.log(
-    "Task:",
-    task.id,
-    "children:",
-    tasks.filter((t) => t.parent_id === task.id)
-  );
   const children = tasks.filter((t) => t.parent_id === task.id);
 
   return (

@@ -1,6 +1,4 @@
 import AppSidebar from "@/components/app-sidebar";
-import AppSidebarNav from "@/components/app-sidebar-nav";
-import AppSidebarSubNav from "@/components/app-sidebar-sub-nav";
 import { Flash } from "@/components/flash";
 import { Footer } from "@/components/footer";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";

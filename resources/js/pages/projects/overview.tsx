@@ -1,6 +1,4 @@
-import AppLayout from "@/layouts/app-layout";
 import { Card } from "@/components/ui/card";
-import AppSidebarSubNav from "@/components/app-sidebar-sub-nav";
 import ProjectLayoutNav from "@/layouts/project-layout-nav";
 
 interface Props {

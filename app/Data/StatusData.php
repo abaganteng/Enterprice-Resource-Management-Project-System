@@ -14,7 +14,7 @@ class StatusData extends Data
     public function __construct(
         public ?int $id,
         public ?string $name,
-        public ?int $parent_id,
+        public ?string $color,
         /** @var Collection<int, TaskData> */
         public ?Collection $tasks,
     ) {}

@@ -32,6 +32,7 @@
         "@intentui/icons": "^1.11.0",
         "@internationalized/date": "^3.9.0",
         "@react-aria/i18n": "^3.12.12",
+        "@react-stately/color": "^3.9.1",
         "@react-types/overlays": "^3.9.1",
         "@types/node": "^22.15.34",
         "momentum-paginator": "^1.0.7",

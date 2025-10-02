@@ -52,6 +52,7 @@ export type RoleDetailData = {
 export type StatusData = {
   id: number | null;
   name: string | null;
+  color: string | null;
   parent_id: number | null;
   tasks: Array<TaskData> | null;
 };

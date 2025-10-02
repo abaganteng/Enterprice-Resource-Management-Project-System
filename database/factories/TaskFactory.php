@@ -24,7 +24,7 @@ class TaskFactory extends Factory
             'project_id' => 1,
             'project_group_id' => 1,
             'status_id' => 1,
-            'parent_id' => 6,
+            'parent_id' => 1,
             'name' => $this->faker->sentence(3),
         ];
     }

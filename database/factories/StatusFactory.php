@@ -19,6 +19,7 @@ class StatusFactory extends Factory
         return [
             'project_group_id' => 1,
             'name' => $this->faker->sentence(3),
+            'color' => '#3B82F6',
         ];
     }
 }

@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Data\ProjectDetailData;
 
 class TaskController extends Controller
 {
-    public function list(Project $project)
+    public function store(Request $request)
     {
-        
-        $project->load(['projectGroups.statuses.tasks.subtasks']);
-
-        return inertia('tasks/list', [
-            'project' => ProjectDetailData::from($project),
+        $validated = $request->validate([
+            'project_id' => 'required',
+            'project_group_id' => 'required',
+            'status_id' => 'required',
+            'name' => 'required|string|max:255',
         ]);
-    }
 
-    public function overview(Project $project)
-    {
-        $project->load(['projectGroups.statuses.tasks.subtasks']);
-
-        return inertia('tasks/overview', [
-            'project' => ProjectDetailData::from($project),
+        Task::create([
+            'name' => $validated['name'],
+            'project_id' => $validated['project_id'],
+            'project_group_id' => $validated['project_group_id'],
+            'status_id' => $validated['status_id']
         ]);
+
+        flash('New task has been created');
+
+        return back();
     }
 }

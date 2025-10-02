@@ -55,20 +55,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/projects/dashboard', [Controllers\ProjectController::class, 'dashboard'])->name('projects.dashboard');
 
-   Route::prefix('projects/{project}')->group(function () {
-    // Default redirect ke overview
-    Route::get('/', function ($project) {
-        return redirect()->route('projects.dashboard', $project);
-    })->name('projects.dashboard');
 
-    // Overview project
-    Route::get('/overview', [Controllers\TaskController::class, 'overview'])
-        ->name('projects.overview');
+    Route::prefix('projects/{project}')->group(function () {
 
-    // List task dalam project
-    Route::get('/list', [Controllers\TaskController::class, 'list'])
-        ->name('projects.tasks.list');
-});
+        // Overview project
+        Route::get('/overview', [Controllers\ProjectController::class, 'overview'])->name('projects.overview');
+
+        /**
+         * Group
+         */
+        Route::get('/groups', [Controllers\GroupController::class, 'index'])->name('projects.groups.index');
+        Route::post('/groups', [Controllers\GroupController::class, 'store'])->name('projects.groups.create');
+        Route::put('/groups/{group}/rename', [Controllers\GroupController::class, 'rename'])->name('projects.groups.rename');
+
+        /**
+         * Status dalam group
+         */
+        Route::put('/groups/statuses/{status}/rename', [Controllers\StatusController::class, 'rename'])->name('projects.groups.statuses.rename');
+
+        /**
+         * Tasks dalam status
+         */
+        Route::post('/groups/statuses/{status}/tasks', [Controllers\TaskController::class, 'store'])->name('projects.groups.statuses.tasks.create');
+    });
+
+
    
 });
 

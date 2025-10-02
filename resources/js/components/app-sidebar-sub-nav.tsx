@@ -53,7 +53,7 @@ export default function AppSidebarSubNav({ project }: Props) {
           </NavbarItem>
 
           <NavbarItem
-            href={route("projects.tasks.list", { project: project.id })}
+            href={route("projects.groups.index", { project: project.id })}
             className="flex items-center gap-1 text-sm"
           >
             <IconBulletList className="w-4 h-4" />

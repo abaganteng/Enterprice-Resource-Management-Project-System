@@ -12,7 +12,8 @@ class Status extends Model
     use HasFactory;
     protected $fillable = [
         'list_id',
-        'name'
+        'name',
+        'color'
     ];
     public function tasks(): HasMany
     {
