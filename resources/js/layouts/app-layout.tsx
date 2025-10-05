@@ -28,11 +28,9 @@ export default function AppLayout({ children }: PropsWithChildren) {
             collapsible="dock"
           />
 
-          {/* Main section (dinamis → children halaman) */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Main section scrollable (Inset + Footer ikut discroll) */}
+          <div className="flex-1 flex flex-col overflow-auto">
             <SidebarInset>{children}</SidebarInset>
-
-            {/* Footer selalu di bawah */}
             <Footer />
           </div>
         </SidebarProvider>

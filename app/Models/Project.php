@@ -65,7 +65,8 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function projectGroups(): HasMany {
-    return $this->hasMany(ProjectGroup::class);
-}
+    public function projectGroups(): HasMany 
+    {
+        return  $this->hasMany(ProjectGroup::class);
+    }   
 }

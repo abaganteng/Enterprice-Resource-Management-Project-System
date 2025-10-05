@@ -1,6 +1,5 @@
 import {
   IconBarsThree2,
-  IconCalendar,
   IconCommandRegular,
   IconDashboard,
   IconDotsHorizontal,
@@ -9,6 +8,7 @@ import {
   IconPeople,
   IconPlus,
   IconSettings,
+  IconX,
 } from "@intentui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
@@ -27,19 +27,17 @@ import { SidebarNav, SidebarTrigger } from "@/components/ui/sidebar";
 import { ProjectDetailData } from "@/types";
 import { useState } from "react";
 import { FormCreateGroupModal } from "@/pages/projects/groups/form-create-group-modal";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Button } from "./ui/button";
-import { ListBox, ListBoxItem } from "./ui/list-box";
-import { Calendar } from "./ui/calendar";
 import { Link } from "./ui/link";
-import { ProjectDatePicker } from "./project-date-picker";
 
-export default function AppSidebarNav({
+export default function TaskSidebarNav({
   project,
 }: {
   project: ProjectDetailData;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const handleBack = () => {
+    window.history.back();
+  };
   return (
     <>
       <SidebarNav className="flex items-center justify-between">
@@ -56,11 +54,11 @@ export default function AppSidebarNav({
           {/* Icon kiri */}
           <Menu>
             <MenuTrigger aria-label="Open Menu">
-              <IconDotsHorizontal className="w-4 h-4 cursor-pointer hover:text-gray-600" />
+              <IconDotsHorizontal className="w-4 h-4 cursor-pointer hover:text-muted-fg" />
             </MenuTrigger>
             <MenuContent popover={{ placement: "bottom" }}>
               <MenuItem href="#">
-                <IconPlus className="cursor-pointer hover:text-gray-600" />
+                <IconPlus className="cursor-pointer hover:text-muted-fg" />
                 <MenuLabel>Rename</MenuLabel>
               </MenuItem>
               <MenuSeparator />
@@ -102,14 +100,57 @@ export default function AppSidebarNav({
             </MenuContent>
           </Menu>
 
-          <IconBarsThree2 className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-          <ProjectDatePicker />
+          <IconBarsThree2 className="w-5 h-5 cursor-pointer hover:text-muted-fg" />
         </div>
 
         {/* RIGHT */}
         <div className="flex items-center gap-3 ml-auto">
-          <IconMessageDots className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-          <IconPeople className="w-5 h-5 cursor-pointer hover:text-gray-600" />
+          <Menu>
+            <MenuTrigger aria-label="Open Menu">
+              <IconDotsHorizontal className="w-4 h-4 cursor-pointer hover:text-muted-fg" />
+            </MenuTrigger>
+            <MenuContent popover={{ placement: "bottom" }}>
+              <MenuItem href="#">
+                <IconPlus className="cursor-pointer hover:text-muted-fg" />
+                <MenuLabel>Rename</MenuLabel>
+              </MenuItem>
+              <MenuSeparator />
+              <MenuSubmenu>
+                <MenuItem>
+                  <MenuLabel>Create new</MenuLabel>
+                </MenuItem>
+                <MenuContent>
+                  <MenuItem>
+                    <MenuLabel>List</MenuLabel>
+                  </MenuItem>
+                  <MenuSeparator />
+                  <MenuSubmenu>
+                    <MenuItem>
+                      <MenuLabel>Import</MenuLabel>
+                    </MenuItem>
+                    <MenuContent>
+                      <MenuItem>
+                        <MenuLabel>Exels file</MenuLabel>
+                      </MenuItem>
+                      <MenuItem>
+                        <MenuLabel>Pdf file</MenuLabel>
+                      </MenuItem>
+                    </MenuContent>
+                  </MenuSubmenu>
+                </MenuContent>
+              </MenuSubmenu>
+              <MenuSeparator />
+              <MenuItem>
+                <MenuLabel>Duplicate</MenuLabel>
+              </MenuItem>
+              <MenuItem>
+                <MenuLabel>Delete</MenuLabel>
+              </MenuItem>
+            </MenuContent>
+          </Menu>
+          <Link onClick={handleBack}>
+            <IconX className="cursor-pointer hover:text-muted-fg" />
+          </Link>
           {/* Tambah icon lain di sini */}
         </div>
       </SidebarNav>

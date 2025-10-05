@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Disclosure, DisclosurePanel } from "@/components/ui/disclosure";
-import { Heading } from "@/components/ui/heading";
+import { Table } from "@/components/ui/table";
 import { IconChevronRight } from "@intentui/icons";
 
 interface Task {
@@ -11,6 +9,8 @@ interface Task {
 
 interface ListTaskProps {
   tasks: Task[];
+  task: any;
+  level: any;
 }
 
 export function StatusTask({ tasks }: ListTaskProps) {
@@ -18,46 +18,51 @@ export function StatusTask({ tasks }: ListTaskProps) {
   const rootTasks = tasks.filter((t) => !t.parent_id);
 
   return (
-    <div>
+    <>
       {rootTasks.map((task) => (
-        <TaskItem key={task.id} task={task} tasks={tasks} />
+        <StatusTaskItem key={task.id} task={task} tasks={tasks} level={0} />
       ))}
-    </div>
+    </>
   );
 }
 
-interface TaskItemProps {
+interface StatusTaskItemProps {
   task: Task;
   tasks: Task[];
+  level: number; // untuk indentasi visual
 }
 
-function TaskItem({ task, tasks }: TaskItemProps) {
+function StatusTaskItem({ task, tasks, level }: StatusTaskItemProps) {
   const children = tasks.filter((t) => t.parent_id === task.id);
 
   return (
-    <Disclosure>
-      <div className="flex items-center gap-2">
-        {children.length > 0 && (
-          <Heading>
-            <Button slot="trigger" intent="plain">
-              <IconChevronRight className="size-4 cursor-pointer hover:text-gray-600" />
-            </Button>
-          </Heading>
-        )}
-
-        {/* Task name */}
-        <Button intent="plain">{task.name}</Button>
-      </div>
-
-      {children.length > 0 && (
-        <DisclosurePanel>
-          <div className="ml-6">
-            {children.map((child) => (
-              <TaskItem key={child.id} task={child} tasks={tasks} />
-            ))}
+    <>
+      {/* Row utama untuk task */}
+      <Table.Row key={task.id}>
+        <Table.Cell>
+          <div className="flex items-center gap-2">
+            {children.length > 0 && (
+              <IconChevronRight className="size-4 text-gray-400" />
+            )}
+            <span
+              className="text-sm text-foreground"
+              style={{ marginLeft: `${level * 16}px` }} // indentasi dinamis
+            >
+              {task.name}
+            </span>
           </div>
-        </DisclosurePanel>
-      )}
-    </Disclosure>
+        </Table.Cell>
+      </Table.Row>
+
+      {/* Render subtasks langsung di bawah task induk */}
+      {children.map((child) => (
+        <StatusTaskItem
+          key={child.id}
+          task={child}
+          tasks={tasks}
+          level={level + 1}
+        />
+      ))}
+    </>
   );
 }

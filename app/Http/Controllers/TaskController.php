@@ -9,7 +9,7 @@ use App\Data\ProjectDetailData;
 
 class TaskController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, $project, $status)
     {
         $validated = $request->validate([
             'project_id' => 'required',
@@ -18,7 +18,7 @@ class TaskController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        Task::create([
+        $task = Task::create([
             'name' => $validated['name'],
             'project_id' => $validated['project_id'],
             'project_group_id' => $validated['project_group_id'],
@@ -29,4 +29,25 @@ class TaskController extends Controller
 
         return back();
     }
+
+    public function show(Project $project, $group, $status, $task)
+{
+    $task = Task::where([
+        'id' => $task,
+        'status_id' => $status,
+        'project_group_id' => $group,
+        'project_id' => $project->id,
+    ])
+    ->with(['status.group.project', 'subtasks'])
+    ->firstOrFail();
+
+    $subtasks = Task::where('parent_id', $task->id)->get();
+
+    return inertia('projects/groups/statuses/tasks/show', [
+        'project' => $project,
+        'task' => $task,
+        'subtasks' => $subtasks,
+    ]);
+}
+
 }

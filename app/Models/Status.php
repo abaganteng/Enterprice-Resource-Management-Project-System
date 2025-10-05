@@ -5,18 +5,24 @@ namespace App\Models;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Status extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'list_id',
+        'project_group_id',
         'name',
         'color'
     ];
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(ProjectGroup::class);
     }
 }

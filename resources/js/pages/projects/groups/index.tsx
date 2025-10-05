@@ -12,11 +12,6 @@ interface Props {
 
 export default function Index({ project }: Props) {
   const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
-
-  // simpan form per Index
-  const [forms, setForms] = useState<{
-    [key: number]: ReturnType<typeof useForm>;
-  }>({});
   return (
     <div className="p-4 lg:p-6">
       <Card>

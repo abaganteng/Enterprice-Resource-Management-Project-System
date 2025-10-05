@@ -56,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects/dashboard', [Controllers\ProjectController::class, 'dashboard'])->name('projects.dashboard');
 
 
-    Route::prefix('projects/{project}')->group(function () {
+    Route::prefix('projects/{project}')->scopeBindings()->group(function () {
 
         // Overview project
         Route::get('/overview', [Controllers\ProjectController::class, 'overview'])->name('projects.overview');
@@ -72,11 +72,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
          * Status dalam group
          */
         Route::put('/groups/statuses/{status}/rename', [Controllers\StatusController::class, 'rename'])->name('projects.groups.statuses.rename');
+        Route::post('/groups/{group}/statuses', [Controllers\StatusController::class, 'store'])->name('projects.groups.statuses.create');
 
         /**
          * Tasks dalam status
          */
+        Route::get('/groups/{group}/statuses/{status}/tasks/{task}', [Controllers\TaskController::class, 'show'])->name('projects.groups.statuses.tasks.show');
         Route::post('/groups/statuses/{status}/tasks', [Controllers\TaskController::class, 'store'])->name('projects.groups.statuses.tasks.create');
+        Route::put('/groups/statuses/{status}/tasks', [Controllers\TaskController::class, 'update'])->name('projects.groups.statuses.tasks.create');
     });
 
 

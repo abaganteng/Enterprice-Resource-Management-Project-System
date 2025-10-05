@@ -37,6 +37,7 @@ class ProjectController extends Controller
     ]);
 
     flash('Project created successfully!');
+    
 
     return to_route('home');
 

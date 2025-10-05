@@ -1,5 +1,9 @@
 import { Container } from "@/components/ui/container";
-import { Disclosure, DisclosurePanel } from "@/components/ui/disclosure";
+import {
+  Disclosure,
+  DisclosurePanel,
+  DisclosureTrigger,
+} from "@/components/ui/disclosure";
 import { GroupStatus } from "./groups/statuses/group-status";
 import {
   Menu,
@@ -22,10 +26,12 @@ import {
 import { TextField } from "@/components/ui/text-field";
 import { Input } from "react-aria-components";
 import { Heading } from "@/components/ui/heading";
-import { Button } from "@/components/ui/button";
+import { Button, buttonStyles } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { FormCreateGroupModal } from "./groups/form-create-group-modal";
+import { NewStatusForm } from "./groups/statuses/new-status-form";
+import { button } from "motion/react-m";
 export function ProjectGroupItem({
   project,
   group,
@@ -39,6 +45,9 @@ export function ProjectGroupItem({
     name: group.name,
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [creatingStatusId, setCreatingStatusId] = useState<
+    number | string | null
+  >(null);
 
   useEffect(() => {
     if (editingGroupId === group.id && inputRef.current) {
@@ -63,19 +72,15 @@ export function ProjectGroupItem({
       {
         preserveScroll: true,
         onSuccess: () => setEditingGroupId(null),
-      }
+      },
     );
   };
 
   return (
     <>
-      <Disclosure key={group.id}>
+      <Disclosure key={group.id} className={"space-y-6"}>
         <div className="flex items-center gap-2">
-          <Heading>
-            <Button slot="trigger" intent="plain">
-              <IconChevronRight className="size-5 cursor-pointer hover:text-gray-600" />
-            </Button>
-          </Heading>
+          <DisclosureTrigger className={"hover:text-muted-fg cursor-pointer"} />
           <div className="flex flex-1 items-center gap-2 min-w-0">
             {editingGroupId === group.id ? (
               <Input
@@ -106,7 +111,11 @@ export function ProjectGroupItem({
               >
                 <IconDotsHorizontal className="w-4 h-4  hover:text-gray-600" />
               </MenuTrigger>
-              <MenuContent popover={{ placement: "bottom" }}>
+              <MenuContent
+                popover={{
+                  placement: "bottom",
+                }}
+              >
                 <MenuItem
                   onAction={() => {
                     setEditingGroupId(group.id);
@@ -130,6 +139,10 @@ export function ProjectGroupItem({
                     >
                       <IconSlideAdd />
                       <MenuLabel>List</MenuLabel>
+                    </MenuItem>
+                    <MenuItem onClick={() => setCreatingStatusId(group.id)}>
+                      <IconPlus />
+                      <MenuLabel>Add Status</MenuLabel>
                     </MenuItem>
                     <MenuSeparator />
                     <MenuSubmenu>
@@ -163,6 +176,14 @@ export function ProjectGroupItem({
 
         <DisclosurePanel>
           <Container>
+            {creatingStatusId === group.id && (
+              <NewStatusForm
+                project={project}
+                group={group}
+                onCancel={() => setCreatingStatusId(null)}
+                onSuccess={() => setCreatingStatusId(null)}
+              />
+            )}
             <GroupStatus
               project={project}
               group={group.id}
