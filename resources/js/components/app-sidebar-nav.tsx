@@ -1,6 +1,5 @@
 import {
   IconBarsThree2,
-  IconCalendar,
   IconCommandRegular,
   IconDashboard,
   IconDotsHorizontal,
@@ -27,12 +26,8 @@ import { SidebarNav, SidebarTrigger } from "@/components/ui/sidebar";
 import { ProjectDetailData } from "@/types";
 import { useState } from "react";
 import { FormCreateGroupModal } from "@/pages/projects/groups/form-create-group-modal";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Button } from "./ui/button";
-import { ListBox, ListBoxItem } from "./ui/list-box";
-import { Calendar } from "./ui/calendar";
-import { Link } from "./ui/link";
 import { ProjectDatePicker } from "./project-date-picker";
+import { router, useForm } from "@inertiajs/react";
 
 export default function AppSidebarNav({
   project,
@@ -40,6 +35,31 @@ export default function AppSidebarNav({
   project: ProjectDetailData;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  type DateValues = {
+    start_date?: string | null;
+    end_date?: string | null;
+    due_date?: string | null;
+  };
+  const [projectDates, setProjectDates] = useState<DateValues>({
+    start_date: "",
+    end_date: "",
+    due_date: "",
+  });
+
+  const handleSaveProjectDates = (dates: DateValues) => {
+    router.put(
+      route("projects.date.store", { project: project.id }),
+      {
+        start_date: dates.start_date,
+        end_date: dates.end_date,
+        due_date: dates.due_date,
+      },
+      {
+        preserveState: true,
+        onSuccess: () => closed,
+      },
+    );
+  };
   return (
     <>
       <SidebarNav className="flex items-center justify-between">
@@ -103,7 +123,12 @@ export default function AppSidebarNav({
           </Menu>
 
           <IconBarsThree2 className="w-5 h-5 cursor-pointer hover:text-gray-600" />
-          <ProjectDatePicker />
+          <ProjectDatePicker
+            value={projectDates}
+            onChange={(newDates: any) => setProjectDates(newDates)}
+            onSave={handleSaveProjectDates}
+            project={project}
+          />
         </div>
 
         {/* RIGHT */}

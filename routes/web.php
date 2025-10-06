@@ -40,18 +40,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
        Route::get('/manage-roles-permissions/index', [Controllers\RolesPermissionsController::class, 'index'])->name('manage-roles-permissions.index');
     });    
 
-    Route::group(['middleware' => ['permission:read project']], function () { 
-        Route::get('/projects/index', [Controllers\ProjectController::class, 'index'])->name('projects.index');
-        
-    });
 
     Route::group(['middleware' => ['permission:create project']], function () { 
         Route::post('/projects/store', [Controllers\ProjectController::class, 'store'])->name('projects.store');
+        Route::put('/projects/{project}/date/store', [Controllers\ProjectController::class, 'dateStore'])->name('projects.date.store');
     });
 
-    Route::group(['middleware' => ['permission:update project']], function () { 
-        Route::put('/projects/update', [Controllers\ProjectController::class, 'update'])->name('projects.update');
-    });
+
 
     Route::get('/projects/dashboard', [Controllers\ProjectController::class, 'dashboard'])->name('projects.dashboard');
 

@@ -33,6 +33,9 @@ export type ProjectData = {
 export type ProjectDetailData = {
   id: number | null;
   name: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  due_date: string | null;
   projectGroups: Array<ProjectGroupData> | null;
 };
 export type ProjectGroupData = {

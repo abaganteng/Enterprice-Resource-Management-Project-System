@@ -15,6 +15,9 @@ class ProjectDetailData extends Data
     public function __construct(
         public ?int $id,
         public ?string $name,
+        public ?string $start_date,
+        public ?string $end_date,
+        public ?string $due_date,
         /** @var Collection<int, ProjectGroupData> */
         public ?Collection $projectGroups
     ) {}

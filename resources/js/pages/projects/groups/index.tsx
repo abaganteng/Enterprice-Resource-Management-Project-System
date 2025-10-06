@@ -2,8 +2,8 @@ import { Card } from "@/components/ui/card";
 import ProjectLayoutNav from "@/layouts/project-layout-nav";
 import { ProjectDetailData } from "@/types";
 import { useState } from "react";
-import { useForm } from "@inertiajs/react";
 import { ProjectGroupItem } from "../project-group-item";
+import { Container } from "@/components/ui/container";
 
 interface Props {
   project: ProjectDetailData;
@@ -13,11 +13,11 @@ interface Props {
 export default function Index({ project }: Props) {
   const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
   return (
-    <div className="p-4 lg:p-6">
-      <Card>
-        <Card.Header>
-          <Card.Title>
-            {project.projectGroups?.map((group: any) => (
+    <Container>
+      {project.projectGroups?.map((group: any) => (
+        <Card className="py-5">
+          <Card.Header>
+            <Card.Title>
               <ProjectGroupItem
                 key={group.id}
                 project={project}
@@ -25,11 +25,11 @@ export default function Index({ project }: Props) {
                 editingGroupId={editingGroupId}
                 setEditingGroupId={setEditingGroupId}
               />
-            ))}
-          </Card.Title>
-        </Card.Header>
-      </Card>
-    </div>
+            </Card.Title>
+          </Card.Header>
+        </Card>
+      ))}
+    </Container>
   );
 }
 

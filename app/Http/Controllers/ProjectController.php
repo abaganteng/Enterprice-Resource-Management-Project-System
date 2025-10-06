@@ -43,5 +43,21 @@ class ProjectController extends Controller
 
     }
 
+    public function dateStore(Request $request, Project $project)
+    {
+        $validated = $request->validate([
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'due_date' => ['nullable', 'date'],
+        ]);
+
+        $project->update($validated);
+
+        flash('Date already set');
+
+        return back();
+    
+    }
+
 
 }

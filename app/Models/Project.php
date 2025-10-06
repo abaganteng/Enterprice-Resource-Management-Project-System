@@ -18,6 +18,9 @@ class Project extends Model
     protected $fillable = [
         'name',
         'created_by',
+        'start_date',
+        'end_date',
+        'due_date'
     ];
 
     public function getStartDate(): Attribute
@@ -62,7 +65,7 @@ class Project extends Model
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function projectGroups(): HasMany 
