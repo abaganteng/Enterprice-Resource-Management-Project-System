@@ -66,7 +66,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         /**
          * Status dalam group
          */
-        Route::put('/groups/statuses/{status}/rename', [Controllers\StatusController::class, 'rename'])->name('projects.groups.statuses.rename');
+        Route::put('/groups/{projectGroup}/statuses/{status}/rename', [Controllers\StatusController::class, 'rename'])->name('projects.groups.statuses.rename');
         Route::post('/groups/{group}/statuses', [Controllers\StatusController::class, 'store'])->name('projects.groups.statuses.create');
 
         /**
@@ -75,6 +75,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/groups/{group}/statuses/{status}/tasks/{task}', [Controllers\TaskController::class, 'show'])->name('projects.groups.statuses.tasks.show');
         Route::post('/groups/statuses/{status}/tasks', [Controllers\TaskController::class, 'store'])->name('projects.groups.statuses.tasks.create');
         Route::put('/groups/statuses/{status}/tasks', [Controllers\TaskController::class, 'update'])->name('projects.groups.statuses.tasks.create');
+        Route::delete('/groups/{projectGroup}/statuses/{status}/tasks/{task}/assign/{assign}', [Controllers\TaskController::class, 'assignRemove'])->name('projects.groups.statuses.tasks.assign.remove');
+        Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/date', [Controllers\TaskController::class, 'taskDate'])->name('projects.groups.statuses.tasks.date');
+        Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/assign', [Controllers\TaskController::class, 'assignTask'])->name('projects.groups.statuses.tasks.assign');
+        Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/priority', [Controllers\TaskController::class, 'priorityTask'])->name('projects.groups.statuses.tasks.priority');
     });
 
 

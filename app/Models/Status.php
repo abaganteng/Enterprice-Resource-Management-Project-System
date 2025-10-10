@@ -18,11 +18,11 @@ class Status extends Model
     ];
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'status_id');
     }
 
     public function group(): BelongsTo
     {
-        return $this->belongsTo(ProjectGroup::class);
+        return $this->belongsTo(ProjectGroup::class, 'project_group_id');
     }
 }

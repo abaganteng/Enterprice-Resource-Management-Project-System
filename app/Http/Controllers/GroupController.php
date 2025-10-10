@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\ManageUserData;
+use App\Models\User;
 use App\Models\Project;
 use App\Models\ProjectGroup;
 use Illuminate\Http\Request;
@@ -12,10 +14,13 @@ class GroupController extends Controller
     public function index(Project $project)
     {
         
-        $project->load(['projectGroups.statuses.tasks.subtasks']);
+        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
+
+        $users = User::select('id', 'name')->get();
 
         return inertia('projects/groups/index', [
             'project' => ProjectDetailData::from($project),
+            'users' => ManageUserData::collect($users)
         ]);
     }
 

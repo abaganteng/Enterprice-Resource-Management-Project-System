@@ -52,6 +52,7 @@ function StatusTaskItem({ task, tasks, level }: StatusTaskItemProps) {
             </span>
           </div>
         </Table.Cell>
+        <Table.Cell>Assign</Table.Cell>
       </Table.Row>
 
       {/* Render subtasks langsung di bawah task induk */}

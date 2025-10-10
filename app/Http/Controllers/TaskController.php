@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\Status;
 use App\Models\Project;
+use App\Models\ProjectGroup;
 use Illuminate\Http\Request;
 use App\Data\ProjectDetailData;
 
@@ -18,6 +20,8 @@ class TaskController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
+        $project = $validated['project_id'];
+
         $task = Task::create([
             'name' => $validated['name'],
             'project_id' => $validated['project_id'],
@@ -27,27 +31,89 @@ class TaskController extends Controller
 
         flash('New task has been created');
 
-        return back();
+        return to_route('projects.groups.index', $project);
     }
 
     public function show(Project $project, $group, $status, $task)
-{
-    $task = Task::where([
-        'id' => $task,
-        'status_id' => $status,
-        'project_group_id' => $group,
-        'project_id' => $project->id,
-    ])
-    ->with(['status.group.project', 'subtasks'])
-    ->firstOrFail();
+    {
+        $task = Task::where([
+            'id' => $task,
+            'status_id' => $status,
+            'project_group_id' => $group,
+            'project_id' => $project->id,
+        ])
+        ->with(['status.group.project', 'subtasks'])
+        ->firstOrFail();
 
-    $subtasks = Task::where('parent_id', $task->id)->get();
+        $subtasks = Task::where('parent_id', $task->id)->get();
 
-    return inertia('projects/groups/statuses/tasks/show', [
-        'project' => $project,
-        'task' => $task,
-        'subtasks' => $subtasks,
-    ]);
-}
+        return inertia('projects/groups/statuses/tasks/show', [
+            'project' => $project,
+            'task' => $task,
+            'subtasks' => $subtasks,
+        ]);
+    }   
+
+    public function assignTask(Project $project, ProjectGroup $projectGroup, $status, Task $task, Request $request)
+    {
+        $validated = $request->validate([
+            'assigned_to' => ['required', 'exists:users,id'],
+        ]);
+
+        // Tambahkan user ke task (tanpa menghapus user lain yang sudah di-assign)
+        $task->assignees()->syncWithoutDetaching([$validated['assigned_to']]);
+
+        flash('Assign task successfully');
+
+        return back();
+    }
+
+    public function assignRemove(Project $project, ProjectGroup $projectGroup, $status, Task $task, $assign ,Request $request)
+    {
+            // Pastikan task dan user benar-benar terhubung
+        $exists = $task->assignees()->where('user_id', $assign)->exists();
+
+        if (! $exists) {
+            return back()->with('error', 'User tidak ter-assign ke task ini.');
+        }
+
+        // Lepas relasi di pivot table
+        $task->assignees()->detach($assign);
+
+        flash('Remove succesfully');
+
+        // Kembalikan respon inertia
+        return to_route('projects.groups.index', $project);
+    }
+
+    public function taskDate(Project $project, ProjectGroup $projectGroup, $status, Task $task, Request $request)
+    {
+        $validated = $request->validate([
+            'due_date' => ['required'],
+        ]);
+        
+        $task->update([
+            'due_date' => $validated['due_date'],
+        ]);
+        
+        flash('Add Due Date successfully');
+
+        return back();
+    }
+
+    public function priorityTask(Project $project, ProjectGroup $projectGroup, $status, Task $task, Request $request)
+    {
+        $validated = $request->validate([
+            'priority' => ['required'],
+        ]);
+        
+        $task->update([
+            'priority' => $validated['priority'],
+        ]);
+        
+        flash('Add Priority successfully');
+
+        return back();
+    }
 
 }

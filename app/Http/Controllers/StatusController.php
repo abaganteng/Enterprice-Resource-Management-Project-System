@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use App\Models\Project;
+use App\Models\ProjectGroup;
 use Illuminate\Http\Request;
 
 class StatusController extends Controller
 {
-    public function rename(Project $project, Status $status, Request $request)
+    public function rename(Project $project, ProjectGroup $projectGroup, Status $status, Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -17,7 +18,7 @@ class StatusController extends Controller
 
         $status->update($validated);
 
-        flash('Rename List Successfuly');
+        flash('Rename Status Successfuly');
 
         return back();
     }

@@ -60,7 +60,7 @@ class Project extends Model
     }
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'project_id');
     }
 
     public function createdBy(): BelongsTo
@@ -70,6 +70,6 @@ class Project extends Model
 
     public function projectGroups(): HasMany 
     {
-        return  $this->hasMany(ProjectGroup::class);
+        return  $this->hasMany(ProjectGroup::class, 'project_id');
     }   
 }

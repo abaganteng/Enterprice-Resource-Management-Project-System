@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { IconEnter } from "@intentui/icons";
 import { useEffect, useRef, useState } from "react";
 import { Input } from "react-aria-components";
@@ -14,7 +14,7 @@ export function NewTaskForm({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const form = useForm<{
+  const { data, setData, reset, processing, post } = useForm<{
     name: string;
     project_id: number;
     project_group_id: number | string;
@@ -31,9 +31,9 @@ export function NewTaskForm({
   }, []);
 
   const handleSubmit = () => {
-    if (!form.data.name.trim()) return;
+    if (!data.name.trim()) return;
 
-    form.post(
+    post(
       route("projects.groups.statuses.tasks.create", {
         project: project.id,
         status: status.id,
@@ -41,8 +41,9 @@ export function NewTaskForm({
       {
         preserveScroll: true,
         onSuccess: () => {
-          form.reset("name");
-          onSuccess?.(); // bisa buat tutup form
+          reset("name");
+          onSuccess?.();
+          window.location.reload();
         },
       },
     );
@@ -53,8 +54,8 @@ export function NewTaskForm({
       <Input
         ref={inputRef}
         placeholder="Task Name"
-        value={form.data.name}
-        onChange={(e: any) => form.setData("name", e.target.value)}
+        value={data.name}
+        onChange={(e: any) => setData("name", e.target.value)}
         onKeyDown={(e: any) => {
           if (e.key === "Enter") handleSubmit();
           if (e.key === "Escape") onCancel?.();
@@ -66,7 +67,7 @@ export function NewTaskForm({
         Cancel
       </Button>
 
-      <Button onClick={handleSubmit} isDisabled={submitting || form.processing}>
+      <Button onClick={handleSubmit} isDisabled={submitting || processing}>
         Save <IconEnter />
       </Button>
     </div>

@@ -17,7 +17,7 @@ class ProjectController extends Controller
 {
         public function overview(Project $project)
     {
-        $project->load(['projectGroups.statuses.tasks.subtasks']);
+        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
 
         return inertia('projects/overview', [
             'project' => ProjectDetailData::from($project),

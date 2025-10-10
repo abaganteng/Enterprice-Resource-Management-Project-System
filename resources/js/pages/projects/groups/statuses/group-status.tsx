@@ -1,18 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   Disclosure,
   DisclosurePanel,
   DisclosureTrigger,
 } from "@/components/ui/disclosure";
-import { Heading } from "@/components/ui/heading";
 import {
   Menu,
   MenuContent,
   MenuItem,
   MenuLabel,
   MenuSeparator,
-  MenuSubmenu,
   MenuTrigger,
 } from "@/components/ui/menu";
 import {
@@ -22,19 +19,34 @@ import {
   IconDotsVertical,
   IconEye,
   IconEyeDropper,
+  IconPerson,
   IconPlus,
+  IconX,
 } from "@intentui/icons";
-import { StatusTask } from "./tasks/status-task";
 import { Container } from "@/components/ui/container";
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "@inertiajs/react";
-import { Input, parseColor } from "react-aria-components";
+import { router, useForm } from "@inertiajs/react";
+import {
+  Autocomplete,
+  Popover,
+  Input,
+  parseColor,
+  useFilter,
+} from "react-aria-components";
 import { ColorPicker } from "@/components/ui/color-picker";
 import { NewTaskForm } from "./tasks/new-task-form";
 import { Table } from "@/components/ui/table";
 import { useDragAndDrop } from "react-aria-components";
 import { useListData } from "react-stately";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { Dialog } from "@/components/ui/dialog";
+import { SearchField } from "@/components/ui/search-field";
+import { ListBox } from "@/components/ui/list-box";
+import { Avatar } from "@/components/ui/avatar";
+import { usePress } from "react-aria";
+import TaskDueDate from "./task-due-date";
+import TaskPriority from "./task-priority";
+import { twMerge } from "tailwind-merge";
 
 interface Status {
   id: number | string;
@@ -45,11 +57,17 @@ interface Status {
 
 interface ListStatusProps {
   project: any;
+  users: any;
   group: any;
   statuses: Status[];
 }
 
-export function GroupStatus({ project, statuses, group }: ListStatusProps) {
+export function GroupStatus({
+  users,
+  project,
+  statuses,
+  group,
+}: ListStatusProps) {
   const [editingStatusId, setEditingStatusId] = useState<
     number | string | null
   >(null);
@@ -61,9 +79,6 @@ export function GroupStatus({ project, statuses, group }: ListStatusProps) {
     name: "",
     color: "",
   });
-  const [creatingStatusId, setCreatingStatusId] = useState<
-    number | string | null
-  >(null);
 
   useEffect(() => {
     if (editingStatusId && inputRef.current) {
@@ -87,6 +102,7 @@ export function GroupStatus({ project, statuses, group }: ListStatusProps) {
     form.put(
       route("projects.groups.statuses.rename", {
         project: project.id,
+        projectGroup: group,
         status: statusId,
       }),
       {
@@ -98,8 +114,12 @@ export function GroupStatus({ project, statuses, group }: ListStatusProps) {
 
   return (
     <>
-      {statuses.map((status) => (
-        <Disclosure key={status.id} className={"space-y-6"}>
+      {statuses.map((status: any) => (
+        <Disclosure
+          defaultExpanded={status.id}
+          key={status.id}
+          className={"space-y-6"}
+        >
           <div className="flex items-center gap-2">
             <DisclosureTrigger
               className={"hover:text-muted-fg cursor-pointer"}
@@ -181,7 +201,12 @@ export function GroupStatus({ project, statuses, group }: ListStatusProps) {
 
           <DisclosurePanel>
             <Container>
-              <StatusTable project={project} group={group} status={status} />
+              <StatusTable
+                users={users}
+                project={project}
+                group={group}
+                status={status}
+              />
             </Container>
           </DisclosurePanel>
         </Disclosure>
@@ -190,7 +215,7 @@ export function GroupStatus({ project, statuses, group }: ListStatusProps) {
   );
 }
 
-function StatusTable({ project, group, status }: any) {
+function StatusTable({ users, project, group, status }: any) {
   const [creatingTask, setCreatingTask] = useState(false);
 
   // data lokal task
@@ -231,6 +256,9 @@ function StatusTable({ project, group, status }: any) {
       >
         <Table.Header>
           <Table.Column isRowHeader>Name</Table.Column>
+          <Table.Column>Assign</Table.Column>
+          <Table.Column>Due Date</Table.Column>
+          <Table.Column>Priority</Table.Column>
           <Table.Column />
         </Table.Header>
 
@@ -238,6 +266,7 @@ function StatusTable({ project, group, status }: any) {
           {(task: any) => (
             <StatusTaskItem
               key={task.id}
+              users={users}
               task={task}
               group={group}
               tasks={list.items}
@@ -285,10 +314,12 @@ function StatusTable({ project, group, status }: any) {
 interface Task {
   id: number | string;
   name: string;
+  assignees: any[];
   parent_id?: number | string | null;
 }
 
 interface StatusTaskItemProps {
+  users: any[];
   task: Task;
   tasks: Task[];
   level: number;
@@ -298,6 +329,7 @@ interface StatusTaskItemProps {
 }
 
 function StatusTaskItem({
+  users,
   task,
   group,
   tasks,
@@ -306,42 +338,211 @@ function StatusTaskItem({
   status,
 }: StatusTaskItemProps) {
   const [expanded, setExpanded] = useState(false);
-  console.log(project);
+  const { contains } = useFilter({ sensitivity: "base" });
   const children = tasks.filter((t) => t && t.parent_id === task.id);
 
   const hasChildren = children.length > 0;
+
+  const { put, data, setData, reset } = useForm({
+    assigned_to: "" as string,
+  });
+
+  const handleAssign = (key: string | number, taskId: string | number) => {
+    const userId = String(key);
+    setData("assigned_to", userId);
+    router.put(
+      route("projects.groups.statuses.tasks.assign", {
+        project: project.id,
+        projectGroup: group,
+        status: status.id,
+        task: taskId,
+      }),
+      { assigned_to: userId },
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          reset();
+          window.location.reload();
+        },
+      },
+    );
+  };
+
+  const getInitials = (name: string) => {
+    if (!name) return "";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (
+      parts[0].charAt(0) + parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+  };
+
+  const handleRemoveAssignees = (
+    assignId: number | string,
+    taskId: number | string,
+    data: any,
+  ) => {
+    router.post(
+      route("projects.groups.statuses.tasks.assign.remove", {
+        project: project.id,
+        projectGroup: group,
+        status: status.id,
+        task: taskId,
+        assign: assignId,
+      }),
+      {
+        _method: "delete",
+        assign: assignId,
+        task: taskId,
+        ...data,
+      },
+      {
+        preserveScroll: true,
+        onSuccess: () => {
+          const updated = task.assignees.filter((u) => u.id !== assignId);
+          task.assignees = updated;
+          window.location.reload();
+        },
+      },
+    );
+  };
 
   return (
     <>
       {/* Baris utama task */}
       <Table.Row key={task.id}>
         <Table.Cell>
-          <div className="flex items-center gap-2">
-            {/* Expand / Collapse button */}
-            {hasChildren ? (
-              <button
-                type="button"
-                onClick={() => setExpanded((prev) => !prev)}
-                className="transition-transform duration-200 hover:text-muted"
-              >
-                <IconChevronRight
-                  className={`size-4 text-gray-400 transform  ${
-                    expanded ? "rotate-90 text-blue-500" : ""
-                  }`}
-                />
-              </button>
-            ) : (
-              <div className="w-4" /> // placeholder agar alignment tetap sejajar
+          <div
+            className={twMerge(
+              "flex items-center justify-between w-full",
+              "group/task hover:bg-muted/40 rounded-md px-2 py-1 transition-colors",
             )}
+          >
+            {/* Kiri: expand button + nama task */}
+            <div className="flex items-center gap-2">
+              {hasChildren ? (
+                <Button
+                  size="sm"
+                  intent="outline"
+                  aria-label={expanded ? "Collapse" : "Expand"}
+                  onPress={() => setExpanded((prev) => !prev)}
+                  className={twMerge(
+                    "size-5 transition-transform duration-200",
+                    expanded ? "rotate-90 text-blue-500" : "text-muted-fg",
+                  )}
+                >
+                  <IconChevronRight className="size-4" />
+                </Button>
+              ) : (
+                <div className="w-5" />
+              )}
 
-            {/* Nama task */}
-            <span
-              style={{ marginLeft: `${level * 16}px` }}
-              className="truncate text-sm text-foreground"
+              <span
+                style={{ marginLeft: `${level * 16}px` }}
+                className="truncate text-sm font-medium text-foreground"
+              >
+                {task.name}
+              </span>
+            </div>
+
+            {/* Kanan: tombol Add Subtask (sementara placeholder) */}
+            <Button
+              size="sm"
+              intent="outline"
+              className="opacity-0 group-hover/task:opacity-100 transition-opacity"
+              onPress={() => console.log("Add subtask for task:", task.id)}
             >
-              {task.name}
-            </span>
+              <IconPlus className="size-4 text-muted-fg hover:text-foreground" />
+            </Button>
           </div>
+        </Table.Cell>
+        <Table.Cell>
+          <Select
+            placeholder={<IconPerson />}
+            value={data.assigned_to} // gunakan "value" bukan "selectedKey"
+            onChange={(key: any) => handleAssign(key, task.id)}
+          >
+            <SelectTrigger>
+              {task.assignees && task.assignees.length > 0 ? (
+                <div className="flex -space-x-1">
+                  {task.assignees.map((user: any) => {
+                    // 🟢 1️⃣ Definisikan usePress di sini, di dalam map
+                    const { pressProps } = usePress({
+                      onPress: (e: any) => {
+                        e.continuePropagation();
+                        handleRemoveAssignees(user.id, task.id, data);
+                      },
+                    });
+
+                    // 🟢 2️⃣ Return avatar + tombol IconX
+                    return (
+                      <div key={user.id} className="relative group">
+                        <Avatar
+                          style={{
+                            backgroundColor: `hsl(${(user.id * 47) % 360}, 70%, 60%)`,
+                            color: "white",
+                          }}
+                          className="mr-2 size-4 sm:size-6 flex items-center justify-center rounded-full text-[10px] font-medium"
+                        >
+                          {getInitials(user.name)}
+                        </Avatar>
+
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          title="Remove assignee"
+                          {...pressProps}
+                          className="absolute -top-1 -right-1 hidden group-hover:flex items-center justify-center
+             bg-red-500 text-white rounded-full p-[1px] transition hover:bg-red-600"
+                        >
+                          <IconX className="w-2 h-2" />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <IconPerson className="text-gray-400" />
+              )}
+            </SelectTrigger>
+
+            <Popover className="entering:fade-in exiting:fade-out flex max-h-80 w-(--trigger-width) entering:animate-in exiting:animate-out flex-col overflow-hidden rounded-lg border bg-overlay">
+              <Dialog aria-label="Assign User">
+                <Autocomplete filter={contains}>
+                  <div className="border-b bg-muted p-2">
+                    <SearchField className="rounded-lg bg-bg" autoFocus />
+                  </div>
+
+                  <ListBox
+                    className="max-h-[inherit] min-w-[inherit] rounded-t-none border-0 bg-transparent shadow-none"
+                    items={users}
+                  >
+                    {(item) => (
+                      <SelectItem key={item.id} textValue={item.name}>
+                        {item.name}
+                      </SelectItem>
+                    )}
+                  </ListBox>
+                </Autocomplete>
+              </Dialog>
+            </Popover>
+          </Select>
+        </Table.Cell>
+        <Table.Cell>
+          <TaskDueDate
+            projectId={project.id}
+            groupId={group}
+            statusId={status.id}
+            task={task}
+          />
+        </Table.Cell>
+        <Table.Cell>
+          <TaskPriority
+            projectId={project.id}
+            groupId={group}
+            statusId={status.id}
+            task={task}
+          />
         </Table.Cell>
         <Table.Cell>
           <div className="flex justify-end">
@@ -374,6 +575,7 @@ function StatusTaskItem({
         children.map((child) => (
           <StatusTaskItem
             key={child.id}
+            users={users}
             task={child}
             group={group}
             tasks={tasks}

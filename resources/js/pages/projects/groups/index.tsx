@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import ProjectLayoutNav from "@/layouts/project-layout-nav";
-import { ProjectDetailData } from "@/types";
+import { ManageUserData, ProjectDetailData } from "@/types";
 import { useState } from "react";
 import { ProjectGroupItem } from "../project-group-item";
 import { Container } from "@/components/ui/container";
@@ -8,19 +8,20 @@ import { Container } from "@/components/ui/container";
 interface Props {
   project: ProjectDetailData;
   tasks: any[];
+  users: ManageUserData[];
 }
 
-export default function Index({ project }: Props) {
+export default function Index({ project, users }: Props) {
   const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
   return (
     <Container>
       {project.projectGroups?.map((group: any) => (
-        <Card className="py-5">
+        <Card key={group.id} className="py-5">
           <Card.Header>
             <Card.Title>
               <ProjectGroupItem
-                key={group.id}
                 project={project}
+                users={users}
                 group={group}
                 editingGroupId={editingGroupId}
                 setEditingGroupId={setEditingGroupId}
@@ -32,8 +33,6 @@ export default function Index({ project }: Props) {
     </Container>
   );
 }
-
-// gunakan ProjectLayout, bukan AppLayout
 Index.layout = (page: any) => (
   <ProjectLayoutNav project={page.props.project}>{page}</ProjectLayoutNav>
 );

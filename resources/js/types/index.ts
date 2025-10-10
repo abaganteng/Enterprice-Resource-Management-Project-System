@@ -61,6 +61,9 @@ export type StatusData = {
 export type TaskData = {
   id: number | null;
   name: string | null;
+  due_date: string | null;
+  priority: string | null;
+  assignees: Array<UserData> | null;
   parent_id: number | null;
 };
 export type UserData = {

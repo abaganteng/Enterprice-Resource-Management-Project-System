@@ -15,7 +15,6 @@ import {
   MenuTrigger,
 } from "@/components/ui/menu";
 import {
-  IconChevronRight,
   IconDotsHorizontal,
   IconDuplicate,
   IconEyeDropper,
@@ -23,22 +22,20 @@ import {
   IconSlideAdd,
   IconTrash,
 } from "@intentui/icons";
-import { TextField } from "@/components/ui/text-field";
 import { Input } from "react-aria-components";
-import { Heading } from "@/components/ui/heading";
-import { Button, buttonStyles } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { FormCreateGroupModal } from "./groups/form-create-group-modal";
 import { NewStatusForm } from "./groups/statuses/new-status-form";
-import { button } from "motion/react-m";
 export function ProjectGroupItem({
+  users,
   project,
   group,
   editingGroupId,
   setEditingGroupId,
 }: any) {
   const [isOpen, setIsOpen] = useState(false);
+
   type RenameForm = { name: string };
 
   const form = useForm<RenameForm>({
@@ -78,7 +75,11 @@ export function ProjectGroupItem({
 
   return (
     <>
-      <Disclosure key={group.id} className={"space-y-6"}>
+      <Disclosure
+        defaultExpanded={group.id}
+        key={group.id}
+        className={"space-y-6"}
+      >
         <div className="flex items-center gap-2">
           <DisclosureTrigger className={"hover:text-muted-fg cursor-pointer"} />
           <div className="flex flex-1 items-center gap-2 min-w-0">
@@ -186,6 +187,7 @@ export function ProjectGroupItem({
             )}
             <GroupStatus
               project={project}
+              users={users}
               group={group.id}
               statuses={group.statuses ?? []}
             />

@@ -18,16 +18,16 @@ class ProjectGroup extends Model
     ];
     public function statuses(): HasMany
     {
-        return $this->hasMany(Status::class);
+        return $this->hasMany(Status::class, 'project_group_id');
     }
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'status_id');
     }
 
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class, 'project_id');
     }
 }
