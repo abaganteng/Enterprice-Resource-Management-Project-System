@@ -79,6 +79,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/date', [Controllers\TaskController::class, 'taskDate'])->name('projects.groups.statuses.tasks.date');
         Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/assign', [Controllers\TaskController::class, 'assignTask'])->name('projects.groups.statuses.tasks.assign');
         Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/priority', [Controllers\TaskController::class, 'priorityTask'])->name('projects.groups.statuses.tasks.priority');
+        Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/rename', [Controllers\TaskController::class, 'renameTask'])->name('projects.groups.statuses.tasks.rename');
+
+        /**
+         * Subtasks dalam task
+         */
+        Route::post('/groups/{projectGroup}/statuses/{status}/tasks/{task}/subtask', [Controllers\TaskController::class, 'subtaskStore'])->name('projects.groups.statuses.tasks.subtask.create');
     });
 
 

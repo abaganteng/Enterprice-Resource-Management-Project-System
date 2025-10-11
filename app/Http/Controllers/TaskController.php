@@ -116,4 +116,42 @@ class TaskController extends Controller
         return back();
     }
 
+    public function subtaskStore(Project $project, ProjectGroup $projectGroup, $status, Task $task, Request $request)
+    {
+        $validated = $request->validate([
+            'project_id' => 'required',
+            'project_group_id' => 'required',
+            'status_id' => 'required',
+            'parent_id' => 'required',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $project = $validated['project_id'];
+
+        $task = Task::create([
+            'name' => $validated['name'],
+            'project_id' => $validated['project_id'],
+            'project_group_id' => $validated['project_group_id'],
+            'status_id' => $validated['status_id'],
+            'parent_id' => $validated['parent_id'],
+        ]);
+
+        flash('New subtask has been created');
+
+        return to_route('projects.groups.index', $project);
+    }
+
+    public function renameTask(Project $project, ProjectGroup $projectGroup, $status, Task $task, Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $task->update($validated);
+
+        flash('Rename Task Successfuly');
+
+        return back();
+    }
+
 }
