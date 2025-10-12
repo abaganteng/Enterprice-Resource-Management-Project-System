@@ -38,6 +38,11 @@ class Task extends Model
         return $this->belongsToMany(User::class, 'task_user', 'task_id', 'user_id')->withTimestamps();
     }
 
+    public function projectGroup()
+    {
+        return $this->belongsTo(ProjectGroup::class, 'project_group_id');
+    }
+
 
     public function project(): BelongsTo
     {

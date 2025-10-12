@@ -1,3 +1,6 @@
+export type AssignData = {
+  name: string | null;
+};
 export type ManageUserData = {
   id: number;
   name: string;
@@ -17,6 +20,16 @@ export type ManageUserListData = {
 export type PermissionData = {
   id: number;
   name: string;
+};
+export type ProjectCalendarData = {
+  id: number | null;
+  name: string | null;
+  due_date: string | null;
+  priority: string | null;
+  assignees: AssignData | null;
+  status: StatusCalendarData | null;
+  projectGroup: ProjectGroupCalendarData | null;
+  subtasks: Array<SubtaskCalendarData> | null;
 };
 export type ProjectData = {
   id: number;
@@ -38,6 +51,9 @@ export type ProjectDetailData = {
   due_date: string | null;
   projectGroups: Array<ProjectGroupData> | null;
 };
+export type ProjectGroupCalendarData = {
+  name: string | null;
+};
 export type ProjectGroupData = {
   id: number | null;
   name: string | null;
@@ -52,11 +68,18 @@ export type RoleDetailData = {
   name: string;
   permissions: Array<PermissionData>;
 };
+export type StatusCalendarData = {
+  name: string | null;
+};
 export type StatusData = {
   id: number | null;
   name: string | null;
   color: string | null;
   tasks: Array<TaskData> | null;
+};
+export type SubtaskCalendarData = {
+  name: string | null;
+  assign: AssignData | null;
 };
 export type TaskData = {
   id: number | null;

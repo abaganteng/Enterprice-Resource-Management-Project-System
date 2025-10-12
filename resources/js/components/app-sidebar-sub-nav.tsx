@@ -1,6 +1,7 @@
 import {
   IconBarsThree2,
   IconBulletList,
+  IconCalendar,
   IconCommandRegular,
   IconDashboard,
   IconDotsHorizontal,
@@ -28,6 +29,7 @@ import { Button } from "./ui/button";
 import {
   Navbar,
   NavbarItem,
+  NavbarLabel,
   NavbarProvider,
   NavbarSection,
   NavbarSpacer,
@@ -49,7 +51,7 @@ export default function AppSidebarSubNav({ project }: Props) {
             className="flex items-center gap-1 text-sm"
           >
             <IconGrid4 className="w-4 h-4" />
-            <span>Overview</span>
+            <NavbarLabel>Overview</NavbarLabel>
           </NavbarItem>
 
           <NavbarItem
@@ -57,7 +59,14 @@ export default function AppSidebarSubNav({ project }: Props) {
             className="flex items-center gap-1 text-sm"
           >
             <IconBulletList className="w-4 h-4" />
-            <span>List</span>
+            <NavbarLabel>List</NavbarLabel>
+          </NavbarItem>
+          <NavbarItem
+            href={route("projects.calendar", { project: project.id })}
+            className="flex items-center gap-1 text-sm"
+          >
+            <IconCalendar className="w-4 h-4" />
+            <NavbarLabel>Calendar</NavbarLabel>
           </NavbarItem>
         </NavbarSection>
 

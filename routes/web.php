@@ -85,6 +85,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
          * Subtasks dalam task
          */
         Route::post('/groups/{projectGroup}/statuses/{status}/tasks/{task}/subtask', [Controllers\TaskController::class, 'subtaskStore'])->name('projects.groups.statuses.tasks.subtask.create');
+
+        // Calendar
+        Route::get('/calendar', [Controllers\ProjectController::class, 'calendarPage'])->name('projects.calendar');
     });
 
 

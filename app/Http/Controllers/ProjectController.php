@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\User;
 use App\ProjectType;
 use App\ProjectStatus;
@@ -11,6 +12,7 @@ use App\Data\ManageUserData;
 use Illuminate\Http\Request;
 use App\Data\ProjectDetailData;
 use Illuminate\Validation\Rule;
+use App\Data\ProjectCalendarData;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
@@ -57,6 +59,20 @@ class ProjectController extends Controller
 
         return back();
     
+    }
+
+    public function calendarPage(Project $project)
+    {
+        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
+
+        $tasks = Task::with(['assignees', 'status.group', 'subtasks.assignees'])
+            ->where('project_id', $project->id)
+            ->get();
+
+        return inertia('projects/calendars/project-calendar-page', [
+            'project' => ProjectDetailData::from($project),
+            'tasks' => ProjectCalendarData::collect($tasks),
+        ]);
     }
 
 
