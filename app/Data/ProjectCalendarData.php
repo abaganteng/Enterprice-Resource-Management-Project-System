@@ -15,6 +15,8 @@ class ProjectCalendarData extends Data
         public ?int $id,
         public ?string $name,
         public ?string $due_date,
+        public ?string $start_date,
+        public ?string $end_date,
         public ?string $priority,
         public ?AssignData $assignees,
         public ?StatusCalendarData $status,

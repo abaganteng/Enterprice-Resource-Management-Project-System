@@ -89,14 +89,14 @@ class TaskController extends Controller
     public function taskDate(Project $project, ProjectGroup $projectGroup, $status, Task $task, Request $request)
     {
         $validated = $request->validate([
-            'due_date' => ['required'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'due_date' => ['nullable', 'date'],
         ]);
-        
-        $task->update([
-            'due_date' => $validated['due_date'],
-        ]);
-        
-        flash('Add Due Date successfully');
+
+        $task->update($validated);
+
+        flash('Date already set');
 
         return back();
     }

@@ -25,6 +25,8 @@ export type ProjectCalendarData = {
   id: number | null;
   name: string | null;
   due_date: string | null;
+  start_date: string | null;
+  end_date: string | null;
   priority: string | null;
   assignees: AssignData | null;
   status: StatusCalendarData | null;
@@ -70,6 +72,7 @@ export type RoleDetailData = {
 };
 export type StatusCalendarData = {
   name: string | null;
+  color: string | null;
 };
 export type StatusData = {
   id: number | null;
@@ -85,6 +88,8 @@ export type TaskData = {
   id: number | null;
   name: string | null;
   due_date: string | null;
+  start_date: string | null;
+  end_date: string | null;
   priority: string | null;
   assignees: Array<UserData> | null;
   parent_id: number | null;

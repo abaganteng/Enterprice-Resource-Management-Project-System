@@ -49,6 +49,7 @@ import { NewSubtaskForm } from "./tasks/new-subtask-form";
 import { GridList, GridListItem } from "@/components/ui/grid-list";
 import { TaskNameCell } from "./task-name-cell";
 import AssignTask from "./tasks/assign-task";
+import { ProjectDatePicker } from "@/components/project-date-picker";
 
 interface Status {
   id: number | string;
@@ -377,6 +378,36 @@ function StatusTaskItem({
       },
     );
   };
+  type DateValues = {
+    start_date?: string | null;
+    end_date?: string | null;
+    due_date?: string | null;
+  };
+  const [projectDates, setProjectDates] = useState<DateValues>({
+    start_date: "",
+    end_date: "",
+    due_date: "",
+  });
+
+  const handleSaveProjectDates = (dates: DateValues) => {
+    router.put(
+      route("projects.groups.statuses.tasks.date", {
+        project: project.id,
+        projectGroup: group,
+        status: status.id,
+        task: task.id,
+      }),
+      {
+        start_date: dates.start_date,
+        end_date: dates.end_date,
+        due_date: dates.due_date,
+      },
+      {
+        preserveState: true,
+        onSuccess: () => closed,
+      },
+    );
+  };
 
   return (
     <div className="flex flex-col">
@@ -421,11 +452,17 @@ function StatusTaskItem({
 
         {/* Kolom 3: Due Date */}
         <div className="flex justify-end ">
-          <TaskDueDate
+          {/* <TaskDueDate
             projectId={project.id}
             groupId={group}
             statusId={status.id}
             task={task}
+          /> */}
+          <ProjectDatePicker
+            value={projectDates}
+            onChange={(newDates: any) => setProjectDates(newDates)}
+            onSave={handleSaveProjectDates}
+            project={task}
           />
         </div>
 

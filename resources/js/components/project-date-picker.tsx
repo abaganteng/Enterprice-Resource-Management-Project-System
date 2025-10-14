@@ -37,6 +37,7 @@ export function ProjectDatePicker({
   onSave,
   autoFocus = true,
 }: ProjectDatePickerProps) {
+  console.log(project);
   const [dates, setDates] = useState<DateValues>(value);
   const [mode, setMode] = useState<SelectionMode>("due_date");
   const [activeField, setActiveField] = useState<"start" | "end" | "due">(

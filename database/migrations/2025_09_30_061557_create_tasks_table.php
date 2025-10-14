@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignId('parent_id')->nullable()->constrained('tasks')->onDelete('cascade');
             $table->string('name');
             $table->date('due_date')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->string('priority')->nullable();
             $table->timestamps();
         });

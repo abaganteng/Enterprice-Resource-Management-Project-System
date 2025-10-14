@@ -16,6 +16,7 @@
         "@inertiajs/react": "^2.0.14",
         "@prettier/plugin-php": "^0.24.0",
         "@tailwindcss/vite": "^4.1.11",
+        "@types/fullcalendar": "^3.8.0",
         "@types/react": "^19.1.8",
         "@types/react-dom": "^19.1.6",
         "@vitejs/plugin-react": "^4.6.0",
@@ -32,6 +33,12 @@
         "vite-plugin-watch": "^0.3.1"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.19",
+        "@fullcalendar/daygrid": "^6.1.19",
+        "@fullcalendar/interaction": "^6.1.19",
+        "@fullcalendar/list": "^6.1.19",
+        "@fullcalendar/react": "^6.1.19",
+        "@fullcalendar/timegrid": "^6.1.19",
         "@intentui/icons": "^1.11.0",
         "@internationalized/date": "^3.9.0",
         "@react-aria/i18n": "^3.12.12",

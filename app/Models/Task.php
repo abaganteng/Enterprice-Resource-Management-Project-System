@@ -20,6 +20,8 @@ class Task extends Model
         'parent_id',
         'name',
         'due_date',
+        'start_date',
+        'end_date',
         'priority',
     ];
 
