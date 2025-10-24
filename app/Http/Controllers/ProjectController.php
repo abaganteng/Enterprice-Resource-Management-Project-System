@@ -13,13 +13,16 @@ use Illuminate\Http\Request;
 use App\Data\ProjectDetailData;
 use Illuminate\Validation\Rule;
 use App\Data\ProjectCalendarData;
+use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
         public function overview(Project $project)
     {
-        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
+        $project->load(['projectGroups.tasks.subtasks', 'projectGroups.tasks.assignees', 'projectGroups.tasks.status']);
+
+        $status = Status::select(['name', 'color'])->get();
 
         return inertia('projects/overview', [
             'project' => ProjectDetailData::from($project),
@@ -65,13 +68,21 @@ class ProjectController extends Controller
     {
         $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
 
-        $tasks = Task::with(['assignees', 'status.group', 'subtasks.assignees'])
+        $tasks = Task::with(['assignees', 'status', 'projectGroup', 'subtasks.assignees'])
             ->where('project_id', $project->id)
             ->get();
 
         return inertia('projects/calendars/project-calendar-page', [
             'project' => ProjectDetailData::from($project),
             'tasks' => ProjectCalendarData::collect($tasks),
+        ]);
+    }
+
+    public function test(Project $project)
+    {
+        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
+        return inertia('projects/test/test', [
+            'project' => ProjectDetailData::from($project),
         ]);
     }
 

@@ -64,7 +64,7 @@ export function ProjectGroupItem({
     form.put(
       route("projects.groups.rename", {
         project: project.id,
-        group: group.id,
+        projectGroup: group.id,
       }),
       {
         preserveScroll: true,

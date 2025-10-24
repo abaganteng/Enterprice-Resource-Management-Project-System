@@ -15,6 +15,8 @@ class ProjectGroupData extends Data
         public ?int $id,
         public ?string $name,
         /** @var Collection<int, StatusData> */
-        public ?Collection $statuses
+        public ?Collection $statuses,
+        /** @var Collection<int, TaskData> */
+        public ?Collection $tasks,
     ) {}
 }

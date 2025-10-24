@@ -154,4 +154,17 @@ class TaskController extends Controller
         return back();
     }
 
+    public function updateStatus(Project $project, ProjectGroup $projectGroup, $status, Task $task, Request $request)
+    {
+        $validated = $request->validate([
+            'status_id' => ['required'],
+        ]);
+
+        $task->update($validated);
+
+        return back();
+    }
+
+
+
 }

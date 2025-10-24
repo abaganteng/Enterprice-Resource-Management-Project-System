@@ -8,6 +8,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import { mapTasksToEvents } from "@/utils/calendar-utils";
 import { setupCalendarCellHover } from "@/utils/calendar-cell-utils";
+import { router } from "@inertiajs/react";
 
 interface Props {
   project: any;
@@ -22,19 +23,23 @@ export default function ProjectCalendarPage({ project, tasks }: Props) {
     const event = info.event;
     const task = event.extendedProps.task;
 
-    const updatedTask = {
-      id: task.id,
-      start_date: event.startStr,
-      end_date: event.endStr ?? event.startStr,
-    };
-
-    console.log("Dragged Task:", updatedTask);
-
-    // 🔁 Nanti ganti ke route Laravel kamu
-    // await router.put(`/projects/${project.id}/tasks/${task.id}`, updatedTask, { preserveScroll: true })
-
-    // Simulasi sukses
-    console.log("✅ Task date updated (simulated)");
+    console.log("drop Task:", event.startStr, event.endSt);
+    router.put(
+      route("projects.groups.statuses.tasks.date", {
+        project: project.id,
+        projectGroup: task.projectGroup.id,
+        status: task.status.id,
+        task: task.id,
+      }),
+      {
+        start_date: event.startStr,
+        end_date: event.endStr,
+        due_date: event.startStr,
+      },
+      {
+        preserveScroll: true,
+      },
+    );
   };
 
   // ✅ Saat user resize event (ubah durasi start/end)
@@ -42,24 +47,25 @@ export default function ProjectCalendarPage({ project, tasks }: Props) {
     const event = info.event;
     const task = event.extendedProps.task;
 
-    const updatedTask = {
-      id: task.id,
-      start_date: event.startStr,
-      end_date: event.endStr ?? event.startStr,
-    };
-
-    console.log("Resized Task:", updatedTask);
-
-    // 🔁 Nanti ganti ke route Laravel kamu
-    // await router.put(`/projects/${project.id}/tasks/${task.id}`, updatedTask, { preserveScroll: true })
-
-    console.log("✅ Task resized (simulated)");
+    // console.log("Resized Task:", task);
+    router.put(
+      route("projects.groups.statuses.tasks.date", {
+        project: project.id,
+        projectGroup: task.projectGroup.id,
+        status: task.status.id,
+        task: task.id,
+      }),
+      { start_date: event.startStr, end_date: event.endStr, due_date: null },
+      {
+        preserveScroll: true,
+      },
+    );
   };
 
   // ✅ Ketika event di-klik (sementara log di console)
   const handleEventClick = (info: any) => {
     const { task } = info.event.extendedProps;
-    console.log("🟦 Clicked Task:", task);
+    // console.log("🟦 Clicked Task:", task);
   };
 
   return (

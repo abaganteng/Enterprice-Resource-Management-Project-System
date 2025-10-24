@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\ManageUserData;
 use App\Models\User;
+use App\Models\Status;
 use App\Models\Project;
+use App\Data\StatusData;
+use App\Data\ManageUserData;
 use App\Models\ProjectGroup;
 use Illuminate\Http\Request;
 use App\Data\ProjectDetailData;
@@ -14,13 +16,17 @@ class GroupController extends Controller
     public function index(Project $project)
     {
         
-        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
+        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.tasks.assignees',]);
+
+        $status = Status::select(['name', 'color'])->with('tasks')->get();
 
         $users = User::select('id', 'name')->get();
 
         return inertia('projects/groups/index', [
             'project' => ProjectDetailData::from($project),
-            'users' => ManageUserData::collect($users)
+            'users' => ManageUserData::collect($users),
+            'statuses' => StatusData::collect($status),
+
         ]);
     }
 
@@ -41,13 +47,13 @@ class GroupController extends Controller
         return back();
     }
 
-    public function rename(Project $project, ProjectGroup $group, Request $request)
+    public function rename(Project $project, ProjectGroup $projectGroup, Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required',
         ]);
 
-        $group->update($validated);
+        $projectGroup->update($validated);
 
         flash('Rename List Successfuly');
 

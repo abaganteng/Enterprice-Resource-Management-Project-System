@@ -21,6 +21,7 @@ class TaskData extends Data
         public ?string $priority,
         /** @var Collection<int, UserData> */
         public ?Collection $assignees,
+        public ?StatusData $status,
         public ?int $parent_id,
     ) {}
 }

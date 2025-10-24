@@ -6,9 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { Input, parseColor } from "react-aria-components";
 
 export function NewStatusForm({ project, group, onCancel, onSuccess }: any) {
-  console.log(project, group);
   const [colorValue, setColorValue] = useState<any>(() =>
-    parseColor("#3B82F6")
+    parseColor("#3B82F6"),
   );
   const inputRef = useRef<HTMLInputElement | null>(null);
   const form = useForm<{
@@ -37,7 +36,7 @@ export function NewStatusForm({ project, group, onCancel, onSuccess }: any) {
           form.reset();
           onSuccess?.();
         },
-      }
+      },
     );
   };
 

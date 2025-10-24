@@ -68,6 +68,13 @@ export default function AppSidebarSubNav({ project }: Props) {
             <IconCalendar className="w-4 h-4" />
             <NavbarLabel>Calendar</NavbarLabel>
           </NavbarItem>
+          <NavbarItem
+            href={route("projects.test", { project: project.id })}
+            className="flex items-center gap-1 text-sm"
+          >
+            <IconCalendar className="w-4 h-4" />
+            <NavbarLabel>Test</NavbarLabel>
+          </NavbarItem>
         </NavbarSection>
 
         <NavbarSpacer />

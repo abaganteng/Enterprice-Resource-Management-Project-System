@@ -6,6 +6,10 @@ interface ProjectCalendarData {
   start_date?: string | null;
   end_date?: string | null;
   due_date?: string | null;
+  projectGroup: {
+    id: number;
+    name: string;
+  } | null;
   status?: {
     id: number;
     name: string;
@@ -29,6 +33,7 @@ export function mapTasksToEvents(tasks: ProjectCalendarData[]): EventInput[] {
           title: t.name ?? "Unknow",
           start: t.start_date ?? t.due_date ?? undefined,
           end: t.end_date ?? t.due_date ?? undefined,
+          projectGroup: t.projectGroup?.id ?? undefined,
           color: statusColor,
           extendedProps: {
             task: t,

@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
          */
         Route::get('/groups', [Controllers\GroupController::class, 'index'])->name('projects.groups.index');
         Route::post('/groups', [Controllers\GroupController::class, 'store'])->name('projects.groups.create');
-        Route::put('/groups/{group}/rename', [Controllers\GroupController::class, 'rename'])->name('projects.groups.rename');
+        Route::put('/groups/{projectGroup}/rename', [Controllers\GroupController::class, 'rename'])->name('projects.groups.rename');
 
         /**
          * Status dalam group
@@ -85,9 +85,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
          * Subtasks dalam task
          */
         Route::post('/groups/{projectGroup}/statuses/{status}/tasks/{task}/subtask', [Controllers\TaskController::class, 'subtaskStore'])->name('projects.groups.statuses.tasks.subtask.create');
+        Route::put('/groups/{projectGroup}/statuses/{status}/tasks/{task}/move', [Controllers\TaskController::class, 'updateStatus'])->name('projects.groups.statuses.tasks.updateStatus');
 
         // Calendar
         Route::get('/calendar', [Controllers\ProjectController::class, 'calendarPage'])->name('projects.calendar');
+
+        //Test Drag & Drop
+        Route::get('/test', [Controllers\ProjectController::class, 'test'])->name('projects.test');
     });
 
 

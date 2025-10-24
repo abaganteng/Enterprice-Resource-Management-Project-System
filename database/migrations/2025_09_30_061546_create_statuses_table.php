@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_group_id')->constrained()->onDelete('cascade');
+            $table->foreignId('project_group_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name'); 
+            $table->boolean('is_default')->nullable();
             $table->string('color')->default('#3B82F6'); 
             $table->timestamps();
         });

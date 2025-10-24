@@ -39,10 +39,10 @@ export default function TaskPriority({
       {
         preserveScroll: true,
         onSuccess: () => {
-          console.log("✅ Priority updated successfully:", value);
+          // console.log("✅ Priority updated successfully:", value);
         },
         onError: (e) => {
-          console.error("❌ Failed to update priority", e);
+          // console.error("❌ Failed to update priority", e);
         },
       },
     );

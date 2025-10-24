@@ -54,12 +54,14 @@ export type ProjectDetailData = {
   projectGroups: Array<ProjectGroupData> | null;
 };
 export type ProjectGroupCalendarData = {
+  id: number | null;
   name: string | null;
 };
 export type ProjectGroupData = {
   id: number | null;
   name: string | null;
   statuses: Array<StatusData> | null;
+  tasks: Array<TaskData> | null;
 };
 export type RoleData = {
   id: number;
@@ -71,6 +73,7 @@ export type RoleDetailData = {
   permissions: Array<PermissionData>;
 };
 export type StatusCalendarData = {
+  id: number | null;
   name: string | null;
   color: string | null;
 };
@@ -81,6 +84,7 @@ export type StatusData = {
   tasks: Array<TaskData> | null;
 };
 export type SubtaskCalendarData = {
+  id: number | null;
   name: string | null;
   assign: AssignData | null;
 };
@@ -92,6 +96,7 @@ export type TaskData = {
   end_date: string | null;
   priority: string | null;
   assignees: Array<UserData> | null;
+  status: StatusData | null;
   parent_id: number | null;
 };
 export type UserData = {
