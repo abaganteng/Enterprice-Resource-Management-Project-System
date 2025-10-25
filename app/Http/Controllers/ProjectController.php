@@ -78,13 +78,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function test(Project $project)
-    {
-        $project->load(['projectGroups.statuses.tasks.subtasks', 'projectGroups.statuses.tasks.assignees']);
-        return inertia('projects/test/test', [
-            'project' => ProjectDetailData::from($project),
-        ]);
-    }
+
 
 
 }

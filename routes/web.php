@@ -91,7 +91,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/calendar', [Controllers\ProjectController::class, 'calendarPage'])->name('projects.calendar');
 
         //Test Drag & Drop
-        Route::get('/test', [Controllers\ProjectController::class, 'test'])->name('projects.test');
+        Route::get('/dashboard', [Controllers\ProjectDashboardController::class, 'dashboard'])->name('projects.dashboard');
     });
 
 

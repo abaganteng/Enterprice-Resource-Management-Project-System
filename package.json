@@ -47,10 +47,13 @@
         "@types/node": "^22.15.34",
         "momentum-paginator": "^1.0.7",
         "motion": "^12.19.2",
+        "re-resizable": "^6.11.2",
         "react": "^19.1.0",
         "react-aria-components": "^1.13.0",
         "react-dom": "^19.1.0",
+        "recharts": "^3.3.0",
         "sonner": "^2.0.5",
+        "swapy": "^1.0.5",
         "tailwindcss-react-aria-components": "^2.0.0",
         "tw-animate-css": "^1.3.4",
         "vite": "^6.3.5"
