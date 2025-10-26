@@ -29,6 +29,10 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarDisclosure,
+  SidebarDisclosureGroup,
+  SidebarDisclosurePanel,
+  SidebarDisclosureTrigger,
   SidebarHeader,
   SidebarItem,
   SidebarLabel,
@@ -37,6 +41,15 @@ import {
   SidebarSection,
   SidebarSectionGroup,
 } from "@/components/ui/sidebar";
+import {
+  BriefcaseBusiness,
+  Building,
+  Building2,
+  ChevronDown,
+  FilePenLine,
+  Users,
+  UsersRound,
+} from "lucide-react";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   projects: { id: number; name: string }[];
@@ -74,7 +87,7 @@ export default function AppSidebar({
                 <>
                   <SidebarLink href="#">
                     <IconShoppingBagFill />
-                    <SidebarLabel>Orders</SidebarLabel>
+                    <SidebarLabel>Employees</SidebarLabel>
                   </SidebarLink>
                   {(!isCollapsed || isFocused) && (
                     <Menu>
@@ -92,7 +105,7 @@ export default function AppSidebar({
                       >
                         <MenuItem href="#new-order">
                           <IconPlus />
-                          Create New Order
+                          Create New Employee
                         </MenuItem>
                         <MenuItem href="#view-all">
                           <IconListBulletsFill />
@@ -168,6 +181,30 @@ export default function AppSidebar({
               <SidebarLabel>Payments</SidebarLabel>
             </SidebarItem>
           </SidebarSection>
+          <SidebarDisclosureGroup defaultExpandedKeys={[1]}>
+            <SidebarDisclosure id={1}>
+              <SidebarDisclosureTrigger>
+                <UsersRound className="size-4" />
+                <SidebarLabel>Human Resources</SidebarLabel>
+              </SidebarDisclosureTrigger>
+              <SidebarDisclosurePanel>
+                <SidebarItem href="#" tooltip="Organization">
+                  <SidebarLink href={route("organizations.dashboard")}>
+                    <Building2 className="w-4 h-4" />
+                    <SidebarLabel>Organization</SidebarLabel>
+                  </SidebarLink>
+                </SidebarItem>
+                <SidebarItem href="#" tooltip="FAQ">
+                  <Users className="size-4" />
+                  <SidebarLabel>Employees</SidebarLabel>
+                </SidebarItem>
+                <SidebarItem href="#" tooltip="Documentation">
+                  <FilePenLine className="size-4" />
+                  <SidebarLabel>Employee Contract</SidebarLabel>
+                </SidebarItem>
+              </SidebarDisclosurePanel>
+            </SidebarDisclosure>
+          </SidebarDisclosureGroup>
           <SidebarSection>
             <div className="col-span-full flex w-full items-center justify-between px-2 ">
               <span className="text-xs font-semibold uppercase text-gray-500">

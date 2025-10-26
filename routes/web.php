@@ -94,6 +94,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [Controllers\ProjectDashboardController::class, 'dashboard'])->name('projects.dashboard');
     });
 
+        // Organizations
+        Route::get('/organizations', [Controllers\OrganizationController::class, 'dashboard'])->name('organizations.dashboard');
+
+
 
    
 });

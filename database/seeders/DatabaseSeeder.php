@@ -6,6 +6,9 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Status;
 use Illuminate\Database\Seeder;
+use Database\Seeders\PositionSeeder;
+use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\PermissionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +21,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PermissionSeeder::class,
+            DepartmentSeeder::class,
+            PositionSeeder::class,
+            EmployeeSeeder::class,
+            EmployeeContractSeeder::class,
         ]);
 
         $defaults = [

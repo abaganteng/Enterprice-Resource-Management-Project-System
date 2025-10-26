@@ -45,6 +45,7 @@
         "@react-stately/color": "^3.9.1",
         "@react-types/overlays": "^3.9.1",
         "@types/node": "^22.15.34",
+        "lucide-react": "^0.548.0",
         "momentum-paginator": "^1.0.7",
         "motion": "^12.19.2",
         "re-resizable": "^6.11.2",
