@@ -1,6 +1,26 @@
 export type AssignData = {
   name: string | null;
 };
+export type DepartmentData = {
+  id: number | null;
+  name: string | null;
+  head: UserData | null;
+  positions: Array<PositionData> | null;
+  employees: Array<EmployeeData> | null;
+};
+export type EmployeeData = {
+  id: number | null;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  date_of_birth: string | null;
+  gender: string | null;
+  status: string | null;
+  position: PositionData | null;
+  user: UserData | null;
+  join_date: string | null;
+};
 export type ManageUserData = {
   id: number;
   name: string;
@@ -20,6 +40,13 @@ export type ManageUserListData = {
 export type PermissionData = {
   id: number;
   name: string;
+};
+export type PositionData = {
+  id: number;
+  name: string;
+  employees: Array<EmployeeData> | null;
+  base_salary: number | null;
+  level: number | null;
 };
 export type ProjectCalendarData = {
   id: number | null;

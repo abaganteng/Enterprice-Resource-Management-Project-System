@@ -187,22 +187,24 @@ export default function AppSidebar({
                 <UsersRound className="size-4" />
                 <SidebarLabel>Human Resources</SidebarLabel>
               </SidebarDisclosureTrigger>
-              <SidebarDisclosurePanel>
-                <SidebarItem href="#" tooltip="Organization">
-                  <SidebarLink href={route("organizations.dashboard")}>
-                    <Building2 className="w-4 h-4" />
-                    <SidebarLabel>Organization</SidebarLabel>
-                  </SidebarLink>
-                </SidebarItem>
-                <SidebarItem href="#" tooltip="FAQ">
-                  <Users className="size-4" />
-                  <SidebarLabel>Employees</SidebarLabel>
-                </SidebarItem>
-                <SidebarItem href="#" tooltip="Documentation">
-                  <FilePenLine className="size-4" />
-                  <SidebarLabel>Employee Contract</SidebarLabel>
-                </SidebarItem>
-              </SidebarDisclosurePanel>
+              <SidebarSection>
+                <SidebarDisclosurePanel>
+                  <SidebarItem href="#" tooltip="Organization">
+                    <SidebarLink href={route("organizations.dashboard")}>
+                      <Building2 className="w-4 h-4" />
+                      <SidebarLabel>Organization</SidebarLabel>
+                    </SidebarLink>
+                  </SidebarItem>
+                  <SidebarItem href="#" tooltip="FAQ">
+                    <Users className="size-4" />
+                    <SidebarLabel>Employees</SidebarLabel>
+                  </SidebarItem>
+                  <SidebarItem href="#" tooltip="Documentation">
+                    <FilePenLine className="size-4" />
+                    <SidebarLabel>Employee Contract</SidebarLabel>
+                  </SidebarItem>
+                </SidebarDisclosurePanel>
+              </SidebarSection>
             </SidebarDisclosure>
           </SidebarDisclosureGroup>
           <SidebarSection>

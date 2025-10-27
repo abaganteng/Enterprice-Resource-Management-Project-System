@@ -53,12 +53,18 @@ export default function HumanAppSidebarSubNav({ project }: Props) {
       <Navbar>
         {/* LEFT */}
         <NavbarSection>
-          <NavbarItem className="flex items-center gap-1 text-sm">
+          <NavbarItem
+            className="flex items-center gap-1 text-sm"
+            href={route("organizations.dashboard")}
+          >
             <LayoutDashboard className="w-4 h-4" />
             <NavbarLabel>Dashboard</NavbarLabel>
           </NavbarItem>
 
-          <NavbarItem className="flex items-center gap-1 text-sm">
+          <NavbarItem
+            className="flex items-center gap-1 text-sm"
+            href={route("organizations.departments")}
+          >
             <Building className="w-4 h-4" />
             <NavbarLabel>Departments</NavbarLabel>
           </NavbarItem>

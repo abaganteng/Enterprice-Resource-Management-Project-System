@@ -97,6 +97,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Organizations
         Route::get('/organizations', [Controllers\OrganizationController::class, 'dashboard'])->name('organizations.dashboard');
 
+        // Departments
+        Route::get('/organizations/departments', [Controllers\OrganizationController::class, 'departments'])->name('organizations.departments');
+        Route::put('/organizations/departments/{department}', [Controllers\OrganizationController::class, 'departmentRename'])->name('organizations.departments.rename');
+        Route::delete('/organizations/departments/{department}', [Controllers\OrganizationController::class, 'departmentDestroy'])->name('organizations.departments.destroy');
+
+        // Positions
+        Route::post('/organizations/departments/positions', [Controllers\PositionController::class, 'store'])->name('organizations.department.position.store');
+        Route::put('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'update'])->name('organizations.department.position.update');
+        Route::delete('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'destroy'])->name('organizations.department.position.destroy');
+
 
 
    
