@@ -103,9 +103,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/organizations/departments/{department}', [Controllers\OrganizationController::class, 'departmentDestroy'])->name('organizations.departments.destroy');
 
         // Positions
-        Route::post('/organizations/departments/positions', [Controllers\PositionController::class, 'store'])->name('organizations.department.position.store');
-        Route::put('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'update'])->name('organizations.department.position.update');
-        Route::delete('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'destroy'])->name('organizations.department.position.destroy');
+        Route::get('/organizations/positions', [Controllers\PositionController::class, 'index'])->name('organizations.positions');
+        Route::post('/organizations/positions', [Controllers\PositionController::class, 'store'])->name('organizations.position.store');
+        Route::put('/organizations/positions/{position}', [Controllers\PositionController::class, 'update'])->name('organizations.position.update');
+        Route::delete('/organizations/positions/{position}', [Controllers\PositionController::class, 'destroy'])->name('organizations.position.destroy');
+        Route::post('/organizations/departments/positions', [Controllers\PositionController::class, 'storePositionByDepartment'])->name('organizations.department.position.store');
+        Route::put('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'updatePositionByDepartment'])->name('organizations.department.position.update');
+        Route::delete('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'destroyPositionByDepartment'])->name('organizations.department.position.destroy');
 
 
 

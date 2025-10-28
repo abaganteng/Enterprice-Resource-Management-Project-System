@@ -2,7 +2,14 @@ import AppLayout from "@/layouts/app-layout";
 import { Head } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
 import SettingsLayout from "@/pages/settings/settings-layout";
-import { Table } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Menu,
   MenuContent,
@@ -18,7 +25,11 @@ import {
 } from "@intentui/icons";
 import { ManageUserListData } from "@/types";
 import { usePaginator } from "momentum-paginator";
-import { Pagination } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationItem,
+  PaginationList,
+} from "@/components/ui/pagination";
 import { Link } from "@/components/ui/link";
 import { buttonStyles } from "@/components/ui/button";
 
@@ -52,26 +63,26 @@ export default function Index({ users }: Props) {
             className="[--gutter:var(--card-spacing)] sm:[--gutter:var(--card-spacing)]"
             aria-label="Users"
           >
-            <Table.Header>
-              <Table.Column className="w-0">#</Table.Column>
-              <Table.Column isRowHeader>Email</Table.Column>
-              <Table.Column>Name</Table.Column>
-              <Table.Column>Role</Table.Column>
-              <Table.Column />
-            </Table.Header>
-            <Table.Body>
+            <TableHeader>
+              <TableColumn className="w-0">#</TableColumn>
+              <TableColumn isRowHeader>Email</TableColumn>
+              <TableColumn>Name</TableColumn>
+              <TableColumn>Role</TableColumn>
+              <TableColumn />
+            </TableHeader>
+            <TableBody>
               {users.data.length > 0 ? (
                 users.data.map((user: ManageUserListData, index: number) => (
-                  <Table.Row key={user.id}>
-                    <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>{user.email}</Table.Cell>
-                    <Table.Cell>{user.name}</Table.Cell>
-                    <Table.Cell>
+                  <TableRow key={user.id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>
                       {user.roles?.length > 0
                         ? user.roles?.map((role: any) => role.name).join(", ")
                         : "-"}
-                    </Table.Cell>
-                    <Table.Cell className="text-end last:pr-2.5">
+                    </TableCell>
+                    <TableCell className="text-end last:pr-2.5">
                       <Menu>
                         <MenuTrigger>
                           <IconDotsVertical />
@@ -89,55 +100,53 @@ export default function Index({ users }: Props) {
                           </MenuItem>
                         </MenuContent>
                       </Menu>
-                    </Table.Cell>
-                  </Table.Row>
+                    </TableCell>
+                  </TableRow>
                 ))
               ) : (
-                <Table.Row>
-                  <Table.Cell className="text-center">
+                <TableRow>
+                  <TableCell className="text-center">
                     No data available.
-                  </Table.Cell>
-                  <Table.Cell className="text-center">
+                  </TableCell>
+                  <TableCell className="text-center">
                     No data available.
-                  </Table.Cell>
-                  <Table.Cell className="text-center">
+                  </TableCell>
+                  <TableCell className="text-center">
                     No data available.
-                  </Table.Cell>
-                  <Table.Cell className="text-center">
+                  </TableCell>
+                  <TableCell className="text-center">
                     No data available.
-                  </Table.Cell>
-                </Table.Row>
+                  </TableCell>
+                </TableRow>
               )}
-            </Table.Body>
+            </TableBody>
           </Table>
         </Card.Content>
         <Card.Footer>
           <Pagination>
-            <Pagination.List>
-              <Pagination.Item
+            <PaginationList>
+              <PaginationItem
                 className={!previous.isActive ? "hidden" : ""}
-                segment="previous"
                 href={previous.url ?? ""}
               />
               {pages.map((page) =>
                 page.isPage ? (
-                  <Pagination.Item
+                  <PaginationItem
                     key={page.label}
                     isCurrent={page.isCurrent}
                     href={page.url ?? ""}
                   >
                     {page.label}
-                  </Pagination.Item>
+                  </PaginationItem>
                 ) : (
-                  <Pagination.Item segment="ellipsis" />
-                )
+                  <PaginationItem />
+                ),
               )}
-              <Pagination.Item
+              <PaginationItem
                 className={!next.isActive ? "hidden" : ""}
-                segment="next"
                 href={next.url ?? ""}
               />
-            </Pagination.List>
+            </PaginationList>
           </Pagination>
         </Card.Footer>
       </Card>

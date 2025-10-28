@@ -68,7 +68,10 @@ export default function HumanAppSidebarSubNav({ project }: Props) {
             <Building className="w-4 h-4" />
             <NavbarLabel>Departments</NavbarLabel>
           </NavbarItem>
-          <NavbarItem className="flex items-center gap-1 text-sm">
+          <NavbarItem
+            className="flex items-center gap-1 text-sm"
+            href={route("organizations.positions")}
+          >
             <BriefcaseBusiness className="w-4 h-4" />
             <NavbarLabel>Positions</NavbarLabel>
           </NavbarItem>

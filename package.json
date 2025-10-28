@@ -39,6 +39,7 @@
         "@fullcalendar/list": "^6.1.19",
         "@fullcalendar/react": "^6.1.19",
         "@fullcalendar/timegrid": "^6.1.19",
+        "@heroicons/react": "^2.2.0",
         "@intentui/icons": "^1.11.0",
         "@internationalized/date": "^3.9.0",
         "@react-aria/i18n": "^3.12.12",

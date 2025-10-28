@@ -11,27 +11,14 @@ import {
   DisclosurePanel,
   DisclosureTrigger,
 } from "@/components/ui/disclosure";
-import { Heading } from "@/components/ui/heading";
-import { Menu } from "@/components/ui/menu";
-import { Table } from "@/components/ui/table";
 import HumanResourcesNav from "@/layouts/human-resource-nav";
 import { DepartmentData } from "@/types";
 import { useForm } from "@inertiajs/react";
-import { IconDotsHorizontal, IconEyeDropper, IconPlus } from "@intentui/icons";
-import {
-  EllipsisVerticalIcon,
-  Pencil,
-  Trash,
-  UserCog,
-  UserPlus,
-  Users,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Trash } from "lucide-react";
+import { useState } from "react";
 import { DepartmentTitle } from "./department-title";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
-import { TextField } from "@/components/ui/text-field";
-import { Input } from "@/components/ui/field";
 import { CreatePositionByDepartment } from "../positions/create-position-by-department";
 import { EditPositionByDepartment } from "../positions/edit-position-by-department";
 
@@ -157,7 +144,7 @@ export default function Index({ departments }: Props) {
                   );
                 }}
               >
-                Delete Department
+                Delete Position
               </Button>
             </Modal.Footer>
           </Modal.Content>

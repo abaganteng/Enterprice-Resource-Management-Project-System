@@ -2,7 +2,14 @@ import AppLayout from "@/layouts/app-layout";
 import { Head, usePage } from "@inertiajs/react";
 import { Card } from "@/components/ui/card";
 import SettingsLayout from "@/pages/settings/settings-layout";
-import { Table } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { PermissionData, RoleDetailData } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { View as AssignPermission } from "../permission/view";
@@ -32,7 +39,7 @@ export default function Index() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<any>(null);
   const [action, setAction] = useState<"update" | "delete" | "revoke" | null>(
-    null
+    null,
   );
   const { props } = usePage<PageProps>();
   const { rolesPermissions, permissions } = props;
@@ -53,16 +60,16 @@ export default function Index() {
               className="[--gutter:var(--card-spacing)] sm:[--gutter:var(--card-spacing)]"
               aria-label="Role-Permission"
             >
-              <Table.Header>
-                <Table.Column isRowHeader>Role</Table.Column>
-                <Table.Column>Permission</Table.Column>
-                <Table.Column />
-              </Table.Header>
-              <Table.Body>
+              <TableHeader>
+                <TableColumn isRowHeader>Role</TableColumn>
+                <TableColumn>Permission</TableColumn>
+                <TableColumn />
+              </TableHeader>
+              <TableBody>
                 {rolesPermissions.map((item: RoleDetailData) => (
-                  <Table.Row key={item.id}>
-                    <Table.Cell>{item.name}</Table.Cell>
-                    <Table.Cell>
+                  <TableRow key={item.id}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>
                       {item.permissions.length > 0 ? (
                         item.permissions.map((permission: PermissionData) => (
                           <Badge key={permission.id} className="capitalize">
@@ -72,8 +79,8 @@ export default function Index() {
                       ) : (
                         <Badge intent="danger">Tidak ada permission</Badge>
                       )}
-                    </Table.Cell>
-                    <Table.Cell>
+                    </TableCell>
+                    <TableCell>
                       <Menu>
                         <MenuTrigger>
                           <IconDotsVertical />
@@ -116,10 +123,10 @@ export default function Index() {
                           <MenuSeparator />
                         </MenuContent>
                       </Menu>
-                    </Table.Cell>
-                  </Table.Row>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Body>
+              </TableBody>
             </Table>
           </Card.Content>
           <Card.Footer></Card.Footer>
@@ -134,18 +141,18 @@ export default function Index() {
             </Card.Header>
             <Card.Content>
               <Table allowResize aria-label="Permissions">
-                <Table.Header>
-                  <Table.Column>#</Table.Column>
-                  <Table.Column isRowHeader>Name</Table.Column>
-                </Table.Header>
-                <Table.Body>
+                <TableHeader>
+                  <TableColumn>#</TableColumn>
+                  <TableColumn isRowHeader>Name</TableColumn>
+                </TableHeader>
+                <TableBody>
                   {permissions.map((item: PermissionData) => (
-                    <Table.Row key={item.id}>
-                      <Table.Cell>{item.id}</Table.Cell>
-                      <Table.Cell>{item.name}</Table.Cell>
-                    </Table.Row>
+                    <TableRow key={item.id}>
+                      <TableCell>{item.id}</TableCell>
+                      <TableCell>{item.name}</TableCell>
+                    </TableRow>
                   ))}
-                </Table.Body>
+                </TableBody>
               </Table>
             </Card.Content>
           </Card>

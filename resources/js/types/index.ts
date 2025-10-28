@@ -44,6 +44,7 @@ export type PermissionData = {
 export type PositionData = {
   id: number;
   name: string;
+  department: DepartmentData;
   employees: Array<EmployeeData> | null;
   base_salary: number | null;
   level: number | null;
