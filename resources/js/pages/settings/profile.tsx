@@ -1,33 +1,36 @@
-import AppLayout from "@/layouts/app-layout"
-import { Head, useForm, usePage } from "@inertiajs/react"
-import type { SharedData } from "@/types/shared"
-import { Card } from "@/components/ui/card"
-import { Form } from "@/components/ui/form"
-import { TextField } from "@/components/ui/text-field"
-import { Link } from "@/components/ui/link"
-import { Button } from "@/components/ui/button"
-import SettingsLayout from "@/pages/settings/settings-layout"
+import AppLayout from "@/layouts/app-layout";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import type { SharedData } from "@/types/shared";
+import { Card } from "@/components/ui/card";
+import { Form } from "@/components/ui/form";
+import { TextField } from "@/components/ui/text-field";
+import { Link } from "@/components/ui/link";
+import { Button } from "@/components/ui/button";
+import SettingsLayout from "@/pages/settings/settings-layout";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 interface Props {
-  mustVerifyEmail: boolean
-  status?: string
+  mustVerifyEmail: boolean;
+  status?: string;
 }
 
-const title = "Profile"
+const title = "Profile";
 
 export default function Profile({ mustVerifyEmail, status }: Props) {
-  const { auth } = usePage<SharedData>().props
-  const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-    name: auth.user.name ?? "",
-    email: auth.user.email ?? "",
-  })
+  const { auth } = usePage<SharedData>().props;
+  const { data, setData, patch, errors, processing, recentlySuccessful } =
+    useForm({
+      name: auth.user.name ?? "",
+      email: auth.user.email ?? "",
+    });
 
   const submit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     patch("/settings/profile", {
       preserveScroll: true,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -41,28 +44,35 @@ export default function Profile({ mustVerifyEmail, status }: Props) {
           </Card.Description>
         </Card.Header>
         <Card.Content>
-          <Form validationErrors={errors} onSubmit={submit} className="max-w-lg space-y-6">
+          <Form
+            validationErrors={errors}
+            onSubmit={submit}
+            className="max-w-lg space-y-6"
+          >
             <TextField
               id="name"
-              label="Name"
               type="text"
               value={data.name}
               onChange={(v) => setData("name", v)}
               isRequired
-              errorMessage={errors.name}
               autoFocus
               autoComplete="name"
-            />
+            >
+              <Label>Name</Label>
+              <Input placeholder="Name" type="text" />
+            </TextField>
+
             <TextField
               id="email"
               type="email"
-              label="Email"
               value={data.email}
               onChange={(v) => setData("email", v)}
               isRequired
-              errorMessage={errors.email}
               autoComplete="email"
-            />
+            >
+              <Label>Email</Label>
+              <Input placeholder="Email" type="email" />
+            </TextField>
 
             {mustVerifyEmail && auth.user.email_verified_at === null && (
               <div>
@@ -70,7 +80,6 @@ export default function Profile({ mustVerifyEmail, status }: Props) {
                   Your email address is unverified.
                   <Link
                     href="/email/verification-notification"
-                    intent="secondary"
                     routerOptions={{
                       method: "post",
                     }}
@@ -91,17 +100,19 @@ export default function Profile({ mustVerifyEmail, status }: Props) {
               <Button type="submit" isDisabled={processing}>
                 Save
               </Button>
-              {recentlySuccessful && <p className="text-muted-fg text-sm">Saved.</p>}
+              {recentlySuccessful && (
+                <p className="text-muted-fg text-sm">Saved.</p>
+              )}
             </div>
           </Form>
         </Card.Content>
       </Card>
     </>
-  )
+  );
 }
 
 Profile.layout = (page: any) => (
   <AppLayout>
     <SettingsLayout children={page} />
   </AppLayout>
-)
+);

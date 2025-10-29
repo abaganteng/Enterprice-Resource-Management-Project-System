@@ -6,6 +6,7 @@ import { TextField } from "@/components/ui/text-field";
 import { Button } from "@/components/ui/button";
 import SettingsLayout from "@/pages/settings/settings-layout";
 import { useRef } from "react";
+import { Input } from "@/components/ui/input";
 
 const title = "Manage User";
 
@@ -59,47 +60,45 @@ export default function Form({
           >
             <TextField
               id="name"
-              label="Name"
               type="text"
               value={data.name}
               onChange={(v: string) => setData("name", v)}
               isRequired
-              errorMessage={errors.name}
               autoFocus
               autoComplete="name"
-            />
+            >
+              <Input placeholder="Name" />
+            </TextField>
             <TextField
               id="email"
               type="email"
-              label="Email"
               value={data.email}
               onChange={(v) => setData("email", v)}
               isRequired
-              errorMessage={errors.email}
               autoComplete="email"
-            />
+            >
+              <Input placeholder="Email" />
+            </TextField>
             <TextField
               id="password"
               type="password"
-              label="Password"
               value={data.password}
               onChange={(v) => setData("password", v)}
               isRequired={page_settings.method === "post"}
-              isRevealable
-              errorMessage={errors.password}
               autoComplete="password"
-            />
+            >
+              <Input placeholder="Password" />
+            </TextField>
 
             <TextField
               type="password"
-              label="Confirm Password"
               name="password_confirmation"
               value={data.password_confirmation}
               onChange={(v) => setData("password_confirmation", v)}
-              errorMessage={errors.password_confirmation}
-              isRevealable
               isRequired={page_settings.method === "post"}
-            />
+            >
+              <Input placeholder="Confirm Password" />
+            </TextField>
 
             <div className="flex items-center justify-end gap-4">
               <Button type="submit" isDisabled={processing}>

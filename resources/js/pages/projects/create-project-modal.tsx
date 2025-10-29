@@ -11,6 +11,8 @@ import {
 import { TextField } from "@/components/ui/text-field";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@inertiajs/react";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 interface CreateProjectModalProps {
   isOpen?: boolean;
@@ -56,13 +58,13 @@ export function CreateProjectModal({
               <TextField
                 autoFocus
                 aria-label="Name"
-                label="Project Name"
-                placeholder="Enter project name"
                 value={data.name}
                 onChange={(v) => setData("name", v)}
                 isRequired
-                errorMessage={errors.name}
-              />
+              >
+                <Label>Project Name</Label>
+                <Input placeholder="Enter project name" />
+              </TextField>
             </ModalBody>
 
             <ModalFooter>

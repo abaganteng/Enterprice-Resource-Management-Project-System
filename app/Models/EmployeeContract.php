@@ -19,6 +19,8 @@ class EmployeeContract extends Model
         'status',
     ];
 
+    protected $appends = ['has_active_contract'];
+
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
@@ -27,5 +29,10 @@ class EmployeeContract extends Model
     public function position(): BelongsTo
     {
         return $this->belongsTo(Position::class);
+    }
+
+    public function getHasActiveContractAttribute(): bool
+    {
+        return $this->status === 'active';
     }
 }

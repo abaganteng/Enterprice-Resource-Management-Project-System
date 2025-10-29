@@ -111,6 +111,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'updatePositionByDepartment'])->name('organizations.department.position.update');
         Route::delete('/organizations/departments/positions/{position}', [Controllers\PositionController::class, 'destroyPositionByDepartment'])->name('organizations.department.position.destroy');
 
+        // Employees
+        Route::get('/organizations/employees', [Controllers\EmployeeController::class, 'index'])->name('organizations.employees');
+        Route::get('/organizations/employees/{employee}', [Controllers\EmployeeController::class, 'show'])->name('organizations.employees.show');
+
 
 
    

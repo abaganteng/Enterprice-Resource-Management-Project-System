@@ -18,7 +18,7 @@ import {
 import { Logo } from "@/components/logo";
 import type { SharedData } from "@/types/shared";
 import { Link } from "@/components/ui/link";
-import { SearchField } from "@/components/ui/search-field";
+import { SearchField, SearchInput } from "@/components/ui/search-field";
 
 export function AppNavbar({ ...props }: React.ComponentProps<typeof Navbar>) {
   const page = usePage();
@@ -39,11 +39,9 @@ export function AppNavbar({ ...props }: React.ComponentProps<typeof Navbar>) {
         <div className="flex flex-1 justify-center">
           <div className="flex items-center gap-3">
             <IconCalendar className="w-5 h-5 text-gray-600" />
-            <SearchField
-              aria-label="Search"
-              placeholder="Search"
-              className="w-64"
-            />
+            <SearchField aria-label="Search" className="w-64">
+              <SearchInput placeholder="Search "></SearchInput>
+            </SearchField>
           </div>
         </div>
 

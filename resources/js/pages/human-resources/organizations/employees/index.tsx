@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Menu } from "@/components/ui/menu";
-import { Modal } from "@/components/ui/modal";
 import {
   Pagination,
   PaginationNext,
@@ -27,28 +25,37 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import HumanResourcesNav from "@/layouts/human-resource-nav";
-import { DepartmentData, PositionData } from "@/types";
+import { DepartmentData, EmployeeData, PositionData } from "@/types";
 import { router, useForm } from "@inertiajs/react";
 import { EllipsisVerticalIcon, EyeIcon, Pencil, TrashIcon } from "lucide-react";
 import { usePaginator } from "momentum-paginator";
 import { Key, useState } from "react";
-import { CreatePositionModal } from "./create-position-modal";
-import { EditPositionModal } from "./edit-position-modal";
+import { CreateEmployeeModal } from "./create-employee-modal";
+import EmployeeNav from "@/layouts/employee-nav";
+import { SearchField, SearchInput } from "@/components/ui/search-field";
+import { Link } from "@/components/ui/link";
 
 interface Props {
-  positions: Paginator<PositionData>;
+  employees: Paginator<EmployeeData>;
   departments: DepartmentData[];
+  positions: PositionData[];
   filters: {
     department_id?: number;
+    position_id?: number;
   };
 }
 
-export default function Index({ positions, departments, filters }: Props) {
-  const { from, to, total, previous, next, pages } = usePaginator(positions);
+export default function Index({
+  employees,
+  departments,
+  positions,
+  filters,
+}: Props) {
+  const { from, to, total, previous, next, pages } = usePaginator(employees);
+  console.log(employees);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState<any>(null);
-  const [action, setAction] = useState<"update" | "delete" | null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
+  const [action, setAction] = useState<"detail" | "delete" | null>(null);
 
   const form = useForm();
 
@@ -56,7 +63,7 @@ export default function Index({ positions, departments, filters }: Props) {
     (filter: keyof Props["filters"]) => (value: Key | null) => {
       const v = value == null || value === "" ? undefined : Number(value);
       router.get(
-        route("organizations.positions", {
+        route("organizations.employees", {
           [filter]: v,
         }),
       );
@@ -66,13 +73,22 @@ export default function Index({ positions, departments, filters }: Props) {
     <>
       <Card className="[--card-spacing:var(--gutter)] p-4">
         <Card.Header className="pb-3">
-          <Card.Title>Positions</Card.Title>
+          <Card.Title>Employees</Card.Title>
           <div className="flex items-center justify-between">
             <Card.Description>
-              Manage positions, levels, and salaries.
+              Manage employees, their positions, and salaries.
             </Card.Description>
-            <CreatePositionModal departments={departments} />
+            <CreateEmployeeModal
+              departments={departments}
+              positions={positions}
+            />
           </div>
+          <SearchField
+            aria-label="Search"
+            className={"flex justify-center items-center py-4"}
+          >
+            <SearchInput placeholder="Search Employee..." />
+          </SearchField>
         </Card.Header>
         <Card.Content>
           <Table
@@ -82,7 +98,12 @@ export default function Index({ positions, departments, filters }: Props) {
           >
             <TableHeader>
               <TableColumn className="w-0">#</TableColumn>
-              <TableColumn isRowHeader>Name</TableColumn>
+              <TableColumn
+                className={"flex items-center justify-center"}
+                isRowHeader
+              >
+                Name
+              </TableColumn>
               <TableColumn>
                 <div className="flex flex-col items-center gap-2">
                   <span className="flex justify-center">Department</span>
@@ -108,24 +129,73 @@ export default function Index({ positions, departments, filters }: Props) {
                   </Select>
                 </div>
               </TableColumn>
+              <TableColumn>
+                <div className="flex flex-col items-center gap-2">
+                  <span className="flex justify-center">Position</span>
+                  <Select
+                    aria-label="Position"
+                    placeholder="Filter by position"
+                    value={filters.position_id?.toString()}
+                    onChange={handleFilterChange("position_id")}
+                  >
+                    <SelectTrigger />
+                    <SelectContent
+                      items={positions.map((position: PositionData) => ({
+                        id: position.id || "",
+                        name: position.name || "",
+                      }))}
+                    >
+                      {(item) => (
+                        <SelectItem id={item.id} textValue={item.name}>
+                          {item.name}
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </TableColumn>
               <TableColumn>Salary</TableColumn>
-              <TableColumn>Total Employee</TableColumn>
               <TableColumn />
             </TableHeader>
             <TableBody>
-              {positions.data.length > 0 ? (
-                positions.data.map((position: PositionData) => (
-                  <TableRow key={position.id}>
-                    <TableCell>{position.id}</TableCell>
-                    <TableCell>{position.name}</TableCell>
-                    <TableCell>{position.department?.name}</TableCell>
+              {employees.data.length > 0 ? (
+                employees.data.map((employee: EmployeeData) => (
+                  <TableRow key={employee.id}>
+                    <TableCell>{employee.id}</TableCell>
+                    <TableCell className={"flex flex-col items-center"}>
+                      <Link
+                        className={"cursor-pointer hover:text-primary"}
+                        key={`detail-${employee.id}`}
+                        onClick={() => {
+                          router.visit(
+                            route("organizations.employees.show", {
+                              employee: employee.id,
+                            }),
+                            {
+                              preserveState: true,
+                              preserveScroll: true,
+                            },
+                          );
+                        }}
+                      >
+                        <div className="flex flex-col items-center">
+                          <span className="font-bold text-base">
+                            {employee.name}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {employee.email}
+                          </span>
+                        </div>
+                      </Link>
+                    </TableCell>
+                    <TableCell>{employee.department?.name}</TableCell>
+                    <TableCell>{employee.position?.name}</TableCell>
                     <TableCell>
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
                         currency: "USD",
-                      }).format(position.base_salary ?? 0)}
+                      }).format(employee.position?.base_salary ?? 0)}
                     </TableCell>
-                    <TableCell>{position.employees?.length || 0}</TableCell>
                     <TableCell className="text-end last:pr-2.5">
                       <Menu>
                         <Menu.Trigger>
@@ -136,23 +206,23 @@ export default function Index({ positions, departments, filters }: Props) {
                             <EyeIcon className="w-4 h-4" /> View
                           </Menu.Item>
                           <Menu.Item
-                            key={`update-${position.id}`}
-                            onAction={() => {
-                              setSelectedPosition(position);
-                              setAction("update");
-                              setIsOpen(true);
-                            }}
+                          // key={`update-${employee.id}`}
+                          // onAction={() => {
+                          //   setSelectedPosition(employee.position);
+                          //   setAction("update");
+                          //   setIsOpen(true);
+                          // }}
                           >
                             <Pencil className="w-4 h-4" /> Edit
                           </Menu.Item>
                           <Menu.Separator />
                           <Menu.Item
-                            key={`delete-${position.id}`}
-                            onAction={() => {
-                              setSelectedPosition(position.id);
-                              setAction("delete");
-                              setIsOpen(true);
-                            }}
+                          // key={`delete-${employee.id}`}
+                          // onAction={() => {
+                          //   setSelectedPosition(employee.position);
+                          //   setAction("delete");
+                          //   setIsOpen(true);
+                          // }}
                           >
                             <TrashIcon className="w-4 h-4 text-red-500" />{" "}
                             Delete
@@ -173,7 +243,7 @@ export default function Index({ positions, departments, filters }: Props) {
           </Table>
         </Card.Content>
         <Card.Footer>
-          <Pagination className="flex flex-col items-center">
+          <Pagination className="flex flex-col items-center py-3">
             <PaginationList className="hidden md:flex">
               <PaginationFirst href={previous?.url ?? ""} />
               <PaginationPrevious href={previous?.url ?? ""} />
@@ -225,7 +295,7 @@ export default function Index({ positions, departments, filters }: Props) {
         </Card.Footer>
       </Card>
 
-      {selectedPosition && action === "update" && (
+      {/* {selectedPosition && action === "update" && (
         <EditPositionModal
           open={isOpen}
           onOpenChange={setIsOpen}
@@ -234,7 +304,7 @@ export default function Index({ positions, departments, filters }: Props) {
         />
       )}
 
-      {selectedPosition && action === "delete" && (
+       
         <Modal isOpen={isOpen} onOpenChange={() => setIsOpen(false)}>
           <Modal.Content role="alertdialog">
             <Modal.Header>
@@ -268,12 +338,12 @@ export default function Index({ positions, departments, filters }: Props) {
             </Modal.Footer>
           </Modal.Content>
         </Modal>
-      )}
+      )} */}
     </>
   );
 }
 
 // gunakan ProjectLayout, bukan AppLayout
 Index.layout = (page: any) => (
-  <HumanResourcesNav project={page.props.project}>{page}</HumanResourcesNav>
+  <EmployeeNav project={page.props.project}>{page}</EmployeeNav>
 );

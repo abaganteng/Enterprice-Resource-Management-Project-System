@@ -28,6 +28,8 @@ import { Autocomplete, useFilter, Popover } from "react-aria-components";
 import { SearchField } from "@/components/ui/search-field";
 import { ListBox } from "@/components/ui/list-box";
 import { DatePicker } from "@/components/ui/date-picker";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 interface CreateProjectModalProps {
   open: boolean;
@@ -69,13 +71,13 @@ export function FormCreateGroupModal({
               <TextField
                 autoFocus
                 aria-label="Name"
-                label="List Name"
-                placeholder="Enter list name"
                 value={data.name}
                 onChange={(v) => setData("name", v)}
                 isRequired
-                errorMessage={errors.name}
-              />
+              >
+                <Label>List Name</Label>
+                <Input placeholder="Enter list name" />
+              </TextField>
             </ModalBody>
 
             <ModalFooter>

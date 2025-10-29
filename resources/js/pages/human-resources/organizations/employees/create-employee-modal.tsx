@@ -9,15 +9,16 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { TextField } from "@/components/ui/text-field";
-import { DepartmentData } from "@/types";
+import { DepartmentData, PositionData } from "@/types";
 import { useForm } from "@inertiajs/react";
 import { IconPlus } from "@intentui/icons";
 
 interface Props {
   departments: DepartmentData[];
+  positions: PositionData[];
 }
 
-export function CreatePositionModal({ departments }: Props) {
+export function CreateEmployeeModal({ departments, positions }: Props) {
   const { data, setData, post, errors } = useForm({
     name: "",
     department_id: 0,
@@ -85,7 +86,7 @@ export function CreatePositionModal({ departments }: Props) {
                   value={data.base_salary?.toString() || ""}
                   onChange={(v) => setData("base_salary", Number(v))}
                 >
-                  <Label>Salary</Label>
+                  <Label>Base Salary</Label>
                   <Input type="number" placeholder="Enter salary" />
                 </TextField>
               </Modal.Body>

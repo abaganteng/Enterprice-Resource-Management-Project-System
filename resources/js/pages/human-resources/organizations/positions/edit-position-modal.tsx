@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import {
   Select,
@@ -26,7 +28,7 @@ export function EditPositionModal({
 }: EditPositionModalProps) {
   const { data, setData, put, processing, errors } = useForm({
     name: position.name,
-    department_id: position.department.id,
+    department_id: position.department?.id ?? null,
     base_salary: position.base_salary,
   });
 
@@ -55,12 +57,13 @@ export function EditPositionModal({
               <Modal.Body>
                 <TextField
                   aria-label="Name"
-                  label="Name"
-                  value={data.name}
+                  value={data.name ?? ""}
                   onChange={(v) => setData("name", v)}
-                  errorMessage={errors.name}
                   className={"pb-3"}
-                />
+                >
+                  <Label>Position Name</Label>
+                  <Input type="text" placeholder="Enter position name" />
+                </TextField>
                 <Select
                   aria-label="Department"
                   placeholder="Select department"
@@ -76,7 +79,6 @@ export function EditPositionModal({
                 </Select>
                 <TextField
                   aria-label="Base Salary ($)"
-                  label="Base Salary"
                   value={
                     data.base_salary != null
                       ? `$ ${data.base_salary}`
@@ -90,8 +92,11 @@ export function EditPositionModal({
                       Number.isNaN(parsed) ? null : parsed,
                     );
                   }}
-                  errorMessage={errors.base_salary}
-                />
+                  className={"pb-3"}
+                >
+                  <Label>Base Salary</Label>
+                  <Input type="number" placeholder="Enter base salary" />
+                </TextField>
               </Modal.Body>
               <Modal.Footer>
                 <Modal.Close>Cancel</Modal.Close>

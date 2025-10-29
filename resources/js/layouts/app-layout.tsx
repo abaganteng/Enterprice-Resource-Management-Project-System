@@ -31,7 +31,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
           {/* Main section scrollable (Inset + Footer ikut discroll) */}
           <div className="flex-1 flex flex-col overflow-auto">
             <SidebarInset>{children}</SidebarInset>
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </SidebarProvider>
       </div>

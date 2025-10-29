@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { TextField } from "@/components/ui/text-field";
 import { DepartmentData } from "@/types";
@@ -46,13 +48,14 @@ export function CreatePositionByDepartment({
               <TextField
                 autoFocus
                 aria-label="Name"
-                label="Position Name"
-                placeholder="Enter position name"
                 value={data.name}
                 onChange={(v) => setData("name", v)}
-                errorMessage={errors.name}
                 isRequired
-              />
+                className={"pb-3"}
+              >
+                <Label>Position Name</Label>
+                <Input type="text" placeholder="Enter position name" />
+              </TextField>
               {/* <TextField
                 aria-label="Base Salary"
                 label="Base Salary"

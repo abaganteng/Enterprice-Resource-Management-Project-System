@@ -5,6 +5,8 @@ import { Form } from "@/components/ui/form";
 import { TextField } from "@/components/ui/text-field";
 import { Button } from "@/components/ui/button";
 import SettingsLayout from "@/pages/settings/settings-layout";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 const title = "Manage User";
 
@@ -41,15 +43,16 @@ export function View() {
           >
             <TextField
               id="name"
-              label="Role Name"
               type="text"
               value={data.name}
               onChange={(v) => setData("name", v)}
               isRequired
-              errorMessage={errors.name}
               autoFocus
               autoComplete="name"
-            />
+            >
+              <Label>Role Name</Label>
+              <Input placeholder="Enter role name" />
+            </TextField>
 
             <div className="flex items-center justify-end gap-4">
               <Button type="submit" isDisabled={processing}>

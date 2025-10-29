@@ -14,7 +14,7 @@ import { useForm } from "@inertiajs/react";
 import { PermissionData, RoleData, RoleDetailData } from "@/types";
 import { useEffect } from "react";
 import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox";
-import { Description } from "@/components/ui/field";
+import { Description, Label } from "@/components/ui/field";
 
 type UpdateRoleModalProps = {
   role: RoleDetailData;
@@ -56,11 +56,11 @@ export function RevokePermissionModal({
             </ModalHeader>
             <ModalBody>
               <CheckboxGroup
-                label="Select permissions to revoke"
                 value={data.permissions}
                 onChange={(values) => setData("permissions", values)}
                 className={"py-2"}
               >
+                <Label>Select permissions to revoke</Label>
                 {role.permissions.length > 0 ? (
                   role.permissions.map((permission: PermissionData) => (
                     <Checkbox value={permission.name} className={"py-3"}>

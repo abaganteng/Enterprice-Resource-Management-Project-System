@@ -13,6 +13,8 @@ import { TextField } from "@/components/ui/text-field";
 import { useForm } from "@inertiajs/react";
 import { RoleData } from "@/types";
 import { useEffect } from "react";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 type UpdateRoleModalProps = {
   role: RoleData;
@@ -63,8 +65,10 @@ export function UpdateRoleModal({
                 type="text"
                 value={data.name}
                 onChange={(v) => setData("name", v)}
-                errorMessage={errors.name}
-              />
+              >
+                <Label>Role Name</Label>
+                <Input placeholder="Enter role name" />
+              </TextField>
             </ModalBody>
             <ModalFooter>
               <ModalClose>Cancel</ModalClose>

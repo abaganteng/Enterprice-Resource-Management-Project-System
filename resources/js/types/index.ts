@@ -8,8 +8,20 @@ export type DepartmentData = {
   positions: Array<PositionData> | null;
   employees: Array<EmployeeData> | null;
 };
+export type EmployeeContractData = {
+  id: number | null;
+  employee: EmployeeData | null;
+  position: PositionData | null;
+  has_active_contract: boolean | null;
+  contract_type: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  benefits: string | null;
+  status: string | null;
+};
 export type EmployeeData = {
   id: number | null;
+  employee_code: string | null;
   name: string | null;
   email: string | null;
   phone: string | null;
@@ -17,6 +29,8 @@ export type EmployeeData = {
   date_of_birth: string | null;
   gender: string | null;
   status: string | null;
+  contracts: { [key: number]: any } | null;
+  department: DepartmentData | null;
   position: PositionData | null;
   user: UserData | null;
   join_date: string | null;
@@ -42,9 +56,9 @@ export type PermissionData = {
   name: string;
 };
 export type PositionData = {
-  id: number;
-  name: string;
-  department: DepartmentData;
+  id: number | null;
+  name: string | null;
+  department: DepartmentData | null;
   employees: Array<EmployeeData> | null;
   base_salary: number | null;
   level: number | null;

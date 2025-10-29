@@ -11,6 +11,7 @@ import { Autocomplete, Popover, useFilter } from "react-aria-components";
 import { SearchField } from "@/components/ui/search-field";
 import { ListBox } from "@/components/ui/list-box";
 import { TextField } from "@/components/ui/text-field";
+import { Label } from "@/components/ui/field";
 
 const title = "Manage User";
 
@@ -55,14 +56,16 @@ export default function AssignRole({ users, roles, user, role }: Props) {
             className="max-w-lg space-y-6"
           >
             {user ? (
-              <TextField isReadOnly label="User Name" value={user.name} />
+              <TextField isReadOnly value={user.name}>
+                <Label>User Name</Label>
+              </TextField>
             ) : (
               <Select
-                label="Find a user"
                 placeholder="Select a user"
                 selectedKey={data.user_id}
                 onSelectionChange={(v) => setData("user_id", v as string)}
               >
+                <Label>Select a user</Label>
                 <SelectTrigger />
                 <Popover className="entering:fade-in exiting:fade-out flex max-h-80 w-(--trigger-width) entering:animate-in exiting:animate-out flex-col overflow-hidden rounded-lg border bg-overlay">
                   <Dialog aria-label="Users">
@@ -84,10 +87,10 @@ export default function AssignRole({ users, roles, user, role }: Props) {
               </Select>
             )}
             <Select
-              label="Choose a role"
               selectedKey={data.role_id}
               onSelectionChange={(v) => setData("role_id", v as string)}
             >
+              <Label>Choose a role</Label>
               <SelectTrigger />
               <Popover className="entering:fade-in exiting:fade-out flex max-h-80 w-(--trigger-width) entering:animate-in exiting:animate-out flex-col overflow-hidden rounded-lg border bg-overlay">
                 <Dialog aria-label="Roles">

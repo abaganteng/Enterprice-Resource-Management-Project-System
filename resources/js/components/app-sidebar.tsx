@@ -195,7 +195,10 @@ export default function AppSidebar({
                       <SidebarLabel>Organization</SidebarLabel>
                     </SidebarLink>
                   </SidebarItem>
-                  <SidebarItem href="#" tooltip="FAQ">
+                  <SidebarItem
+                    href={route("organizations.employees")}
+                    tooltip="Employees"
+                  >
                     <Users className="size-4" />
                     <SidebarLabel>Employees</SidebarLabel>
                   </SidebarItem>

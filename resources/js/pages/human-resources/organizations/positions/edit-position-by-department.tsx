@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { TextField } from "@/components/ui/text-field";
 import { PositionData } from "@/types";
@@ -41,15 +43,15 @@ export function EditPositionByDepartment({
             <Modal.Body>
               <TextField
                 aria-label="Name"
-                label="Name"
-                value={data.name}
+                value={data.name ?? ""}
                 onChange={(v) => setData("name", v)}
-                errorMessage={errors.name}
                 className={"pb-3"}
-              />
+              >
+                <Label>Position Name</Label>
+                <Input type="text" placeholder="Enter position name" />
+              </TextField>
               <TextField
                 aria-label="Base Salary ($)"
-                label="Base Salary"
                 value={
                   data.base_salary != null ? `$ ${data.base_salary}` : undefined
                 }
@@ -58,8 +60,10 @@ export function EditPositionByDepartment({
                   const parsed = cleaned === "" ? null : Number(cleaned);
                   setData("base_salary", Number.isNaN(parsed) ? null : parsed);
                 }}
-                errorMessage={errors.base_salary}
-              />
+              >
+                <Label>Base Salary</Label>
+                <Input type="number" placeholder="Enter base salary" />
+              </TextField>
             </Modal.Body>
             <Modal.Footer>
               <Modal.Close>Cancel</Modal.Close>
