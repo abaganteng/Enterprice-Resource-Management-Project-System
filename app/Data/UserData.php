@@ -10,5 +10,6 @@ class UserData extends Data
         public int $id,
         public string $name,
         public string $email,
+        public ?string $gravatar,
     ) {}
 }

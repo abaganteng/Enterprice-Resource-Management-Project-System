@@ -11,7 +11,7 @@ import {
   MenuItem,
   MenuLabel,
   MenuSeparator,
-  MenuSubmenu,
+  MenuSubMenu,
   MenuTrigger,
 } from "@/components/ui/menu";
 import {
@@ -112,11 +112,7 @@ export function ProjectGroupItem({
               >
                 <IconDotsHorizontal className="w-4 h-4  hover:text-gray-600" />
               </MenuTrigger>
-              <MenuContent
-                popover={{
-                  placement: "bottom",
-                }}
-              >
+              <MenuContent>
                 <MenuItem
                   onAction={() => {
                     setEditingGroupId(group.id);
@@ -127,7 +123,7 @@ export function ProjectGroupItem({
                   <MenuLabel>Rename</MenuLabel>
                 </MenuItem>
                 <MenuSeparator />
-                <MenuSubmenu>
+                <MenuSubMenu>
                   <MenuItem>
                     <IconPlus />
                     <MenuLabel>Create new</MenuLabel>
@@ -146,7 +142,7 @@ export function ProjectGroupItem({
                       <MenuLabel>Add Status</MenuLabel>
                     </MenuItem>
                     <MenuSeparator />
-                    <MenuSubmenu>
+                    <MenuSubMenu>
                       <MenuItem>
                         <MenuLabel>Import</MenuLabel>
                       </MenuItem>
@@ -158,15 +154,15 @@ export function ProjectGroupItem({
                           <MenuLabel>Pdf file</MenuLabel>
                         </MenuItem>
                       </MenuContent>
-                    </MenuSubmenu>
+                    </MenuSubMenu>
                   </MenuContent>
-                </MenuSubmenu>
+                </MenuSubMenu>
                 <MenuSeparator />
                 <MenuItem>
                   <IconDuplicate />
                   <MenuLabel>Duplicate</MenuLabel>
                 </MenuItem>
-                <MenuItem isDanger>
+                <MenuItem intent="danger">
                   <IconTrash />
                   <MenuLabel>Delete</MenuLabel>
                 </MenuItem>

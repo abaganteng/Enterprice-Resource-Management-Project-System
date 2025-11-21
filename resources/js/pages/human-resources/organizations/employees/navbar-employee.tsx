@@ -1,19 +1,15 @@
 import {
-  IconBarsThree2,
-  IconBulletList,
-  IconCalendar,
   IconCommandRegular,
   IconDashboard,
-  IconDotsHorizontal,
-  IconGrid4,
+  IconDocumentEdit,
   IconLogout,
-  IconMessageDots,
   IconPeople,
+  IconPerson,
+  IconPersonAdded,
   IconSearch,
   IconSettings,
 } from "@intentui/icons";
 import { Avatar } from "@/components/ui/avatar";
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import {
   Menu,
   MenuContent,
@@ -24,17 +20,6 @@ import {
   MenuSeparator,
   MenuTrigger,
 } from "@/components/ui/menu";
-import { SidebarNav, SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "./ui/button";
-import {
-  Navbar,
-  NavbarItem,
-  NavbarLabel,
-  NavbarProvider,
-  NavbarSection,
-  NavbarSpacer,
-  NavbarStart,
-} from "./ui/navbar";
 import {
   BriefcaseBusiness,
   Building,
@@ -42,12 +27,22 @@ import {
   Layers,
   LayoutDashboard,
 } from "lucide-react";
+import {
+  NavbarProvider,
+  Navbar,
+  NavbarSection,
+  NavbarItem,
+  NavbarLabel,
+  NavbarSpacer,
+} from "@/components/ui/navbar";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   project?: any;
+  employee?: any;
 }
 
-export default function EmployeeAppSidebarSubNav({ project }: Props) {
+export default function NavbarEmployee({ project, employee }: Props) {
   return (
     <NavbarProvider>
       <Navbar>
@@ -55,24 +50,28 @@ export default function EmployeeAppSidebarSubNav({ project }: Props) {
         <NavbarSection>
           <NavbarItem
             className="flex items-center gap-1 text-sm"
-            href={route("organizations.dashboard")}
-            isCurrent={route().current("organizations.dashboard")}
+            href={route("organizations.employees.profile", {
+              employee: employee.id,
+            })}
+            isCurrent={route().current("organizations.employees.profile")}
           >
-            <LayoutDashboard className="w-4 h-4" />
-            <NavbarLabel>Dashboard</NavbarLabel>
+            <IconPerson />
+            <NavbarLabel>Profile</NavbarLabel>
           </NavbarItem>
 
           <NavbarItem
             className="flex items-center gap-1 text-sm"
-            href={route("organizations.employees")}
-            isCurrent={route().current("organizations.employees")}
+            href={route("organizations.employees.contract", {
+              employee: employee.id,
+            })}
+            isCurrent={route().current("organizations.employees.contract")}
           >
-            <Building className="w-4 h-4" />
-            <NavbarLabel>Employees</NavbarLabel>
+            <IconDocumentEdit />
+            <NavbarLabel>Contract</NavbarLabel>
           </NavbarItem>
           <NavbarItem className="flex items-center gap-1 text-sm" href="#">
-            <BriefcaseBusiness className="w-4 h-4" />
-            <NavbarLabel>Employees Contract</NavbarLabel>
+            <IconPersonAdded />
+            <NavbarLabel>Attedances</NavbarLabel>
           </NavbarItem>
           <NavbarItem className="flex items-center gap-1 text-sm">
             <IconPeople className="w-4 h-4" />

@@ -31,7 +31,7 @@ import { ProjectDatePicker } from "./project-date-picker";
 import { router, useForm } from "@inertiajs/react";
 import { Button } from "./ui/button";
 
-export default function EmployeeAppSidebarNav({
+export default function ContractAppSidebarNav({
   project,
 }: {
   project: ProjectDetailData;

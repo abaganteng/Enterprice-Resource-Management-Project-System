@@ -153,7 +153,7 @@ export function GroupStatus({
                 <MenuTrigger aria-label="Open Menu" className="p-0">
                   <IconDotsHorizontal className="w-4 h-4 cursor-pointer hover:text-gray-600" />
                 </MenuTrigger>
-                <MenuContent popover={{ placement: "bottom" }}>
+                <MenuContent>
                   <MenuItem
                     onAction={() => {
                       setEditingStatusId(status.id);

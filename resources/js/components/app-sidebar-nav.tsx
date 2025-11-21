@@ -19,7 +19,7 @@ import {
   MenuLabel,
   MenuSection,
   MenuSeparator,
-  MenuSubmenu,
+  MenuSubMenu,
   MenuTrigger,
 } from "@/components/ui/menu";
 import { SidebarNav, SidebarTrigger } from "@/components/ui/sidebar";
@@ -78,13 +78,13 @@ export default function AppSidebarNav({
             <MenuTrigger aria-label="Open Menu">
               <IconDotsHorizontal className="w-4 h-4 cursor-pointer hover:text-gray-600" />
             </MenuTrigger>
-            <MenuContent popover={{ placement: "bottom" }}>
+            <MenuContent>
               <MenuItem href="#">
                 <IconPlus className="cursor-pointer hover:text-gray-600" />
                 <MenuLabel>Rename</MenuLabel>
               </MenuItem>
               <MenuSeparator />
-              <MenuSubmenu>
+              <MenuSubMenu>
                 <MenuItem>
                   <MenuLabel>Create new</MenuLabel>
                 </MenuItem>
@@ -97,7 +97,7 @@ export default function AppSidebarNav({
                     <MenuLabel>List</MenuLabel>
                   </MenuItem>
                   <MenuSeparator />
-                  <MenuSubmenu>
+                  <MenuSubMenu>
                     <MenuItem>
                       <MenuLabel>Import</MenuLabel>
                     </MenuItem>
@@ -109,9 +109,9 @@ export default function AppSidebarNav({
                         <MenuLabel>Pdf file</MenuLabel>
                       </MenuItem>
                     </MenuContent>
-                  </MenuSubmenu>
+                  </MenuSubMenu>
                 </MenuContent>
-              </MenuSubmenu>
+              </MenuSubMenu>
               <MenuSeparator />
               <MenuItem>
                 <MenuLabel>Duplicate</MenuLabel>
@@ -158,7 +158,7 @@ function UserMenu() {
           src="https://intentui.com/images/avatar/cobain.jpg"
         />
       </MenuTrigger>
-      <MenuContent popover={{ placement: "bottom end" }} className="min-w-64">
+      <MenuContent className="min-w-64">
         <MenuSection>
           <MenuHeader separator>
             <span className="block">Kurt Cobain</span>

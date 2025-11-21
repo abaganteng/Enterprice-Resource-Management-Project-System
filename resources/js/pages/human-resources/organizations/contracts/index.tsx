@@ -32,12 +32,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DepartmentData, EmployeeData, PositionData } from "@/types";
+import {
+  DepartmentData,
+  EmployeeContractData,
+  EmployeeData,
+  PositionData,
+} from "@/types";
 import { router, useForm } from "@inertiajs/react";
 import { EllipsisVerticalIcon, EyeIcon, Pencil, TrashIcon } from "lucide-react";
 import { usePaginator } from "momentum-paginator";
 import { Key, useState } from "react";
-import { CreateEmployeeModal } from "./create-employee-modal";
 import EmployeeNav from "@/layouts/employee-nav";
 import { SearchField, SearchInput } from "@/components/ui/search-field";
 import { Link } from "@/components/ui/link";
@@ -48,53 +52,50 @@ import {
   IconEyeDropper,
   IconTrash,
 } from "@intentui/icons";
+import { CreateEmployeeModal } from "../employees/create-employee-modal";
+import ContractNav from "@/layouts/contract-nav";
 
 interface Props {
-  employees: Paginator<EmployeeData>;
-  departments: DepartmentData[];
-  positions: PositionData[];
-  filters: {
-    department_id?: number;
-    position_id?: number;
-  };
+  contracts: Paginator<EmployeeContractData>;
+  // departments: DepartmentData[];
+  // positions: PositionData[];
+  // filters: {
+  //   department_id?: number;
+  //   position_id?: number;
+  // };
 }
 
-export default function Index({
-  employees,
-  departments,
-  positions,
-  filters,
-}: Props) {
-  const { from, to, total, previous, next, pages } = usePaginator(employees);
+export default function Index({ contracts }: Props) {
+  const { from, to, total, previous, next, pages } = usePaginator(contracts);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
+  const [selectedContract, setSelectedContract] = useState<any>(null);
   const [action, setAction] = useState<"detail" | "delete" | null>(null);
 
   const form = useForm();
 
-  const handleFilterChange =
-    (filter: keyof Props["filters"]) => (value: Key | null) => {
-      const v = value == null || value === "" ? undefined : Number(value);
-      router.get(
-        route("organizations.employees", {
-          [filter]: v,
-        }),
-      );
-    };
+  // const handleFilterChange =
+  //   (filter: keyof Props["filters"]) => (value: Key | null) => {
+  //     const v = value == null || value === "" ? undefined : Number(value);
+  //     router.get(
+  //       route("organizations.employees", {
+  //         [filter]: v,
+  //       }),
+  //     );
+  //   };
 
   return (
     <>
       <Card className="[--card-spacing:var(--gutter)] p-4">
         <Card.Header className="pb-3">
-          <Card.Title>Employees</Card.Title>
+          <Card.Title>Contracts</Card.Title>
           <div className="flex items-center justify-between">
             <Card.Description>
-              Manage employees, their positions, and salaries.
+              Manage contracts, their positions, and salaries.
             </Card.Description>
-            <CreateEmployeeModal
+            {/* <CreateContractModal
               departments={departments}
               positions={positions}
-            />
+            /> */}
           </div>
           <SearchField
             aria-label="Search"
@@ -111,81 +112,31 @@ export default function Index({
           >
             <TableHeader>
               <TableColumn className="w-0">#</TableColumn>
-              <TableColumn className="w-0">Employee Code</TableColumn>
+              <TableColumn className="w-0">Employee Name</TableColumn>
 
               <TableColumn
                 className={"flex items-center justify-center"}
                 isRowHeader
               >
-                Name
+                Position
               </TableColumn>
-              <TableColumn>
-                <div className="flex flex-col items-center gap-2">
-                  <span className="flex justify-center">Department</span>
-                  <Select
-                    aria-label="Department"
-                    placeholder="Filter by department"
-                    value={filters.department_id?.toString()}
-                    onChange={handleFilterChange("department_id")}
-                  >
-                    <SelectTrigger />
-                    <SelectContent
-                      items={departments.map((department: DepartmentData) => ({
-                        id: department.id || "",
-                        name: department.name || "",
-                      }))}
-                    >
-                      {(item) => (
-                        <SelectItem id={item.id} textValue={item.name}>
-                          {item.name}
-                        </SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </TableColumn>
-              <TableColumn>
-                <div className="flex flex-col items-center gap-2">
-                  <span className="flex justify-center">Position</span>
-                  <Select
-                    aria-label="Position"
-                    placeholder="Filter by position"
-                    value={filters.position_id?.toString()}
-                    onChange={handleFilterChange("position_id")}
-                  >
-                    <SelectTrigger />
-                    <SelectContent
-                      items={positions.map((position: PositionData) => ({
-                        id: position.id || "",
-                        name: position.name || "",
-                      }))}
-                    >
-                      {(item) => (
-                        <SelectItem id={item.id} textValue={item.name}>
-                          {item.name}
-                        </SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </TableColumn>
-              <TableColumn>Status</TableColumn>
+              <TableColumn>Contract Type</TableColumn>
+              <TableColumn>Contract Term</TableColumn>
               <TableColumn />
             </TableHeader>
             <TableBody>
-              {employees.data.length > 0 ? (
-                employees.data.map((employee: EmployeeData) => (
-                  <TableRow key={employee.id}>
-                    <TableCell>{employee.id}</TableCell>
-                    <TableCell>{employee.employee_code}</TableCell>
+              {contracts.data.length > 0 ? (
+                contracts.data.map((contract: EmployeeContractData) => (
+                  <TableRow key={contract.id}>
+                    <TableCell>{contract.id}</TableCell>
                     <TableCell className={"flex flex-col items-center"}>
                       <Link
                         className={"cursor-pointer hover:text-primary"}
-                        key={`detail-${employee.id}`}
+                        key={`detail-${contract.employee?.id}`}
                         onClick={() => {
                           router.visit(
                             route("organizations.employees.profile", {
-                              employee: employee.id,
+                              employee: contract.employee?.id,
                             }),
                             {
                               preserveState: true,
@@ -196,27 +147,47 @@ export default function Index({
                       >
                         <div className="flex flex-col items-center">
                           <span className="font-bold text-base">
-                            {employee.name}
+                            {contract.employee?.name}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {employee.email}
+                            {contract.employee?.email}
                           </span>
                         </div>
                       </Link>
                     </TableCell>
-                    <TableCell>{employee.department?.name}</TableCell>
-                    <TableCell>{employee.position?.name}</TableCell>
-                    <TableCell className={"capitalize"}>
-                      {employee.status === "active" ? (
-                        <Badge isCircle intent="success">
-                          {employee.status}
-                        </Badge>
-                      ) : (
-                        <Badge isCircle intent="danger">
-                          {employee.status}
-                        </Badge>
-                      )}
+                    <TableCell>{contract.employee?.position?.name}</TableCell>
+                    <TableCell>{contract.contract_type}</TableCell>
+                    <TableCell>
+                      {(() => {
+                        if (!contract.start_date || !contract.end_date) {
+                          return "-";
+                        }
+
+                        const start = new Date(contract.start_date);
+                        const end = new Date(contract.end_date);
+
+                        // hitung total bulan dan hari
+                        const years = end.getFullYear() - start.getFullYear();
+                        const months =
+                          end.getMonth() - start.getMonth() + years * 12;
+                        const days = Math.floor(
+                          (end.getTime() - start.getTime()) /
+                            (1000 * 60 * 60 * 24),
+                        );
+
+                        // konversi ke format yang mudah dibaca
+                        if (months < 1) {
+                          return `${days} hari`;
+                        } else if (months < 12) {
+                          return `${months} bulan (${days} hari)`;
+                        } else {
+                          const yearCount = Math.floor(months / 12);
+                          const remainingMonths = months % 12;
+                          return `${yearCount} thn${remainingMonths ? ` ${remainingMonths} bln` : ""}`;
+                        }
+                      })()}
                     </TableCell>
+
                     <TableCell className="text-end last:pr-2.5">
                       <Menu>
                         <MenuTrigger>
@@ -225,7 +196,7 @@ export default function Index({
                         <MenuContent placement="left top">
                           <MenuItem
                             href={route("organizations.employees.profile", {
-                              employee: employee.id,
+                              employee: contract.employee?.id,
                             })}
                           >
                             <IconEye />
@@ -373,5 +344,5 @@ export default function Index({
 
 // gunakan ProjectLayout, bukan AppLayout
 Index.layout = (page: any) => (
-  <EmployeeNav project={page.props.project}>{page}</EmployeeNav>
+  <ContractNav project={page.props.project}>{page}</ContractNav>
 );

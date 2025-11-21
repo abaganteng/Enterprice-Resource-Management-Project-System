@@ -1,7 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Modal } from "@/components/ui/modal";
+import {
+  Modal,
+  ModalBody,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+} from "@/components/ui/modal";
 import { TextField } from "@/components/ui/text-field";
 import { DepartmentData } from "@/types";
 import { useForm } from "@inertiajs/react";
@@ -35,16 +44,16 @@ export function CreatePositionByDepartment({
       <Button intent="outline">
         <IconPlus />
       </Button>
-      <Modal.Content>
+      <ModalContent>
         {({ close }) => (
           <>
-            <Modal.Header>
-              <Modal.Title>Create New Position</Modal.Title>
-              <Modal.Description>
+            <ModalHeader>
+              <ModalTitle>Create New Position</ModalTitle>
+              <ModalDescription>
                 Create a new position in this department.
-              </Modal.Description>
-            </Modal.Header>
-            <Modal.Body>
+              </ModalDescription>
+            </ModalHeader>
+            <ModalBody>
               <TextField
                 autoFocus
                 aria-label="Name"
@@ -56,18 +65,9 @@ export function CreatePositionByDepartment({
                 <Label>Position Name</Label>
                 <Input type="text" placeholder="Enter position name" />
               </TextField>
-              {/* <TextField
-                aria-label="Base Salary"
-                label="Base Salary"
-                placeholder="Enter base salary"
-                value={data.base_salary}
-                onChange={(v) => setData("base_salary", v)}
-                errorMessage={errors.base_salary}
-                isRequired
-              /> */}
-            </Modal.Body>
-            <Modal.Footer>
-              <Modal.Close>Cancel</Modal.Close>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose>Cancel</ModalClose>
               <Button
                 onPress={close}
                 onClick={handleSubmit}
@@ -80,10 +80,10 @@ export function CreatePositionByDepartment({
               >
                 Save changes
               </Button>
-            </Modal.Footer>
+            </ModalFooter>
           </>
         )}
-      </Modal.Content>
+      </ModalContent>
     </Modal>
   );
 }

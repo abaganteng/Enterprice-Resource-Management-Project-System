@@ -3,7 +3,17 @@ import { IconCalendar, IconChevronLgDown, IconLogout } from "@intentui/icons";
 import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { buttonStyles } from "@/components/ui/button";
-import { Menu } from "@/components/ui/menu";
+import {
+  Menu,
+  MenuContent,
+  MenuHeader,
+  MenuItem,
+  MenuLabel,
+  MenuSection,
+  MenuSeparator,
+  MenuSubMenu,
+  MenuTrigger,
+} from "@/components/ui/menu";
 import {
   Navbar,
   NavbarGap,
@@ -84,7 +94,7 @@ function UserMenu() {
   const { auth } = usePage<SharedData>().props;
   return (
     <Menu>
-      <Menu.Trigger
+      <MenuTrigger
         className="group flex items-start justify-between rounded-lg p-1 text-left data-hovered:bg-secondary"
         aria-label="Open menu"
       >
@@ -98,47 +108,47 @@ function UserMenu() {
           <span className="text-xs">{auth.user.email}</span>
         </div>
         <IconChevronLgDown className="transition-transform group-data-pressed:rotate-180" />
-      </Menu.Trigger>
-      <Menu.Content placement="bottom end" className="sm:min-w-56">
-        <Menu.Section>
-          <Menu.Header separator className="relative">
+      </MenuTrigger>
+      <MenuContent placement="bottom end" className="sm:min-w-56">
+        <MenuSection>
+          <MenuHeader separator className="relative">
             <div>{auth.user.name}</div>
             <div className="truncate whitespace-nowrap pr-6 font-normal text-muted-fg text-sm">
               {auth.user.email}
             </div>
-          </Menu.Header>
-        </Menu.Section>
-        <Menu.Item href="/dashboard">
-          <Menu.Label>Dashboard</Menu.Label>
-        </Menu.Item>
-        <Menu.Submenu className="justify-between">
-          <Menu.Item href="/manage-user/index">
-            <Menu.Label>Management Access</Menu.Label>
-          </Menu.Item>
-          <Menu.Content>
-            <Menu.Item href="/manage-user/index">
-              <Menu.Label>Manage user</Menu.Label>
-            </Menu.Item>
-            <Menu.Item href="/manage-roles-permissions/index">
-              <Menu.Label>Manage Role & Permission</Menu.Label>
-            </Menu.Item>
-          </Menu.Content>
-        </Menu.Submenu>
-        <Menu.Item href="/settings/profile" className="justify-between">
-          <Menu.Label>Update profile</Menu.Label>
-        </Menu.Item>
-        <Menu.Item href="/settings/password" className="justify-between">
-          <Menu.Label>Change password</Menu.Label>
-        </Menu.Item>
-        <Menu.Item href="/settings/appearance" className="justify-between">
-          <Menu.Label>Appearance</Menu.Label>
-        </Menu.Item>
-        <Menu.Separator />
-        <Menu.Item routerOptions={{ method: "post" }} href="/logout">
-          <Menu.Label>Logout</Menu.Label>
+          </MenuHeader>
+        </MenuSection>
+        <MenuItem href="/dashboard">
+          <MenuLabel>Dashboard</MenuLabel>
+        </MenuItem>
+        <MenuSubMenu className="justify-between">
+          <MenuItem href="/manage-user/index">
+            <MenuLabel>Management Access</MenuLabel>
+          </MenuItem>
+          <MenuContent>
+            <MenuItem href="/manage-user/index">
+              <MenuLabel>Manage user</MenuLabel>
+            </MenuItem>
+            <MenuItem href="/manage-roles-permissions/index">
+              <MenuLabel>Manage Role & Permission</MenuLabel>
+            </MenuItem>
+          </MenuContent>
+        </MenuSubMenu>
+        <MenuItem href="/settings/profile" className="justify-between">
+          <MenuLabel>Update profile</MenuLabel>
+        </MenuItem>
+        <MenuItem href="/settings/password" className="justify-between">
+          <MenuLabel>Change password</MenuLabel>
+        </MenuItem>
+        <MenuItem href="/settings/appearance" className="justify-between">
+          <MenuLabel>Appearance</MenuLabel>
+        </MenuItem>
+        <MenuSeparator />
+        <MenuItem routerOptions={{ method: "post" }} href="/logout">
+          <MenuLabel>Logout</MenuLabel>
           <IconLogout />
-        </Menu.Item>
-      </Menu.Content>
+        </MenuItem>
+      </MenuContent>
     </Menu>
   );
 }

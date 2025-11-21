@@ -5,7 +5,14 @@ import { TaskNameCell } from "./task-name-cell";
 import AssignTask from "./tasks/assign-task";
 import { ProjectDatePicker } from "@/components/project-date-picker";
 import TaskPriority from "./task-priority";
-import { Menu } from "@/components/ui/menu";
+import {
+  Menu,
+  MenuTrigger,
+  MenuContent,
+  MenuItem,
+  MenuLabel,
+  MenuSeparator,
+} from "@/components/ui/menu";
 import { IconDotsVertical, IconEye, IconEyeDropper } from "@intentui/icons";
 import { NewSubtaskForm } from "./tasks/new-subtask-form";
 
@@ -170,11 +177,11 @@ export function StatusTaskItem({
         {/* Kolom 5: Actions */}
         <div className="flex justify-end ">
           <Menu>
-            <Menu.Trigger className="size-6">
+            <MenuTrigger className="size-6">
               <IconDotsVertical />
-            </Menu.Trigger>
-            <Menu.Content aria-label="Actions" placement="left top">
-              <Menu.Item
+            </MenuTrigger>
+            <MenuContent aria-label="Actions" placement="left top">
+              <MenuItem
                 href={route("projects.groups.statuses.tasks.show", {
                   project: project.id,
                   group: group,
@@ -183,19 +190,19 @@ export function StatusTaskItem({
                 })}
               >
                 <IconEye />
-                <Menu.Label>Detail</Menu.Label>
-              </Menu.Item>
-              <Menu.Separator />
-              <Menu.Item
+                <MenuLabel>Detail</MenuLabel>
+              </MenuItem>
+              <MenuSeparator />
+              <MenuItem
                 onAction={() => {
                   setEditingTaskId(task.id);
                   form.setData("name", task.name);
                 }}
               >
                 <IconEyeDropper className="cursor-pointer hover:text-gray-600" />
-                <Menu.Label>Rename</Menu.Label>
-              </Menu.Item>
-            </Menu.Content>
+                <MenuLabel>Rename</MenuLabel>
+              </MenuItem>
+            </MenuContent>
           </Menu>
         </div>
       </div>

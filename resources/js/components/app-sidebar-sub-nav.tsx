@@ -49,6 +49,7 @@ export default function AppSidebarSubNav({ project }: Props) {
           <NavbarItem
             href={route("projects.overview", { project: project.id })}
             className="flex items-center gap-1 text-sm"
+            isCurrent={route().current("projects.overview")}
           >
             <IconGrid4 className="w-4 h-4" />
             <NavbarLabel>Overview</NavbarLabel>
@@ -57,6 +58,7 @@ export default function AppSidebarSubNav({ project }: Props) {
           <NavbarItem
             href={route("projects.groups.index", { project: project.id })}
             className="flex items-center gap-1 text-sm"
+            isCurrent={route().current("projects.groups.index")}
           >
             <IconBulletList className="w-4 h-4" />
             <NavbarLabel>List</NavbarLabel>
@@ -64,6 +66,7 @@ export default function AppSidebarSubNav({ project }: Props) {
           <NavbarItem
             href={route("projects.calendar", { project: project.id })}
             className="flex items-center gap-1 text-sm"
+            isCurrent={route().current("projects.calendar")}
           >
             <IconCalendar className="w-4 h-4" />
             <NavbarLabel>Calendar</NavbarLabel>

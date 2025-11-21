@@ -47,7 +47,7 @@ interface Props {
   project?: any;
 }
 
-export default function EmployeeAppSidebarSubNav({ project }: Props) {
+export default function ContractAppSidebarSubNav({ project }: Props) {
   return (
     <NavbarProvider>
       <Navbar>
@@ -64,11 +64,11 @@ export default function EmployeeAppSidebarSubNav({ project }: Props) {
 
           <NavbarItem
             className="flex items-center gap-1 text-sm"
-            href={route("organizations.employees")}
-            isCurrent={route().current("organizations.employees")}
+            href={route("organizations.contracts")}
+            isCurrent={route().current("organizations.contracts")}
           >
             <Building className="w-4 h-4" />
-            <NavbarLabel>Employees</NavbarLabel>
+            <NavbarLabel>Contracts</NavbarLabel>
           </NavbarItem>
           <NavbarItem className="flex items-center gap-1 text-sm" href="#">
             <BriefcaseBusiness className="w-4 h-4" />

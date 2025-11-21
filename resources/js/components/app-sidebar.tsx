@@ -202,7 +202,10 @@ export default function AppSidebar({
                     <Users className="size-4" />
                     <SidebarLabel>Employees</SidebarLabel>
                   </SidebarItem>
-                  <SidebarItem href="#" tooltip="Documentation">
+                  <SidebarItem
+                    href={route("organizations.contracts")}
+                    tooltip="Contracts"
+                  >
                     <FilePenLine className="size-4" />
                     <SidebarLabel>Employee Contract</SidebarLabel>
                   </SidebarItem>

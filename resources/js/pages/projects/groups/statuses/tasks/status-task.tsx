@@ -1,4 +1,4 @@
-import { Table } from "@/components/ui/table";
+import { Table, TableCell, TableRow } from "@/components/ui/table";
 import { IconChevronRight } from "@intentui/icons";
 
 interface Task {
@@ -38,8 +38,8 @@ function StatusTaskItem({ task, tasks, level }: StatusTaskItemProps) {
   return (
     <>
       {/* Row utama untuk task */}
-      <Table.Row key={task.id}>
-        <Table.Cell>
+      <TableRow key={task.id}>
+        <TableCell>
           <div className="flex items-center gap-2">
             {children.length > 0 && (
               <IconChevronRight className="size-4 text-gray-400" />
@@ -51,9 +51,9 @@ function StatusTaskItem({ task, tasks, level }: StatusTaskItemProps) {
               {task.name}
             </span>
           </div>
-        </Table.Cell>
-        <Table.Cell>Assign</Table.Cell>
-      </Table.Row>
+        </TableCell>
+        <TableCell>Assign</TableCell>
+      </TableRow>
 
       {/* Render subtasks langsung di bawah task induk */}
       {children.map((child) => (

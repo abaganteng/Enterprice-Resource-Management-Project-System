@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('employee_id')->constrained('employees');
             $table->foreignId('position_id')->nullable()->constrained('positions')->onDelete('set null');
-            $table->enum('contract_type',['permanent','contract','intern','freelance'])->default('permanent');
+            $table->string('contract_type')->default('permanent');
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->text('benefits')->nullable();

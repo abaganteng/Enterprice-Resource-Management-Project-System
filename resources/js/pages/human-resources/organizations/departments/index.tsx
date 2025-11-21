@@ -17,10 +17,20 @@ import { useForm } from "@inertiajs/react";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 import { DepartmentTitle } from "./department-title";
-import { Modal } from "@/components/ui/modal";
+import {
+  Modal,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+} from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { CreatePositionByDepartment } from "../positions/create-position-by-department";
 import { EditPositionByDepartment } from "../positions/edit-position-by-department";
+import { Link } from "@/components/ui/link";
+import { IconEye, IconTrash } from "@intentui/icons";
 
 interface Props {
   departments: DepartmentData[];
@@ -73,7 +83,7 @@ export default function Index({ departments }: Props) {
                           <>
                             <DescriptionTerm>{position.name}</DescriptionTerm>
                             <DescriptionDetails>
-                              <div className="flex items-center justify-between gap-x-4">
+                              <div className="flex items-center justify-between gap-x-3">
                                 <div className="flex flex-col">
                                   <span className="text-sm text-gray-500">
                                     {new Intl.NumberFormat("en-US", {
@@ -95,10 +105,19 @@ export default function Index({ departments }: Props) {
                                       setSelectedPosition(position.id);
                                       setIsOpen(true);
                                     }}
+                                    className=" fill-red-500"
                                   >
-                                    <Trash className="w-4 h-4 text-red-500" />
+                                    <IconTrash />
                                   </Button>
                                 </div>
+                                <Link
+                                  href={route("organizations.employees", {
+                                    department_id: department.id,
+                                    position_id: position.id,
+                                  })}
+                                >
+                                  <IconEye />
+                                </Link>
                               </div>
                             </DescriptionDetails>
                           </>
@@ -117,16 +136,16 @@ export default function Index({ departments }: Props) {
 
       {selectedPosition && (
         <Modal isOpen={isOpen} onOpenChange={() => setIsOpen(false)}>
-          <Modal.Content role="alertdialog">
-            <Modal.Header>
-              <Modal.Title>Delete Position?</Modal.Title>
-              <Modal.Description>
+          <ModalContent role="alertdialog">
+            <ModalHeader>
+              <ModalTitle>Delete Position?</ModalTitle>
+              <ModalDescription>
                 This will delete the position and all associated data. This
                 action is permanent and cannot be undone.
-              </Modal.Description>
-            </Modal.Header>
-            <Modal.Footer>
-              <Modal.Close>Cancel</Modal.Close>
+              </ModalDescription>
+            </ModalHeader>
+            <ModalFooter>
+              <ModalClose>Cancel</ModalClose>
               <Button
                 intent="danger"
                 onClick={() => {
@@ -146,8 +165,8 @@ export default function Index({ departments }: Props) {
               >
                 Delete Position
               </Button>
-            </Modal.Footer>
-          </Modal.Content>
+            </ModalFooter>
+          </ModalContent>
         </Modal>
       )}
     </div>

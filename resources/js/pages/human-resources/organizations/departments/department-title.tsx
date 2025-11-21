@@ -1,6 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Menu } from "@/components/ui/menu";
-import { Modal } from "@/components/ui/modal";
+import {
+  MenuTrigger,
+  MenuContent,
+  MenuItem,
+  MenuLabel,
+  Menu,
+} from "@/components/ui/menu";
+import {
+  Modal,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+} from "@/components/ui/modal";
 import { DepartmentData } from "@/types";
 import { useForm } from "@inertiajs/react";
 import { IconDotsHorizontal } from "@intentui/icons";
@@ -76,53 +90,53 @@ export function DepartmentTitle({
         <span>{department.name}</span>
       )}
       <Menu>
-        <Menu.Trigger aria-label="Open Menu" className="p-0">
+        <MenuTrigger aria-label="Open Menu" className="p-0">
           <IconDotsHorizontal className="h-4 w-4 cursor-pointer hover:text-gray-600" />
-        </Menu.Trigger>
-        <Menu.Content popover={{ placement: "bottom" }}>
-          <Menu.Item
+        </MenuTrigger>
+        <MenuContent>
+          <MenuItem
             onAction={() => {
               setEditingDepartmentId(department.id);
               form.setData("name", department?.name || "");
             }}
           >
             <Pencil className="h-4 w-4 mr-2" />
-            <Menu.Label>Rename</Menu.Label>
-          </Menu.Item>
-          <Menu.Item>
+            <MenuLabel>Rename</MenuLabel>
+          </MenuItem>
+          <MenuItem>
             {department.head ? (
               <UserCog className="h-4 w-4 mr-2" />
             ) : (
               <UserPlus className="h-4 w-4 mr-2" />
             )}
-            <Menu.Label>
+            <MenuLabel>
               {department.head ? "Change Head" : "Add Head"}
-            </Menu.Label>
-          </Menu.Item>
-          <Menu.Item
+            </MenuLabel>
+          </MenuItem>
+          <MenuItem
             onAction={() => {
               setSelectedDepartment({ department: department.id });
               setIsOpen(true);
             }}
           >
             <Trash className="h-4 w-4 mr-2 text-red-500" />
-            <Menu.Label>Delete</Menu.Label>
-          </Menu.Item>
-        </Menu.Content>
+            <MenuLabel>Delete</MenuLabel>
+          </MenuItem>
+        </MenuContent>
       </Menu>
 
       {selectedDepartment && (
         <Modal isOpen={isOpen} onOpenChange={() => setIsOpen(false)}>
-          <Modal.Content role="alertdialog">
-            <Modal.Header>
-              <Modal.Title>Delete Department?</Modal.Title>
-              <Modal.Description>
+          <ModalContent role="alertdialog">
+            <ModalHeader>
+              <ModalTitle>Delete Department?</ModalTitle>
+              <ModalDescription>
                 This will delete the department and all associated data. This
                 action is permanent and cannot be undone.
-              </Modal.Description>
-            </Modal.Header>
-            <Modal.Footer>
-              <Modal.Close>Cancel</Modal.Close>
+              </ModalDescription>
+            </ModalHeader>
+            <ModalFooter>
+              <ModalClose>Cancel</ModalClose>
               <Button
                 intent="danger"
                 onClick={() => {
@@ -142,8 +156,8 @@ export function DepartmentTitle({
               >
                 Delete Department
               </Button>
-            </Modal.Footer>
-          </Modal.Content>
+            </ModalFooter>
+          </ModalContent>
         </Modal>
       )}
     </div>

@@ -1,7 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Modal } from "@/components/ui/modal";
+import {
+  Modal,
+  ModalBody,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+} from "@/components/ui/modal";
 import {
   Select,
   SelectContent,
@@ -41,16 +50,16 @@ export function CreatePositionModal({ departments }: Props) {
         <Button>
           <IconPlus /> Add Position
         </Button>
-        <Modal.Content>
+        <ModalContent>
           {({ close }) => (
             <>
-              <Modal.Header>
-                <Modal.Title>Create New Position</Modal.Title>
-                <Modal.Description>
+              <ModalHeader>
+                <ModalTitle>Create New Position</ModalTitle>
+                <ModalDescription>
                   Create a new position in this department.
-                </Modal.Description>
-              </Modal.Header>
-              <Modal.Body>
+                </ModalDescription>
+              </ModalHeader>
+              <ModalBody>
                 <TextField
                   autoFocus
                   aria-label="Name"
@@ -88,9 +97,9 @@ export function CreatePositionModal({ departments }: Props) {
                   <Label>Salary</Label>
                   <Input type="number" placeholder="Enter salary" />
                 </TextField>
-              </Modal.Body>
-              <Modal.Footer>
-                <Modal.Close>Cancel</Modal.Close>
+              </ModalBody>
+              <ModalFooter>
+                <ModalClose>Cancel</ModalClose>
                 <Button
                   onPress={close}
                   onClick={handleSubmit}
@@ -103,10 +112,10 @@ export function CreatePositionModal({ departments }: Props) {
                 >
                   Save changes
                 </Button>
-              </Modal.Footer>
+              </ModalFooter>
             </>
           )}
-        </Modal.Content>
+        </ModalContent>
       </Modal>
     </>
   );

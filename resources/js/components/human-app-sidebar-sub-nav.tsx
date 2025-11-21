@@ -56,6 +56,7 @@ export default function HumanAppSidebarSubNav({ project }: Props) {
           <NavbarItem
             className="flex items-center gap-1 text-sm"
             href={route("organizations.dashboard")}
+            isCurrent={route().current("organizations.dashboard")}
           >
             <LayoutDashboard className="w-4 h-4" />
             <NavbarLabel>Dashboard</NavbarLabel>
@@ -64,6 +65,7 @@ export default function HumanAppSidebarSubNav({ project }: Props) {
           <NavbarItem
             className="flex items-center gap-1 text-sm"
             href={route("organizations.departments")}
+            isCurrent={route().current("organizations.departments")}
           >
             <Building className="w-4 h-4" />
             <NavbarLabel>Departments</NavbarLabel>
@@ -71,6 +73,7 @@ export default function HumanAppSidebarSubNav({ project }: Props) {
           <NavbarItem
             className="flex items-center gap-1 text-sm"
             href={route("organizations.positions")}
+            isCurrent={route().current("organizations.positions")}
           >
             <BriefcaseBusiness className="w-4 h-4" />
             <NavbarLabel>Positions</NavbarLabel>

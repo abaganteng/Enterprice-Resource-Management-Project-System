@@ -1,7 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Menu } from "@/components/ui/menu";
-import { Modal } from "@/components/ui/modal";
+import {
+  Menu,
+  MenuContent,
+  MenuItem,
+  MenuLabel,
+  MenuSeparator,
+  MenuTrigger,
+} from "@/components/ui/menu";
+import {
+  Modal,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+} from "@/components/ui/modal";
 import {
   Pagination,
   PaginationNext,
@@ -35,6 +50,7 @@ import { usePaginator } from "momentum-paginator";
 import { Key, useState } from "react";
 import { CreatePositionModal } from "./create-position-modal";
 import { EditPositionModal } from "./edit-position-modal";
+import { IconEye, IconEyeDropper, IconTrash } from "@intentui/icons";
 
 interface Props {
   positions: Paginator<PositionData>;
@@ -128,14 +144,15 @@ export default function Index({ positions, departments, filters }: Props) {
                     <TableCell>{position.employees?.length || 0}</TableCell>
                     <TableCell className="text-end last:pr-2.5">
                       <Menu>
-                        <Menu.Trigger>
+                        <MenuTrigger>
                           <EllipsisVerticalIcon />
-                        </Menu.Trigger>
-                        <Menu.Content placement="left top">
-                          <Menu.Item>
-                            <EyeIcon className="w-4 h-4" /> View
-                          </Menu.Item>
-                          <Menu.Item
+                        </MenuTrigger>
+                        <MenuContent placement="left top">
+                          <MenuItem>
+                            <IconEye className="w-4 h-4" />
+                            <MenuLabel>View</MenuLabel>
+                          </MenuItem>
+                          <MenuItem
                             key={`update-${position.id}`}
                             onAction={() => {
                               setSelectedPosition(position);
@@ -143,21 +160,23 @@ export default function Index({ positions, departments, filters }: Props) {
                               setIsOpen(true);
                             }}
                           >
-                            <Pencil className="w-4 h-4" /> Edit
-                          </Menu.Item>
-                          <Menu.Separator />
-                          <Menu.Item
+                            <IconEyeDropper className="w-4 h-4" />
+                            <MenuLabel>Edit</MenuLabel>
+                          </MenuItem>
+                          <MenuSeparator />
+                          <MenuItem
                             key={`delete-${position.id}`}
                             onAction={() => {
                               setSelectedPosition(position.id);
                               setAction("delete");
                               setIsOpen(true);
                             }}
+                            intent="danger"
                           >
-                            <TrashIcon className="w-4 h-4 text-red-500" />{" "}
-                            Delete
-                          </Menu.Item>
-                        </Menu.Content>
+                            <IconTrash />
+                            <MenuLabel>Delete</MenuLabel>
+                          </MenuItem>
+                        </MenuContent>
                       </Menu>
                     </TableCell>
                   </TableRow>
@@ -236,16 +255,16 @@ export default function Index({ positions, departments, filters }: Props) {
 
       {selectedPosition && action === "delete" && (
         <Modal isOpen={isOpen} onOpenChange={() => setIsOpen(false)}>
-          <Modal.Content role="alertdialog">
-            <Modal.Header>
-              <Modal.Title>Delete Position?</Modal.Title>
-              <Modal.Description>
+          <ModalContent role="alertdialog">
+            <ModalHeader>
+              <ModalTitle>Delete Position?</ModalTitle>
+              <ModalDescription>
                 This will delete the position and all associated data. This
                 action is permanent and cannot be undone.
-              </Modal.Description>
-            </Modal.Header>
-            <Modal.Footer>
-              <Modal.Close>Cancel</Modal.Close>
+              </ModalDescription>
+            </ModalHeader>
+            <ModalFooter>
+              <ModalClose>Cancel</ModalClose>
               <Button
                 intent="danger"
                 onClick={() => {
@@ -265,8 +284,8 @@ export default function Index({ positions, departments, filters }: Props) {
               >
                 Delete Position
               </Button>
-            </Modal.Footer>
-          </Modal.Content>
+            </ModalFooter>
+          </ModalContent>
         </Modal>
       )}
     </>

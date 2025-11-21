@@ -1,10 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Modal } from "@/components/ui/modal";
+import {
+  Modal,
+  ModalBody,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+} from "@/components/ui/modal";
 import { TextField } from "@/components/ui/text-field";
 import { PositionData } from "@/types";
 import { useForm } from "@inertiajs/react";
+import { IconEyeDropper } from "@intentui/icons";
 import { Pencil } from "lucide-react";
 
 export function EditPositionByDepartment({
@@ -28,19 +38,19 @@ export function EditPositionByDepartment({
 
   return (
     <Modal>
-      <Button size="xs" intent="plain">
-        <Pencil className="h-4 w-4" />
+      <Button intent="plain">
+        <IconEyeDropper />
       </Button>
-      <Modal.Content>
+      <ModalContent>
         {({ close }) => (
           <>
-            <Modal.Header>
-              <Modal.Title>Edit Position</Modal.Title>
-              <Modal.Description>
+            <ModalHeader>
+              <ModalTitle>Edit Position</ModalTitle>
+              <ModalDescription>
                 Change how this position will appear across the dashboard.
-              </Modal.Description>
-            </Modal.Header>
-            <Modal.Body>
+              </ModalDescription>
+            </ModalHeader>
+            <ModalBody>
               <TextField
                 aria-label="Name"
                 value={data.name ?? ""}
@@ -64,16 +74,16 @@ export function EditPositionByDepartment({
                 <Label>Base Salary</Label>
                 <Input type="number" placeholder="Enter base salary" />
               </TextField>
-            </Modal.Body>
-            <Modal.Footer>
-              <Modal.Close>Cancel</Modal.Close>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose>Cancel</ModalClose>
               <Button onPress={close} onClick={handleSubmit} intent="primary">
                 Save changes
               </Button>
-            </Modal.Footer>
+            </ModalFooter>
           </>
         )}
-      </Modal.Content>
+      </ModalContent>
     </Modal>
   );
 }

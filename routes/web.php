@@ -113,7 +113,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Employees
         Route::get('/organizations/employees', [Controllers\EmployeeController::class, 'index'])->name('organizations.employees');
-        Route::get('/organizations/employees/{employee}', [Controllers\EmployeeController::class, 'show'])->name('organizations.employees.show');
+        Route::get('/organizations/employees/{employee}', [Controllers\EmployeeController::class, 'profile'])->name('organizations.employees.profile');
+        Route::get('/organizations/employees/{employee}/contract', [Controllers\EmployeeController::class, 'contract'])->name('organizations.employees.contract');
+        Route::post('/organizations/employees', [Controllers\EmployeeController::class, "store"])->name('organizations.employee.store');
+
+        // Contracts
+        Route::get('/organizations/contracts', [Controllers\ContractController::class, 'index'])->name('organizations.contracts');
 
 
 

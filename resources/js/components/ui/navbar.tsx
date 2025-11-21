@@ -1,35 +1,35 @@
-import { IconHamburger } from "@intentui/icons"
-import { createContext, use, useCallback, useMemo, useState } from "react"
-import { twJoin, twMerge } from "tailwind-merge"
-import { useMediaQuery } from "@/hooks/use-media-query"
-import { composeTailwindRenderProps } from "@/lib/primitive"
-import { Button, type ButtonProps } from "./button"
-import { Link, type LinkProps } from "./link"
-import { Separator } from "./separator"
-import { Sheet } from "./sheet"
+import { IconHamburger } from "@intentui/icons";
+import { createContext, use, useCallback, useMemo, useState } from "react";
+import { twJoin, twMerge } from "tailwind-merge";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { composeTailwindRenderProps } from "@/lib/primitive";
+import { Button, type ButtonProps } from "./button";
+import { Link, type LinkProps } from "./link";
+import { Separator } from "./separator";
+import { Sheet } from "./sheet";
 
 interface NavbarContextProps {
-  open: boolean
-  setOpen: (open: boolean) => void
-  isMobile: boolean
-  toggleNavbar: () => void
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  isMobile: boolean;
+  toggleNavbar: () => void;
 }
 
-const NavbarContext = createContext<NavbarContextProps | null>(null)
+const NavbarContext = createContext<NavbarContextProps | null>(null);
 
 const useNavbar = () => {
-  const context = use(NavbarContext)
+  const context = use(NavbarContext);
   if (!context) {
-    throw new Error("useNavbar must be used within a NavbarProvider.")
+    throw new Error("useNavbar must be used within a NavbarProvider.");
   }
 
-  return context
-}
+  return context;
+};
 
 interface NavbarProviderProps extends React.ComponentProps<"div"> {
-  defaultOpen?: boolean
-  isOpen?: boolean
-  onOpenChange?: (open: boolean) => void
+  defaultOpen?: boolean;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const NavbarProvider = ({
@@ -39,24 +39,24 @@ const NavbarProvider = ({
   className,
   ...props
 }: NavbarProviderProps) => {
-  const isMobile = useMediaQuery("(max-width: 767px)")
-  const [openInternal, setOpenInternal] = useState(defaultOpen)
-  const open = openProp ?? openInternal
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const [openInternal, setOpenInternal] = useState(defaultOpen);
+  const open = openProp ?? openInternal;
 
   const setOpen = useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
       if (setOpenProp) {
-        return setOpenProp?.(typeof value === "function" ? value(open) : value)
+        return setOpenProp?.(typeof value === "function" ? value(open) : value);
       }
 
-      setOpenInternal(value)
+      setOpenInternal(value);
     },
     [setOpenProp, open],
-  )
+  );
 
   const toggleNavbar = useCallback(() => {
-    setOpen((open) => !open)
-  }, [setOpen])
+    setOpen((open) => !open);
+  }, [setOpen]);
 
   const contextValue = useMemo<NavbarContextProps>(
     () => ({
@@ -66,7 +66,7 @@ const NavbarProvider = ({
       toggleNavbar,
     }),
     [open, setOpen, isMobile, toggleNavbar],
-  )
+  );
   return (
     <NavbarContext value={contextValue}>
       <div
@@ -78,13 +78,13 @@ const NavbarProvider = ({
         {...props}
       />
     </NavbarContext>
-  )
-}
+  );
+};
 
 interface NavbarProps extends React.ComponentProps<"div"> {
-  intent?: "default" | "float" | "inset"
-  isSticky?: boolean
-  side?: "left" | "right"
+  intent?: "default" | "float" | "inset";
+  isSticky?: boolean;
+  side?: "left" | "right";
 }
 
 const Navbar = ({
@@ -96,20 +96,29 @@ const Navbar = ({
   ref,
   ...props
 }: NavbarProps) => {
-  const { isMobile, open, setOpen } = useNavbar()
+  const { isMobile, open, setOpen } = useNavbar();
   if (isMobile) {
     return (
       <>
-        <span className="sr-only" aria-hidden data-navbar={intent} data-navbar-sticky={isSticky} />
+        <span
+          className="sr-only"
+          aria-hidden
+          data-navbar={intent}
+          data-navbar-sticky={isSticky}
+        />
         <Sheet isOpen={open} onOpenChange={setOpen} {...props}>
-          <Sheet.Content side={side} aria-label="Mobile Navbar" className="[&>button]:hidden">
+          <Sheet.Content
+            side={side}
+            aria-label="Mobile Navbar"
+            className="[&>button]:hidden"
+          >
             <Sheet.Body className="p-[calc(var(--gutter)---spacing(2))] sm:p-[calc(var(--gutter)---spacing(4))]">
               {children}
             </Sheet.Body>
           </Sheet.Content>
         </Sheet>
       </>
-    )
+    );
   }
 
   return (
@@ -142,10 +151,13 @@ const Navbar = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const NavbarSection = ({ className, ...props }: React.ComponentProps<"div">) => {
+const NavbarSection = ({
+  className,
+  ...props
+}: React.ComponentProps<"div">) => {
   return (
     <div
       data-slot="navbar-section"
@@ -157,11 +169,11 @@ const NavbarSection = ({ className, ...props }: React.ComponentProps<"div">) => 
     >
       {props.children}
     </div>
-  )
-}
+  );
+};
 
 interface NavbarItemProps extends LinkProps {
-  isCurrent?: boolean
+  isCurrent?: boolean;
 }
 
 const NavbarItem = ({ className, isCurrent, ...props }: NavbarItemProps) => {
@@ -187,7 +199,9 @@ const NavbarItem = ({ className, isCurrent, ...props }: NavbarItemProps) => {
     >
       {(values) => (
         <>
-          {typeof props.children === "function" ? props.children(values) : props.children}
+          {typeof props.children === "function"
+            ? props.children(values)
+            : props.children}
 
           {(isCurrent || values.isCurrent) && (
             <span
@@ -202,26 +216,59 @@ const NavbarItem = ({ className, isCurrent, ...props }: NavbarItemProps) => {
         </>
       )}
     </Link>
-  )
-}
+  );
+};
 
-const NavbarSpacer = ({ className, ref, ...props }: React.ComponentProps<"div">) => {
-  return <div ref={ref} className={twMerge("-ml-4 flex-1", className)} {...props} />
-}
+const NavbarSpacer = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
+  return (
+    <div ref={ref} className={twMerge("-ml-4 flex-1", className)} {...props} />
+  );
+};
 
-const NavbarStart = ({ className, ref, ...props }: React.ComponentProps<"div">) => {
-  return <div ref={ref} className={twMerge("p-2 py-4 md:p-2", className)} {...props} />
-}
+const NavbarStart = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
+  return (
+    <div
+      ref={ref}
+      className={twMerge("p-2 py-4 md:p-2", className)}
+      {...props}
+    />
+  );
+};
 
-const NavbarGap = ({ className, ref, ...props }: React.ComponentProps<"div">) => {
-  return <div ref={ref} className={twMerge("mx-2", className)} {...props} />
-}
+const NavbarGap = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
+  return <div ref={ref} className={twMerge("mx-2", className)} {...props} />;
+};
 
-const NavbarSeparator = ({ className, ...props }: React.ComponentProps<typeof Separator>) => {
-  return <Separator orientation="vertical" className={twMerge("h-5", className)} {...props} />
-}
+const NavbarSeparator = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof Separator>) => {
+  return (
+    <Separator
+      orientation="vertical"
+      className={twMerge("h-5", className)}
+      {...props}
+    />
+  );
+};
 
-const NavbarMobile = ({ className, ref, ...props }: React.ComponentProps<"div">) => {
+const NavbarMobile = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<"div">) => {
   return (
     <div
       ref={ref}
@@ -233,30 +280,43 @@ const NavbarMobile = ({ className, ref, ...props }: React.ComponentProps<"div">)
       )}
       {...props}
     />
-  )
-}
+  );
+};
 
-const NavbarInset = ({ className, ref, children, ...props }: React.ComponentProps<"div">) => {
+const NavbarInset = ({
+  className,
+  ref,
+  children,
+  ...props
+}: React.ComponentProps<"div">) => {
   return (
     <div
       ref={ref}
       data-navbar-inset={true}
-      className={twMerge("flex flex-1 flex-col bg-navbar pb-2 md:px-2 dark:bg-bg", className)}
+      className={twMerge(
+        "flex flex-1 flex-col bg-navbar pb-2 md:px-2 dark:bg-bg",
+        className,
+      )}
       {...props}
     >
       <div className="grow bg-bg p-6 md:rounded-lg md:p-12 md:shadow-xs md:ring-1 md:ring-fg/15 md:dark:bg-navbar md:dark:ring-border">
         <div className="mx-auto max-w-7xl">{children}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface NavbarTriggerProps extends ButtonProps {
-  ref?: React.RefObject<HTMLButtonElement>
+  ref?: React.RefObject<HTMLButtonElement>;
 }
 
-const NavbarTrigger = ({ className, onPress, ref, ...props }: NavbarTriggerProps) => {
-  const { toggleNavbar } = useNavbar()
+const NavbarTrigger = ({
+  className,
+  onPress,
+  ref,
+  ...props
+}: NavbarTriggerProps) => {
+  const { toggleNavbar } = useNavbar();
   return (
     <Button
       ref={ref}
@@ -266,16 +326,16 @@ const NavbarTrigger = ({ className, onPress, ref, ...props }: NavbarTriggerProps
       size="sq-sm"
       className={composeTailwindRenderProps(className, "-ml-2 min-lg:hidden")}
       onPress={(event) => {
-        onPress?.(event)
-        toggleNavbar()
+        onPress?.(event);
+        toggleNavbar();
       }}
       {...props}
     >
       <IconHamburger />
       <span className="sr-only">Toggle Navbar</span>
     </Button>
-  )
-}
+  );
+};
 
 const NavbarLabel = ({ className, ...props }: React.ComponentProps<"span">) => {
   return (
@@ -284,10 +344,15 @@ const NavbarLabel = ({ className, ...props }: React.ComponentProps<"span">) => {
       className={twJoin("col-start-2 row-start-1 truncate", className)}
       {...props}
     />
-  )
-}
+  );
+};
 
-export type { NavbarProviderProps, NavbarProps, NavbarTriggerProps, NavbarItemProps }
+export type {
+  NavbarProviderProps,
+  NavbarProps,
+  NavbarTriggerProps,
+  NavbarItemProps,
+};
 export {
   NavbarProvider,
   Navbar,
@@ -301,4 +366,4 @@ export {
   NavbarSeparator,
   NavbarStart,
   NavbarGap,
-}
+};

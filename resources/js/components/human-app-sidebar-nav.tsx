@@ -19,7 +19,7 @@ import {
   MenuLabel,
   MenuSection,
   MenuSeparator,
-  MenuSubmenu,
+  MenuSubMenu,
   MenuTrigger,
 } from "@/components/ui/menu";
 import { SidebarNav, SidebarTrigger } from "@/components/ui/sidebar";
@@ -84,7 +84,7 @@ export default function HumanAppSidebarNav({
                 <MenuLabel>Rename</MenuLabel>
               </MenuItem>
               <MenuSeparator />
-              <MenuSubmenu>
+              <MenuSubMenu>
                 <MenuItem>
                   <MenuLabel>Create new</MenuLabel>
                 </MenuItem>
@@ -93,7 +93,7 @@ export default function HumanAppSidebarNav({
                     <MenuLabel>List</MenuLabel>
                   </MenuItem>
                   <MenuSeparator />
-                  <MenuSubmenu>
+                  <MenuSubMenu>
                     <MenuItem>
                       <MenuLabel>Import</MenuLabel>
                     </MenuItem>
@@ -105,9 +105,9 @@ export default function HumanAppSidebarNav({
                         <MenuLabel>Pdf file</MenuLabel>
                       </MenuItem>
                     </MenuContent>
-                  </MenuSubmenu>
+                  </MenuSubMenu>
                 </MenuContent>
-              </MenuSubmenu>
+              </MenuSubMenu>
               <MenuSeparator />
               <MenuItem>
                 <MenuLabel>Duplicate</MenuLabel>
